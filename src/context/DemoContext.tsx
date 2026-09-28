@@ -111,20 +111,25 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   }, [executionStep, responseApproved]);
 
   const timelineState = getTimelineState(currentMinute);
+  const currentEvent = timelineState.current;
+  const currentTime = currentEvent?.time ?? "09:42";
+  const currentRisk = currentEvent?.risk ?? "Normal";
+  const affectedAssets = currentEvent?.assets ?? [];
+  const demoStage = demoStages[Math.min(demoStep, demoStages.length - 1)] ?? "Normal";
 
   const value = useMemo<DemoContextValue>(
     () => ({
       currentMinute,
       setCurrentMinute,
-      currentTime: timelineState.current.time,
-      currentRisk: timelineState.current.risk,
-      affectedAssets: timelineState.current.assets,
+      currentTime,
+      currentRisk,
+      affectedAssets,
       isRewinding,
       rewindIncident,
       showMissed,
       revealMissed: () => setShowMissed(true),
       demoStep,
-      demoStage: demoStages[Math.min(demoStep, demoStages.length - 1)],
+      demoStage,
       isAttackRunning,
       startAttackSimulation,
       selectedSimulation,
@@ -144,7 +149,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
         setIsSimulating(false);
       },
     }),
-    [currentMinute, setCurrentMinute, timelineState.current.time, timelineState.current.risk, timelineState.current.assets, isRewinding, rewindIncident, showMissed, demoStep, isAttackRunning, startAttackSimulation, selectedSimulation, isSimulating, simulationProgress, responseApproved, executionStep],
+    [currentMinute, setCurrentMinute, currentTime, currentRisk, affectedAssets, isRewinding, rewindIncident, showMissed, demoStep, demoStage, isAttackRunning, startAttackSimulation, selectedSimulation, isSimulating, simulationProgress, responseApproved, executionStep],
   );
 
   return <DemoContext.Provider value={value}>{children}</DemoContext.Provider>;

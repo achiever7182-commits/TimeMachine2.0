@@ -2,7 +2,6 @@ import { Database, FileKey2, Laptop, Radar, Server, UserRound } from "lucide-rea
 import { useState } from "react";
 import { useDemo } from "@/context/DemoContext";
 import { getAttackNodesForMinute } from "@/services/incidentService";
-import type { AttackNode } from "@/types/incident";
 import { cn } from "@/lib/utils";
 import { GlassPanel } from "@/components/layout/PageHeader";
 
@@ -11,8 +10,11 @@ const icons = { radar: Radar, user: UserRound, laptop: Laptop, server: Server, d
 export function AttackGraph({ simulation = false }: { simulation?: boolean }) {
   const { currentMinute, selectedSimulation, isSimulating, simulationProgress } = useDemo();
   const nodes = getAttackNodesForMinute(simulation ? 42 : currentMinute);
-  const [selected, setSelected] = useState<AttackNode>(nodes[2] ?? nodes[0]);
+  const [selectedId, setSelectedId] = useState("laptop");
+  const selected = nodes.find((node) => node.id === selectedId) ?? nodes[0];
   const stopAfter = selectedSimulation === "disable-account" ? 1 : selectedSimulation === "isolate-endpoint" ? 2 : 99;
+
+  if (!selected) return null;
 
   return (
     <GlassPanel className="overflow-hidden">
@@ -31,7 +33,7 @@ export function AttackGraph({ simulation = false }: { simulation?: boolean }) {
                 <div key={node.id} className="flex flex-1 items-center last:flex-none">
                   <button
                     type="button"
-                    onClick={() => setSelected(node)}
+                    onClick={() => setSelectedId(node.id)}
                     className={cn(
                       "group relative flex w-28 shrink-0 flex-col items-center rounded-xl border p-3 text-center transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       stopped ? "border-border bg-muted/20 opacity-35" : node.status !== "Clean" && activeInSimulation ? "border-threat/45 bg-threat/10 shadow-threat" : "border-border bg-secondary/45",

@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, BrainCircuit, CheckCircle2, FlaskConical, Play, ShieldCheck } from "lucide-react";
+import { ArrowRight, BrainCircuit, CheckCircle2, Play, ShieldCheck } from "lucide-react";
 import { AttackGraph } from "@/components/attack-graph/AttackGraph";
 import { GlassPanel, PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ export function SimulationLabView() {
   const { selectedSimulation, selectSimulation, runSimulation, isSimulating, simulationProgress } = useDemo();
   const selected = simulationOptions.find((item) => item.id === selectedSimulation) ?? simulationOptions[1];
   const simulationComplete = simulationProgress >= 5 && !isSimulating;
+
+  if (!selected) return null;
 
   return (
     <div className="mx-auto max-w-7xl animate-fade-in">
