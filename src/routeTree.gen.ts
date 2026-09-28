@@ -10,33 +10,154 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AttackGraphRouteImport } from './routes/attack-graph'
+import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as EvidenceRouteImport } from './routes/evidence'
+import { Route as IncidentsRouteImport } from './routes/incidents'
+import { Route as ReportsRouteImport } from './routes/reports'
+import { Route as ResponseCenterRouteImport } from './routes/response-center'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SimulationLabRouteImport } from './routes/simulation-lab'
+import { Route as TimeMachineRouteImport } from './routes/time-machine'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AttackGraphRoute = AttackGraphRouteImport.update({
+  id: '/attack-graph',
+  path: '/attack-graph',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EvidenceRoute = EvidenceRouteImport.update({
+  id: '/evidence',
+  path: '/evidence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IncidentsRoute = IncidentsRouteImport.update({
+  id: '/incidents',
+  path: '/incidents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResponseCenterRoute = ResponseCenterRouteImport.update({
+  id: '/response-center',
+  path: '/response-center',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimulationLabRoute = SimulationLabRouteImport.update({
+  id: '/simulation-lab',
+  path: '/simulation-lab',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimeMachineRoute = TimeMachineRouteImport.update({
+  id: '/time-machine',
+  path: '/time-machine',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/attack-graph': typeof AttackGraphRoute
+  '/dashboard': typeof DashboardRoute
+  '/evidence': typeof EvidenceRoute
+  '/incidents': typeof IncidentsRoute
+  '/reports': typeof ReportsRoute
+  '/response-center': typeof ResponseCenterRoute
+  '/settings': typeof SettingsRoute
+  '/simulation-lab': typeof SimulationLabRoute
+  '/time-machine': typeof TimeMachineRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/attack-graph': typeof AttackGraphRoute
+  '/dashboard': typeof DashboardRoute
+  '/evidence': typeof EvidenceRoute
+  '/incidents': typeof IncidentsRoute
+  '/reports': typeof ReportsRoute
+  '/response-center': typeof ResponseCenterRoute
+  '/settings': typeof SettingsRoute
+  '/simulation-lab': typeof SimulationLabRoute
+  '/time-machine': typeof TimeMachineRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/attack-graph': typeof AttackGraphRoute
+  '/dashboard': typeof DashboardRoute
+  '/evidence': typeof EvidenceRoute
+  '/incidents': typeof IncidentsRoute
+  '/reports': typeof ReportsRoute
+  '/response-center': typeof ResponseCenterRoute
+  '/settings': typeof SettingsRoute
+  '/simulation-lab': typeof SimulationLabRoute
+  '/time-machine': typeof TimeMachineRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/attack-graph'
+    | '/dashboard'
+    | '/evidence'
+    | '/incidents'
+    | '/reports'
+    | '/response-center'
+    | '/settings'
+    | '/simulation-lab'
+    | '/time-machine'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/attack-graph'
+    | '/dashboard'
+    | '/evidence'
+    | '/incidents'
+    | '/reports'
+    | '/response-center'
+    | '/settings'
+    | '/simulation-lab'
+    | '/time-machine'
+  id:
+    | '__root__'
+    | '/'
+    | '/attack-graph'
+    | '/dashboard'
+    | '/evidence'
+    | '/incidents'
+    | '/reports'
+    | '/response-center'
+    | '/settings'
+    | '/simulation-lab'
+    | '/time-machine'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AttackGraphRoute: typeof AttackGraphRoute
+  DashboardRoute: typeof DashboardRoute
+  EvidenceRoute: typeof EvidenceRoute
+  IncidentsRoute: typeof IncidentsRoute
+  ReportsRoute: typeof ReportsRoute
+  ResponseCenterRoute: typeof ResponseCenterRoute
+  SettingsRoute: typeof SettingsRoute
+  SimulationLabRoute: typeof SimulationLabRoute
+  TimeMachineRoute: typeof TimeMachineRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +169,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/attack-graph': {
+      id: '/attack-graph'
+      path: '/attack-graph'
+      fullPath: '/attack-graph'
+      preLoaderRoute: typeof AttackGraphRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/evidence': {
+      id: '/evidence'
+      path: '/evidence'
+      fullPath: '/evidence'
+      preLoaderRoute: typeof EvidenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/incidents': {
+      id: '/incidents'
+      path: '/incidents'
+      fullPath: '/incidents'
+      preLoaderRoute: typeof IncidentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/response-center': {
+      id: '/response-center'
+      path: '/response-center'
+      fullPath: '/response-center'
+      preLoaderRoute: typeof ResponseCenterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulation-lab': {
+      id: '/simulation-lab'
+      path: '/simulation-lab'
+      fullPath: '/simulation-lab'
+      preLoaderRoute: typeof SimulationLabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/time-machine': {
+      id: '/time-machine'
+      path: '/time-machine'
+      fullPath: '/time-machine'
+      preLoaderRoute: typeof TimeMachineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AttackGraphRoute: AttackGraphRoute,
+  DashboardRoute: DashboardRoute,
+  EvidenceRoute: EvidenceRoute,
+  IncidentsRoute: IncidentsRoute,
+  ReportsRoute: ReportsRoute,
+  ResponseCenterRoute: ResponseCenterRoute,
+  SettingsRoute: SettingsRoute,
+  SimulationLabRoute: SimulationLabRoute,
+  TimeMachineRoute: TimeMachineRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep all Incident Time Machine data and response behavior synthetic and frontend-only until an authenticated, explicitly approved integration is requested; this preserves the demo's safety boundary.
