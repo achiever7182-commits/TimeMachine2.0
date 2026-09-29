@@ -12,8 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AttackGraphRouteImport } from './routes/attack-graph'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as DigitalTwinRouteImport } from './routes/digital-twin'
 import { Route as EvidenceRouteImport } from './routes/evidence'
 import { Route as IncidentsRouteImport } from './routes/incidents'
+import { Route as IrisRouteImport } from './routes/iris'
+import { Route as LearningRouteImport } from './routes/learning'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as ResponseCenterRouteImport } from './routes/response-center'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -35,6 +38,11 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DigitalTwinRoute = DigitalTwinRouteImport.update({
+  id: '/digital-twin',
+  path: '/digital-twin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EvidenceRoute = EvidenceRouteImport.update({
   id: '/evidence',
   path: '/evidence',
@@ -43,6 +51,16 @@ const EvidenceRoute = EvidenceRouteImport.update({
 const IncidentsRoute = IncidentsRouteImport.update({
   id: '/incidents',
   path: '/incidents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IrisRoute = IrisRouteImport.update({
+  id: '/iris',
+  path: '/iris',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearningRoute = LearningRouteImport.update({
+  id: '/learning',
+  path: '/learning',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReportsRoute = ReportsRouteImport.update({
@@ -75,8 +93,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/attack-graph': typeof AttackGraphRoute
   '/dashboard': typeof DashboardRoute
+  '/digital-twin': typeof DigitalTwinRoute
   '/evidence': typeof EvidenceRoute
   '/incidents': typeof IncidentsRoute
+  '/iris': typeof IrisRoute
+  '/learning': typeof LearningRoute
   '/reports': typeof ReportsRoute
   '/response-center': typeof ResponseCenterRoute
   '/settings': typeof SettingsRoute
@@ -87,8 +108,11 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/attack-graph': typeof AttackGraphRoute
   '/dashboard': typeof DashboardRoute
+  '/digital-twin': typeof DigitalTwinRoute
   '/evidence': typeof EvidenceRoute
   '/incidents': typeof IncidentsRoute
+  '/iris': typeof IrisRoute
+  '/learning': typeof LearningRoute
   '/reports': typeof ReportsRoute
   '/response-center': typeof ResponseCenterRoute
   '/settings': typeof SettingsRoute
@@ -100,8 +124,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/attack-graph': typeof AttackGraphRoute
   '/dashboard': typeof DashboardRoute
+  '/digital-twin': typeof DigitalTwinRoute
   '/evidence': typeof EvidenceRoute
   '/incidents': typeof IncidentsRoute
+  '/iris': typeof IrisRoute
+  '/learning': typeof LearningRoute
   '/reports': typeof ReportsRoute
   '/response-center': typeof ResponseCenterRoute
   '/settings': typeof SettingsRoute
@@ -114,8 +141,11 @@ export interface FileRouteTypes {
     | '/'
     | '/attack-graph'
     | '/dashboard'
+    | '/digital-twin'
     | '/evidence'
     | '/incidents'
+    | '/iris'
+    | '/learning'
     | '/reports'
     | '/response-center'
     | '/settings'
@@ -126,8 +156,11 @@ export interface FileRouteTypes {
     | '/'
     | '/attack-graph'
     | '/dashboard'
+    | '/digital-twin'
     | '/evidence'
     | '/incidents'
+    | '/iris'
+    | '/learning'
     | '/reports'
     | '/response-center'
     | '/settings'
@@ -138,8 +171,11 @@ export interface FileRouteTypes {
     | '/'
     | '/attack-graph'
     | '/dashboard'
+    | '/digital-twin'
     | '/evidence'
     | '/incidents'
+    | '/iris'
+    | '/learning'
     | '/reports'
     | '/response-center'
     | '/settings'
@@ -151,8 +187,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AttackGraphRoute: typeof AttackGraphRoute
   DashboardRoute: typeof DashboardRoute
+  DigitalTwinRoute: typeof DigitalTwinRoute
   EvidenceRoute: typeof EvidenceRoute
   IncidentsRoute: typeof IncidentsRoute
+  IrisRoute: typeof IrisRoute
+  LearningRoute: typeof LearningRoute
   ReportsRoute: typeof ReportsRoute
   ResponseCenterRoute: typeof ResponseCenterRoute
   SettingsRoute: typeof SettingsRoute
@@ -183,6 +222,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/digital-twin': {
+      id: '/digital-twin'
+      path: '/digital-twin'
+      fullPath: '/digital-twin'
+      preLoaderRoute: typeof DigitalTwinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/evidence': {
       id: '/evidence'
       path: '/evidence'
@@ -195,6 +241,20 @@ declare module '@tanstack/react-router' {
       path: '/incidents'
       fullPath: '/incidents'
       preLoaderRoute: typeof IncidentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/iris': {
+      id: '/iris'
+      path: '/iris'
+      fullPath: '/iris'
+      preLoaderRoute: typeof IrisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learning': {
+      id: '/learning'
+      path: '/learning'
+      fullPath: '/learning'
+      preLoaderRoute: typeof LearningRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/reports': {
@@ -239,8 +299,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AttackGraphRoute: AttackGraphRoute,
   DashboardRoute: DashboardRoute,
+  DigitalTwinRoute: DigitalTwinRoute,
   EvidenceRoute: EvidenceRoute,
   IncidentsRoute: IncidentsRoute,
+  IrisRoute: IrisRoute,
+  LearningRoute: LearningRoute,
   ReportsRoute: ReportsRoute,
   ResponseCenterRoute: ResponseCenterRoute,
   SettingsRoute: SettingsRoute,

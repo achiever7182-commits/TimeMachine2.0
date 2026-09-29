@@ -10,7 +10,7 @@ const icons = { radar: Radar, user: UserRound, laptop: Laptop, server: Server, d
 export function AttackGraph({ simulation = false }: { simulation?: boolean }) {
   const { currentMinute, selectedSimulation, isSimulating, simulationProgress } = useDemo();
   const nodes = getAttackNodesForMinute(simulation ? 42 : currentMinute);
-  const [selectedId, setSelectedId] = useState("laptop");
+  const [selectedId, setSelectedId] = useState("LAPTOP-042");
   const selected = nodes.find((node) => node.id === selectedId) ?? nodes[0];
   const stopAfter = selectedSimulation === "disable-account" ? 1 : selectedSimulation === "isolate-endpoint" ? 2 : 99;
 
@@ -57,8 +57,8 @@ export function AttackGraph({ simulation = false }: { simulation?: boolean }) {
           <dl className="mt-5 space-y-4 text-sm">
             <Info label="Hostname" value={selected.hostname ?? "External actor"} mono />
             <Info label="Status" value={selected.status} />
-            <Info label="First observed" value={selected.timestamp} mono />
-            <Info label="Current risk" value={selected.risk.toUpperCase()} />
+            <Info label="First observed" value={selected.timestamp ?? "09:42"} mono />
+            <Info label="Current risk" value={String(selected.risk ?? "NORMAL").toUpperCase()} />
             <Info label="Related events" value={String(selected.relatedEvents)} />
           </dl>
         </div>

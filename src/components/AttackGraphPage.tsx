@@ -1,1 +1,22 @@
-import { AttackGraph } from "@/components/attack-graph/AttackGraph";import{PageHeader}from"@/components/layout/PageHeader";export function AttackGraphPage(){return <div className="mx-auto max-w-7xl animate-fade-in"><PageHeader eyebrow="INC-2048" title="Attack Graph" description="Explore each asset and the attacker's movement through the synthetic environment."/><AttackGraph/></div>}
+import { AttackGraphView } from "@/components/attack-graph/AttackGraphView";
+import { IrisInvestigationPanel } from "@/components/iris/IrisInvestigationPanel";
+
+export function AttackGraphPage() {
+  return (
+    <div className="mx-auto max-w-7xl animate-fade-in space-y-4">
+      <AttackGraphView />
+
+      <IrisInvestigationPanel
+        title="IRIS Attack Path Investigator"
+        defaultPrompt="How did the attacker reach the database?"
+        suggestedQuestions={[
+          "How did the attacker reach the database?",
+          "What is this attack path?",
+          "Which assets were compromised?",
+          "What would happen if we isolate LAPTOP-042?",
+        ]}
+        compact={true}
+      />
+    </div>
+  );
+}

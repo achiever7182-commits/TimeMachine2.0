@@ -1,6 +1,6 @@
-import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Bell,
+  Bot,
   BrainCircuit,
   CircleDot,
   FileText,
@@ -10,6 +10,7 @@ import {
   Home,
   ListChecks,
   Menu,
+  Network,
   PanelRightOpen,
   Radar,
   Search,
@@ -20,6 +21,7 @@ import {
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { useDemo } from "@/context/DemoContext";
 import { cn } from "@/lib/utils";
 import { IrisCopilot } from "@/components/ai-copilot/IrisCopilot";
@@ -27,9 +29,11 @@ import { IrisCopilot } from "@/components/ai-copilot/IrisCopilot";
 const navItems = [
   { label: "Dashboard", to: "/dashboard", icon: Home },
   { label: "Incidents", to: "/incidents", icon: Siren },
+  { label: "Digital Twin", to: "/digital-twin", icon: Network },
   { label: "Incident Time Machine", to: "/time-machine", icon: BrainCircuit },
   { label: "Attack Graph", to: "/attack-graph", icon: GitBranch },
   { label: "Simulation Lab", to: "/simulation-lab", icon: FlaskConical },
+  { label: "IRIS Investigator", to: "/iris", icon: Bot },
   { label: "Evidence", to: "/evidence", icon: Radar },
   { label: "Response Center", to: "/response-center", icon: ListChecks },
   { label: "Reports", to: "/reports", icon: FileText },
@@ -65,7 +69,16 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const { demoStage, isAttackRunning, startAttackSimulation } = useDemo();
+  const {
+    demoStage,
+    isAttackRunning,
+    isPaused,
+    currentTime,
+    startAttackSimulation,
+    pauseSimulation,
+    resumeSimulation,
+    resetDemo,
+  } = useDemo();
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -83,13 +96,36 @@ export function AppShell({ children }: { children: ReactNode }) {
         </Link>
         <NavLinks />
         <div className="mt-6 rounded-lg border border-border bg-card/70 p-4 shadow-panel">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-signal">
-            <CircleDot className={cn("size-3", isAttackRunning && "animate-pulse")} /> DEMO MODE
+          <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.18em] text-cyan-signal">
+            <span className="flex items-center gap-2">
+              <CircleDot className={cn("size-3", isAttackRunning && "animate-pulse")} /> DEMO MODE
+            </span>
+            <span className="font-mono text-muted-foreground">{currentTime}</span>
           </div>
-          <p className="mt-2 text-sm text-muted-foreground">Synthetic telemetry only. No real infrastructure actions are connected.</p>
-          <Button className="mt-4 w-full" onClick={startAttackSimulation} disabled={isAttackRunning}>
-            <Radar className="size-4" /> {isAttackRunning ? demoStage : "Start Attack Simulation"}
-          </Button>
+          <p className="mt-2 text-xs text-muted-foreground">Synthetic telemetry only. No real infrastructure actions are connected.</p>
+          {!isAttackRunning && !isPaused ? (
+            <Button className="mt-4 w-full" onClick={startAttackSimulation}>
+              <Radar className="size-4" /> Start Attack Simulation
+            </Button>
+          ) : isAttackRunning ? (
+            <div className="mt-4 flex gap-2">
+              <Button className="flex-1" variant="secondary" size="sm" onClick={pauseSimulation}>
+                Pause
+              </Button>
+              <Button variant="outline" size="sm" onClick={resetDemo}>
+                Reset
+              </Button>
+            </div>
+          ) : (
+            <div className="mt-4 flex gap-2">
+              <Button className="flex-1" size="sm" onClick={resumeSimulation}>
+                Resume
+              </Button>
+              <Button variant="outline" size="sm" onClick={resetDemo}>
+                Reset
+              </Button>
+            </div>
+          )}
         </div>
       </aside>
 
