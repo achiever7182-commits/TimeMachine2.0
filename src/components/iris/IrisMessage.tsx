@@ -1,6 +1,8 @@
-import { Bot, User as UserIcon } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Bot, User as UserIcon, Volume2, Square } from "lucide-react";
 import { IrisFindingCard } from "./IrisFindingCard";
 import { IrisTimelineCitation } from "./IrisTimelineCitation";
+import { elevenLabsAgentService } from "@/services/iris/elevenLabsAgentService";
 import type { IrisCitation, IrisMessage as IrisMessageType } from "@/types/iris";
 
 interface IrisMessageProps {
@@ -11,6 +13,25 @@ interface IrisMessageProps {
 export function IrisMessage({ message, onSelectCitation }: IrisMessageProps) {
   const isUser = message.role === "USER";
   const resp = message.response;
+
+  const [voiceState, setVoiceState] = useState(() => elevenLabsAgentService.getState());
+
+  useEffect(() => {
+    return elevenLabsAgentService.subscribe((state) => {
+      setVoiceState(state);
+    });
+  }, []);
+
+  const isThisMessagePlaying =
+    voiceState.isSpeaking && voiceState.activeMessageId === message.id;
+
+  const handleToggleVoice = () => {
+    if (isThisMessagePlaying) {
+      elevenLabsAgentService.stopSpeaking();
+    } else {
+      elevenLabsAgentService.speak(message.content, message.id);
+    }
+  };
 
   return (
     <div className={`flex flex-col ${isUser ? "items-end" : "items-start"}`}>
@@ -41,6 +62,31 @@ export function IrisMessage({ message, onSelectCitation }: IrisMessageProps) {
               >
                 [{resp.worldPerspective.replace(/_/g, " ")}]
               </span>
+            )}
+
+            {!isUser && (
+              <button
+                type="button"
+                onClick={handleToggleVoice}
+                title={isThisMessagePlaying ? "Stop Voice Narration" : "Listen to ElevenLabs Voice"}
+                className={`flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] transition-colors border ${
+                  isThisMessagePlaying
+                    ? "bg-cyan-signal text-background border-cyan-signal font-bold animate-pulse"
+                    : "border-border/60 text-muted-foreground hover:text-cyan-signal hover:border-cyan-signal/40 hover:bg-secondary/60"
+                }`}
+              >
+                {isThisMessagePlaying ? (
+                  <>
+                    <Square className="size-2.5 fill-current" />
+                    <span>STOP</span>
+                  </>
+                ) : (
+                  <>
+                    <Volume2 className="size-2.5" />
+                    <span>VOICE</span>
+                  </>
+                )}
+              </button>
             )}
           </div>
           <span>{message.timestamp}</span>

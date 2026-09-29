@@ -6,9 +6,18 @@ import {
   RotateCcw,
   Shield,
   Clock,
+  Mic,
+  MicOff,
+  Volume2,
+  VolumeX,
+  Radio,
 } from "lucide-react";
 import { useDemo } from "@/context/DemoContext";
 import { irisService } from "@/services/iris/irisService";
+import {
+  elevenLabsAgentService,
+  ELEVENLABS_AGENT_ID,
+} from "@/services/iris/elevenLabsAgentService";
 import { IrisMessage as IrisMessageBubble } from "./IrisMessage";
 import { IrisSuggestedQuestions } from "./IrisSuggestedQuestions";
 import type { IrisMessage as IrisMessageType } from "@/types/iris";
@@ -27,6 +36,14 @@ export function IrisCopilot() {
   const [messages, setMessages] = useState<IrisMessageType[]>([]);
   const [isAnswering, setIsAnswering] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const [voiceState, setVoiceState] = useState(() => elevenLabsAgentService.getState());
+
+  useEffect(() => {
+    return elevenLabsAgentService.subscribe((state) => {
+      setVoiceState(state);
+    });
+  }, []);
 
   // Build current read-only IRIS context
   const irisContext = useMemo(() => {
@@ -85,6 +102,17 @@ export function IrisCopilot() {
         };
 
         setMessages((prev) => [...prev, irisMsg]);
+
+        // Present only the verified engine response through the live Agent.
+        if (elevenLabsAgentService.getState().voiceEnabled) {
+          const presentedByAgent = elevenLabsAgentService.presentVerifiedResponse(
+            resp.answer,
+            irisMsg.id
+          );
+          if (!presentedByAgent) {
+            elevenLabsAgentService.speak(resp.answer, irisMsg.id);
+          }
+        }
       } catch (err) {
         setMessages((prev) => [
           ...prev,
@@ -101,6 +129,30 @@ export function IrisCopilot() {
     },
     [inputQuery, isAnswering, currentTime, irisContext]
   );
+
+  const handleToggleMic = useCallback(() => {
+    if (voiceState.isListening) {
+      elevenLabsAgentService.stopListening();
+    } else {
+      elevenLabsAgentService.startListening((transcript) => {
+        if (transcript.trim()) {
+          handleSend(transcript.trim());
+        }
+      });
+    }
+  }, [voiceState.isListening, handleSend]);
+
+  const handleToggleSession = useCallback(async () => {
+    if (voiceState.status === "connected" || voiceState.status === "connecting") {
+      elevenLabsAgentService.disconnectSession();
+    } else {
+      await elevenLabsAgentService.connectSession((transcript) => {
+        if (transcript.trim()) {
+          handleSend(transcript.trim());
+        }
+      });
+    }
+  }, [voiceState.status, handleSend]);
 
   const handleClearHistory = useCallback(() => {
     setMessages([
@@ -141,18 +193,85 @@ export function IrisCopilot() {
               <h2 className="text-sm font-bold tracking-tight text-foreground">
                 IRIS INVESTIGATOR
               </h2>
-              <span className="rounded bg-cyan-signal/20 px-1.5 py-0.2 font-mono text-[9px] font-bold text-cyan-signal border border-cyan-signal/30">
-                DETERMINISTIC
+              <span className="rounded bg-cyan-signal/20 px-1.5 py-0.2 font-mono text-[9px] font-bold text-cyan-signal border border-cyan-signal/30 flex items-center gap-1">
+                <span
+                  className={`size-1.5 rounded-full ${
+                    voiceState.isSpeaking
+                      ? "bg-cyan-signal animate-ping"
+                      : voiceState.status === "connected"
+                      ? "bg-emerald-400"
+                      : "bg-cyan-signal"
+                  }`}
+                />
+                <span>
+                  {voiceState.isSpeaking
+                    ? "ELEVENLABS SPEAKING"
+                    : voiceState.status === "connected"
+                    ? "ELEVENLABS AGENT"
+                    : "ELEVENLABS VOICE"}
+                </span>
               </span>
             </div>
-            <p className="text-[11px] text-muted-foreground">
-              Intelligent Response & Investigation System · Grounded in INC-2048 Telemetry
+            <p className="text-[11px] text-muted-foreground flex items-center gap-1">
+              <span>Intelligent Response & Investigation System · Grounded in INC-2048</span>
+              <span className="opacity-60 hidden md:inline">· Agent: {ELEVENLABS_AGENT_ID.slice(0, 14)}...</span>
             </p>
           </div>
         </div>
 
-        {/* Current State Badges */}
+        {/* Current State Badges & Voice Controls */}
         <div className="flex items-center gap-2 font-mono text-xs">
+          {/* Voice Auto-Play Toggle */}
+          <button
+            type="button"
+            onClick={() => elevenLabsAgentService.toggleVoiceEnabled()}
+            title={
+              voiceState.voiceEnabled
+                ? "Voice Output Enabled (Click to Mute)"
+                : "Voice Muted (Click to Unmute)"
+            }
+            className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[11px] transition-colors ${
+              voiceState.voiceEnabled
+                ? "border-cyan-signal/40 bg-cyan-signal/15 text-cyan-signal hover:bg-cyan-signal/25"
+                : "border-border/70 bg-background/40 text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {voiceState.voiceEnabled ? (
+              <>
+                <Volume2 className="size-3 text-cyan-signal" />
+                <span className="hidden sm:inline font-bold">VOICE ON</span>
+              </>
+            ) : (
+              <>
+                <VolumeX className="size-3 text-muted-foreground" />
+                <span className="hidden sm:inline">MUTED</span>
+              </>
+            )}
+          </button>
+
+          {/* Live Session Toggle */}
+          <button
+            type="button"
+            onClick={handleToggleSession}
+            title={
+              voiceState.status === "connected"
+                ? "Disconnect Live ElevenLabs Session"
+                : "Connect Live ElevenLabs Voice Session"
+            }
+            className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[11px] transition-colors ${
+              voiceState.status === "connected"
+                ? "border-emerald-500/50 bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30"
+                : "border-border/70 bg-background/40 text-muted-foreground hover:text-cyan-signal hover:bg-secondary"
+            }`}
+          >
+            <Radio
+              className={`size-3 ${
+                voiceState.status === "connected" ? "text-emerald-400 animate-pulse" : ""
+              }`}
+            />
+            <span>{voiceState.status === "connected" ? "LIVE" : "SESSION"}</span>
+          </button>
+
           <div className="flex items-center gap-1.5 rounded-lg border border-border/70 bg-background/60 px-2.5 py-1 text-[11px]">
             <Clock className="size-3 text-cyan-signal" />
             <span>Time: <strong>{currentTime}</strong></span>
@@ -200,6 +319,12 @@ export function IrisCopilot() {
 
       {/* Input Bar */}
       <div className="border-t border-border/80 bg-background/70 p-3 backdrop-blur-md">
+        {voiceState.error && (
+          <div className="mb-2 text-[11px] text-threat bg-threat/10 border border-threat/30 rounded px-2.5 py-1">
+            {voiceState.error}
+          </div>
+        )}
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -207,13 +332,42 @@ export function IrisCopilot() {
           }}
           className="flex items-center gap-2"
         >
+          <button
+            type="button"
+            onClick={handleToggleMic}
+            title={
+              voiceState.isListening
+                ? "Microphone listening... click to stop"
+                : "Speak query with microphone (Voice Input)"
+            }
+            className={`flex h-10 items-center justify-center rounded-lg px-3 transition-colors ${
+              voiceState.isListening
+                ? "bg-threat text-white animate-pulse"
+                : "border border-border bg-secondary/40 text-muted-foreground hover:text-cyan-signal hover:border-cyan-signal/40 hover:bg-secondary"
+            }`}
+          >
+            {voiceState.isListening ? (
+              <MicOff className="size-4 animate-bounce" />
+            ) : (
+              <Mic className="size-4" />
+            )}
+          </button>
+
           <input
             type="text"
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
-            placeholder="Ask IRIS about chronology, what defenders knew, attack graph paths, or counterfactuals..."
+            placeholder={
+              voiceState.isListening
+                ? "Listening to voice input... speak now..."
+                : "Ask IRIS about chronology, what defenders knew, attack graph paths, or counterfactuals..."
+            }
             disabled={isAnswering}
-            className="h-10 flex-1 rounded-lg border border-border bg-secondary/30 px-3.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-cyan-signal focus:outline-none focus:ring-1 focus:ring-cyan-signal/50"
+            className={`h-10 flex-1 rounded-lg border bg-secondary/30 px-3.5 text-xs text-foreground placeholder:text-muted-foreground focus:border-cyan-signal focus:outline-none focus:ring-1 focus:ring-cyan-signal/50 ${
+              voiceState.isListening
+                ? "border-threat/70 bg-threat/5 ring-1 ring-threat/40"
+                : "border-border"
+            }`}
           />
 
           <button

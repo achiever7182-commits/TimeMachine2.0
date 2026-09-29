@@ -1,4 +1,5 @@
 import { DeterministicIrisProvider } from "./irisInvestigator";
+import { ElevenLabsIrisProvider } from "./elevenLabsProvider";
 import { buildIrisContext } from "./irisContextBuilder";
 import type { IrisContext, IrisMessage, IrisProvider, IrisResponse } from "@/types/iris";
 import type { CounterfactualBranch } from "@/types/counterfactual";
@@ -7,11 +8,15 @@ export class IrisService {
   private provider: IrisProvider;
 
   constructor(provider?: IrisProvider) {
-    this.provider = provider ?? new DeterministicIrisProvider();
+    this.provider = provider ?? new ElevenLabsIrisProvider();
   }
 
   setProvider(provider: IrisProvider) {
     this.provider = provider;
+  }
+
+  getProvider(): IrisProvider {
+    return this.provider;
   }
 
   /**
