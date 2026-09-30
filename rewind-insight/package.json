@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "vite build && node -e \"import fs from 'fs'; if (fs.existsSync('.output/public') && !fs.existsSync('dist')) { fs.cpSync('.output/public', 'dist', { recursive: true }); }\"",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",

@@ -1,7 +1,7 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-if (process.env.VERCEL || process.env.NOW_BUILDER) {
-  process.env.NITRO_PRESET = "vercel";
+if (process.env["VERCEL"] || process.env["NOW_BUILDER"]) {
+  process.env["NITRO_PRESET"] = "vercel";
 }
 
 export default defineConfig({
