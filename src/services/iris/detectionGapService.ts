@@ -8,17 +8,17 @@ import type { DetectionGapFinding } from "@/types/iris";
  */
 export function findEarliestDetectableOpportunity(): DetectionGapFinding {
   // 1. Identify first detectable opportunity event
-  const detectionOppEvent = demoTimelineEvents.find(
+  const detectionOppEvent = (demoTimelineEvents.find(
     (e) => e.category === "DETECTION_OPPORTUNITY" || e.id === "evt-0947"
-  ) ?? demoTimelineEvents[2];
+  ) ?? demoTimelineEvents[2])!;
 
   // 2. Identify formal incident detection event
-  const formalDetectionEvent = demoTimelineEvents.find(
+  const formalDetectionEvent = (demoTimelineEvents.find(
     (e) => e.category === "INCIDENT_ALERT" || e.id === "evt-1024"
-  ) ?? demoTimelineEvents[demoTimelineEvents.length - 1];
+  ) ?? demoTimelineEvents[demoTimelineEvents.length - 1])!;
 
-  const earliestOpportunityMinute = detectionOppEvent.minute;
-  const formalDetectionMinute = formalDetectionEvent.minute;
+  const earliestOpportunityMinute = detectionOppEvent.minute ?? 5;
+  const formalDetectionMinute = formalDetectionEvent.minute ?? 42;
   const detectionDelayMinutes = Math.max(0, formalDetectionMinute - earliestOpportunityMinute);
 
   const explanation =
@@ -30,7 +30,7 @@ export function findEarliestDetectableOpportunity(): DetectionGapFinding {
   return {
     earliestOpportunityMinute,
     timestamp: detectionOppEvent.timestamp,
-    evidenceIds: detectionOppEvent.eventIds,
+    evidenceIds: detectionOppEvent.eventIds || [],
     detectionDelayMinutes,
     formalDetectionTimestamp: formalDetectionEvent.timestamp,
     explanation,

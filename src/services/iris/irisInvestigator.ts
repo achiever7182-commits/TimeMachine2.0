@@ -325,7 +325,7 @@ export class DeterministicIrisProvider implements IrisProvider {
         } else if (!branch) {
           branch = simulateCounterfactualFuture(
             22,
-            standardActions.find((a) => a.type === "ISOLATE_ENDPOINT") || standardActions[1]
+            standardActions.find((a) => a.type === "ISOLATE_ENDPOINT") || standardActions[1]!
           );
         }
 

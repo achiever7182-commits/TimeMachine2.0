@@ -108,9 +108,9 @@ export function AttackGraphView() {
   const handleViewTimelineEvents = useCallback(
     (eventIds: string[]) => {
       if (eventIds.length > 0) {
-        setSelectedEventId(eventIds[0]);
+        setSelectedEventId(eventIds[0] ?? null);
       }
-      navigate({ to: "/timeline" });
+      navigate({ to: "/time-machine" });
     },
     [navigate, setSelectedEventId]
   );

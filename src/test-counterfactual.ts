@@ -34,20 +34,20 @@ console.log("=======================================================\n");
 const snap1004 = getActualDigitalTwinState(22); // 10:04 is minute 22
 const forked = forkSnapshot(snap1004);
 forked.timestamp = "99:99";
-forked.assets[0].status = "ISOLATED";
+forked.assets[0]!.status = "ISOLATED";
 
 assert(
   snap1004.timestamp === "10:04" &&
-  snap1004.assets[0].status !== "ISOLATED" &&
+  snap1004.assets[0]!.status !== "ISOLATED" &&
   forked.timestamp === "99:99",
   "TEST A — SNAPSHOT FORK",
-  `Original remains ${snap1004.timestamp} with status ${snap1004.assets[0].status}`
+  `Original remains ${snap1004.timestamp} with status ${snap1004.assets[0]!.status}`
 );
 
 // TEST B — DO NOTHING
 // Create branch at 10:04. Apply DO_NOTHING. Expected final state matches baseline future.
 const actions1004 = getStandardResponseActions(22);
-const branchDoNothing = simulateCounterfactualFuture(22, actions1004[0]);
+const branchDoNothing = simulateCounterfactualFuture(22, actions1004[0]!);
 const baselineEnd = getActualDigitalTwinState(42);
 
 assert(
@@ -224,10 +224,10 @@ assert(
 
 // TEST N — MULTIPLE BRANCHES
 // Create multiple branches from same timestamp. Verify each remains independent.
-const b1 = simulateCounterfactualFuture(22, actions1004[0]);
-const b2 = simulateCounterfactualFuture(22, actions1004[1]);
-const b3 = simulateCounterfactualFuture(22, actions1004[2]);
-const b4 = simulateCounterfactualFuture(22, actions1004[3]);
+const b1 = simulateCounterfactualFuture(22, actions1004[0]!);
+const b2 = simulateCounterfactualFuture(22, actions1004[1]!);
+const b3 = simulateCounterfactualFuture(22, actions1004[2]!);
+const b4 = simulateCounterfactualFuture(22, actions1004[3]!);
 
 assert(
   b1.branchId !== b2.branchId &&

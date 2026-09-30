@@ -116,16 +116,16 @@ assert(es.counterfactualOutcome.includes("Isolating LAPTOP-042"), "TEST D6: Exec
 // -----------------------------------------------------------------------------
 console.log("\n--- TEST E: Timeline Derived from Source Events ---");
 assert(reportDraft.timeline.length === demoTimelineEvents.length, `TEST E1: Timeline event count matches demo dataset (${reportDraft.timeline.length} events)`);
-const firstEvent = reportDraft.timeline[0];
+const firstEvent = reportDraft.timeline[0]!;
 assert(firstEvent.id === "evt-0942", "TEST E2: First timeline event maps to evt-0942");
-assert(firstEvent.title === demoTimelineEvents[0].title, "TEST E3: Timeline event title matches source dataset");
-assert(firstEvent.eventId === demoTimelineEvents[0].id, "TEST E4: Timeline eventId links to source event ID");
+assert(firstEvent.title === demoTimelineEvents[0]!.title, "TEST E3: Timeline event title matches source dataset");
+assert(firstEvent.eventId === demoTimelineEvents[0]!.id, "TEST E4: Timeline eventId links to source event ID");
 
 // -----------------------------------------------------------------------------
 // TEST F: Actual event timestamps are correct
 // -----------------------------------------------------------------------------
 console.log("\n--- TEST F: Actual Event Timestamps ---");
-assert(reportDraft.timeline[0].timestamp === "09:42", "TEST F1: Initial event timestamp is 09:42");
+assert(reportDraft.timeline[0]!.timestamp === "09:42", "TEST F1: Initial event timestamp is 09:42");
 const evt1000 = reportDraft.timeline.find((e) => e.timestamp === "10:00");
 const evt1004 = reportDraft.timeline.find((e) => e.timestamp === "10:04");
 const evt1012 = reportDraft.timeline.find((e) => e.timestamp === "10:12");
@@ -172,7 +172,7 @@ assert(reportDraft.attackPath.segments.length === graph42.edges.length, "TEST I5
 // -----------------------------------------------------------------------------
 console.log("\n--- TEST J: Affected Assets from Digital Twin ---");
 const twin42 = getActualDigitalTwinState(42);
-const compromisedTwins = twin42.assets.filter((a) => a.securityState === "COMPROMISED");
+const compromisedTwins = twin42.assets.filter((a) => a.status === "COMPROMISED");
 assert(reportDraft.affectedAssets.length >= compromisedTwins.length, "TEST J1: Affected assets catalog covers Digital Twin assets");
 const assetIds = reportDraft.affectedAssets.map((a) => a.id);
 assert(assetIds.includes("LAPTOP-042"), "TEST J2: LAPTOP-042 present in affected assets");
@@ -258,7 +258,7 @@ console.log("\n--- TEST R: Missed Signals Are Evidence-Backed ---");
 assert(reportDraft.whatWeMissed.missedSignalsList.length >= 3, "TEST R1: What We Missed lists missed detection signals");
 const allMissedHaveEvidence = reportDraft.whatWeMissed.missedSignalsList.every((ms) => ms.relatedEvidence.length > 0);
 assert(allMissedHaveEvidence, "TEST R2: Every missed signal references existing evidence");
-assert(reportDraft.whatWeMissed.missedSignalsList[0].timestamp === "09:47", "TEST R3: First missed signal anchors at 09:47");
+assert(reportDraft.whatWeMissed.missedSignalsList[0]!.timestamp === "09:47", "TEST R3: First missed signal anchors at 09:47");
 
 // -----------------------------------------------------------------------------
 // TEST S: Lessons are generated
@@ -313,8 +313,7 @@ assert(snap.snapshotMinute === reportDraft.snapshotMinute, "TEST W2: Snapshot mi
 assert(Object.isFrozen(snap), "TEST W3: Snapshot object is frozen (immutable)");
 let snapshotThrew = false;
 try {
-  // @ts-expect-error Attempting mutation on frozen snapshot
-  snap.compromisedAssetsCount = 999;
+  (snap as any).compromisedAssetsCount = 999;
 } catch {
   snapshotThrew = true;
 }
@@ -412,7 +411,7 @@ assert(attackGraphRoute.includes("LAPTOP-042"), "TEST AD2: Navigation URI target
 // TEST AE: Report → Evidence navigation context works
 // -----------------------------------------------------------------------------
 console.log("\n--- TEST AE: Report → Evidence Navigation Context ---");
-const evidenceSample = reportDraft.evidence[0];
+const evidenceSample = reportDraft.evidence[0]!;
 const evidenceRoute = `/evidence?selectedEvidence=${evidenceSample.id}`;
 assert(evidenceRoute.includes("/evidence"), "TEST AE1: Navigation URI points to Evidence Explorer");
 assert(evidenceRoute.includes(evidenceSample.id), "TEST AE2: Navigation URI references valid evidence ID");

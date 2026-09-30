@@ -5,6 +5,7 @@ import { AttackGraph } from "@/components/attack-graph/AttackGraph";
 import { GlassPanel, PageHeader } from "@/components/layout/PageHeader";
 import { IncidentTimeline } from "@/components/timeline/IncidentTimeline";
 import { IrisInvestigationPanel } from "@/components/iris/IrisInvestigationPanel";
+import IncidentTimeMachine3D from "@/components/ui/incident-time-machine-3d";
 import { useDemo } from "@/context/DemoContext";
 import { cn } from "@/lib/utils";
 
@@ -93,6 +94,11 @@ export function TimeMachineView() {
           </>
         }
       />
+
+      {/* Interactive 3D Execution Pipeline Scene */}
+      <div className="my-6 h-[520px] w-full overflow-hidden rounded-2xl border border-cyan-glow/30 bg-card/40 shadow-glow">
+        <IncidentTimeMachine3D height="100%" />
+      </div>
 
       <IncidentTimeline />
 

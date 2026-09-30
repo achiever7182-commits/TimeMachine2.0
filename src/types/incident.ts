@@ -23,7 +23,7 @@ export type AssetType =
   | "CLOUD_RESOURCE"
   | "FILE_STORE";
 
-export type AssetStatus = "HEALTHY" | "SUSPICIOUS" | "COMPROMISED" | "ISOLATED" | "UNKNOWN" | "Clean" | "Potential" | "Contained";
+export type AssetStatus = "HEALTHY" | "SUSPICIOUS" | "COMPROMISED" | "ISOLATED" | "UNKNOWN" | "Clean" | "Potential" | "Contained" | "Suspicious" | "Compromised";
 
 export type RiskLevel = "Normal" | "Elevated" | "High" | "Critical" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 
@@ -169,7 +169,7 @@ export interface SimulationState {
 export interface Incident {
   id: string;
   title: string;
-  description: string;
+  description?: string;
   severity: Severity;
   status: IncidentStatus;
   organizationId: string;
@@ -221,3 +221,5 @@ export interface ResponseAction {
 export type EvidenceType = "AUTH" | "ENDPOINT" | "NETWORK" | "CLOUD" | "PROCESS";
 
 export type EvidenceEvent = Evidence;
+export type EvidenceItem = Evidence;
+

@@ -114,7 +114,7 @@ export function IrisCopilot() {
       <Button
         size="icon"
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 right-4 z-40 size-12 rounded-full shadow-glow bg-cyan-signal text-background hover:bg-cyan-400"
+        className="fixed bottom-20 right-4 z-40 size-12 rounded-full shadow-glow bg-cyan-signal text-background hover:bg-cyan-400"
         aria-label="Open IRIS Assistant"
       >
         <Bot className="size-6" />

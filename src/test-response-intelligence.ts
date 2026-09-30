@@ -54,11 +54,11 @@ async function runResponseIntelligenceTests() {
   );
 
   // TEST C — Phase 4 engine used as source of truth
-  const directBranch = simulateCounterfactualFuture(testMinute, candidates[1].action);
+  const directBranch = simulateCounterfactualFuture(testMinute, candidates[1]!.action);
   assert(
-    candidates[1].simulatedRisk === directBranch.comparison.counterfactualFinalRisk &&
-    candidates[1].preventedCompromises.length === directBranch.comparison.preventedCompromises.length &&
-    candidates[1].preventedEvents.length === directBranch.comparison.preventedCount,
+    candidates[1]!.simulatedRisk === directBranch.comparison.counterfactualFinalRisk &&
+    candidates[1]!.preventedCompromises.length === directBranch.comparison.preventedCompromises.length &&
+    candidates[1]!.preventedEvents.length === directBranch.comparison.preventedCount,
     "TEST C — PHASE 4 ENGINE AS SOURCE OF TRUTH",
     `Metrics exactly match Phase 4 simulateCounterfactualFuture comparison output.`
   );
@@ -160,17 +160,17 @@ async function runResponseIntelligenceTests() {
   );
 
   // TEST M — Multiple scenarios coexist
-  const branchDoNothing = simulateCounterfactualFuture(testMinute, candidates[0].action);
-  const branchIsolate = simulateCounterfactualFuture(testMinute, candidates[1].action);
-  const branchDisable = simulateCounterfactualFuture(testMinute, candidates[2].action);
-  const branchBlock = simulateCounterfactualFuture(testMinute, candidates[3].action);
+  const branchDoNothing = simulateCounterfactualFuture(testMinute, candidates[0]!.action);
+  const branchIsolate = simulateCounterfactualFuture(testMinute, candidates[1]!.action);
+  const branchDisable = simulateCounterfactualFuture(testMinute, candidates[2]!.action);
+  const branchBlock = simulateCounterfactualFuture(testMinute, candidates[3]!.action);
   const scenarioHistory = [branchDoNothing, branchIsolate, branchDisable, branchBlock];
   assert(
     scenarioHistory.length === 4 &&
-    scenarioHistory[0].comparison.preventedCount === 0 &&
-    scenarioHistory[1].comparison.preventedCount === 3 &&
-    scenarioHistory[2].comparison.preventedCount === 3 &&
-    scenarioHistory[3].comparison.preventedCount === 3,
+    scenarioHistory[0]!.comparison.preventedCount === 0 &&
+    scenarioHistory[1]!.comparison.preventedCount === 3 &&
+    scenarioHistory[2]!.comparison.preventedCount === 3 &&
+    scenarioHistory[3]!.comparison.preventedCount === 3,
     "TEST M — MULTIPLE SCENARIOS COEXIST",
     `All 4 scenario branches coexisting in history without cross-contamination.`
   );
@@ -303,7 +303,7 @@ async function runResponseIntelligenceTests() {
   // TEST V — Phase 1–4 regression tests still pass
   const twinCheck = getActualDigitalTwinState(22);
   const graphCheck = getAttackGraphAtTime("INC-2048", 22);
-  const cfCheck = simulateCounterfactualFuture(22, candidates[1].action);
+  const cfCheck = simulateCounterfactualFuture(22, candidates[1]!.action);
   assert(
     twinCheck.timestamp === "10:04" &&
     graphCheck.nodes.length > 0 &&

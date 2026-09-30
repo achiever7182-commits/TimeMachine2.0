@@ -165,7 +165,6 @@ interface DemoContextValue {
   runSimulation: () => void;
   simulationProgress: number;
   responseApproved: boolean;
-  approveResponse: () => void;
   executionStep: number;
 
   // Phase 4 Counterfactual Simulation Lab
@@ -260,16 +259,16 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   );
   const [activeAction, setActiveAction] = useState<CounterfactualAction>(() => {
     const actions = getStandardResponseActions(22);
-    return actions[1]; // default Option A: Isolate LAPTOP-042
+    return actions[1]!; // default Option A: Isolate LAPTOP-042
   });
   const [counterfactualBranch, setCounterfactualBranch] = useState<CounterfactualBranch | null>(() => {
     const actions = getStandardResponseActions(22);
-    return simulateCounterfactualFuture(22, actions[1]);
+    return simulateCounterfactualFuture(22, actions[1]!);
   });
   const [scenarioHistory, setScenarioHistory] = useState<CounterfactualBranch[]>(() => {
     const actions = getStandardResponseActions(22);
-    const branch0 = simulateCounterfactualFuture(22, actions[0]); // Do Nothing
-    const branchA = simulateCounterfactualFuture(22, actions[1]); // Isolate LAPTOP
+    const branch0 = simulateCounterfactualFuture(22, actions[0]!); // Do Nothing
+    const branchA = simulateCounterfactualFuture(22, actions[1]!); // Isolate LAPTOP
     return [branch0, branchA];
   });
   const [approvedBranchId, setApprovedBranchId] = useState<string | null>(null);
@@ -404,7 +403,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   const jumpToPreviousEvent = useCallback(() => {
     const prevEvents = demoTimelineEvents.filter((e) => (e.minute ?? 0) < currentMinute);
     if (prevEvents.length > 0) {
-      const prev = prevEvents[prevEvents.length - 1];
+      const prev = prevEvents[prevEvents.length - 1]!;
       setCurrentMinute(prev.minute ?? 0);
     } else {
       setCurrentMinute(0);
@@ -859,7 +858,6 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       runSimulation,
       simulationProgress,
       responseApproved,
-      approveResponse: () => approveBranch(counterfactualBranch?.branchId ?? "branch-approved"),
       executionStep,
       // Phase 4 Counterfactual
       counterfactualBranch,

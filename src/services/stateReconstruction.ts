@@ -254,7 +254,7 @@ export function getIncidentStateAtTime(
     return {
       ...node,
       status: isNodeActive ? node.status : ("Clean" as const),
-      risk: isNodeActive ? node.risk : ("Normal" as const),
+      risk: isNodeActive ? (node.risk ?? "Normal") : ("Normal" as const),
     };
   });
 
@@ -275,7 +275,7 @@ export function getIncidentStateAtTime(
     stage,
     risk,
     status,
-    activeEvent,
+    activeEvent: activeEvent ?? null,
     completedEvents,
     activeEvents,
     upcomingEvents,

@@ -94,7 +94,7 @@ export interface AffectedAssetSummary {
   name: string;
   type: string;
   owner: string;
-  status: "HEALTHY" | "COMPROMISED" | "ISOLATED" | "CONTAINED";
+  status: "HEALTHY" | "MONITORED" | "SUSPICIOUS" | "COMPROMISED" | "ISOLATED" | "RECOVERED" | "CONTAINED";
   firstAffectedAt?: string;
   compromiseTimestamp?: string;
   roleInAttack: string;
@@ -111,7 +111,7 @@ export interface AffectedUserSummary {
   name: string;
   role: string;
   department: string;
-  status: "ACTIVE" | "COMPROMISED" | "DISABLED";
+  status: "ACTIVE" | "INACTIVE" | "SUSPICIOUS" | "COMPROMISED" | "DISABLED";
   firstSuspiciousAt?: string;
   compromisedAt?: string;
   compromiseTimestamp?: string;

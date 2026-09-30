@@ -357,7 +357,7 @@ export function getAttackGraphAtTime(
     incidentId,
     nodes,
     edges,
-    entryPoint,
+    entryPoint: entryPoint ?? null,
     compromisedNodes,
     suspiciousNodes,
     affectedNodes,
@@ -392,7 +392,7 @@ export function findPath(
 
   while (queue.length > 0) {
     const path = queue.shift()!;
-    const current = path[path.length - 1];
+    const current = path[path.length - 1]!;
 
     if (current === targetNodeId) {
       return path;

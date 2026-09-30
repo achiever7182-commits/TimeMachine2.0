@@ -156,7 +156,7 @@ const filterServer: AttackGraphFilter = {
 const filtered = filterAttackGraph(g4, filterServer);
 assert(
   filtered.nodes.length === 1 &&
-  filtered.nodes[0].id === "SERVER-03" &&
+  filtered.nodes[0]!.id === "SERVER-03" &&
   g4.nodes.length === 7,
   "TEST J — FILTERS",
   `Filtered nodes: ${filtered.nodes.length}, Original underlying nodes: ${g4.nodes.length}`

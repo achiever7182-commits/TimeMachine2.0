@@ -27,7 +27,9 @@ export type IrisCitationType =
   | "ATTACK_EDGE"
   | "COUNTERFACTUAL_EVENT"
   | "SNAPSHOT"
-  | "RISK_STATE";
+  | "RISK_STATE"
+  | "DETECTION_OPPORTUNITY";
+
 
 export interface IrisCitation {
   id: string;

@@ -98,7 +98,7 @@ export class IncidentReportService {
 
     // Build Forensic Timeline
     const timeline: ReportTimelineEvent[] = demoTimelineEvents
-      .filter((e) => e.minute <= minute)
+      .filter((e) => (e.minute ?? 0) <= minute)
       .map((e) => {
         let significance = "Operational incident progression signal.";
         if (e.id === "evt-0947") {
@@ -125,7 +125,7 @@ export class IncidentReportService {
         }
 
         // Segregate actual occurrence from known-at-time security state
-        const isKnownAtTime = e.minute <= (minute < 42 ? Math.min(minute, 5) : 42);
+        const isKnownAtTime = (e.minute ?? 0) <= (minute < 42 ? Math.min(minute, 5) : 42);
         const knownAtTime = isKnownAtTime
           ? `Observed by defenders at ${e.timestamp}`
           : "Not yet observed by SOC; unassigned telemetry or latent visibility";
@@ -134,7 +134,7 @@ export class IncidentReportService {
           id: e.id,
           eventId: e.id,
           timestamp: e.timestamp,
-          minute: e.minute,
+          minute: e.minute ?? 0,
           title: e.title,
           category: e.category,
           severity: e.severity,
@@ -233,9 +233,9 @@ export class IncidentReportService {
       segments: attackGraph.edges.map((e) => ({
         source: e.source,
         destination: e.target,
-        relationship: e.relationship,
+        relationship: (e as any).relationship || (e as any).relationshipType || "CONNECTED",
         timestamp: e.firstSeen,
-        evidenceId: e.evidenceIds[0],
+        evidenceId: e.evidenceIds[0] || "",
         confidence: e.confidence,
       })),
       description:
@@ -252,9 +252,9 @@ export class IncidentReportService {
       source: ev.source,
       description: ev.content,
       relatedEvent: ev.type === "AUTHENTICATION" ? "evt-0947" : ev.type === "PROCESS" ? "evt-1004" : "evt-1012",
-      relatedAsset: ev.relatedAssetId,
-      relatedUser: ev.relatedUserId,
-      attackNode: ev.relatedAssetId || "ALEX_ACCOUNT",
+      relatedAsset: (ev as any).relatedAssetId || ev.assetId,
+      relatedUser: (ev as any).relatedUserId,
+      attackNode: (ev as any).relatedAssetId || ev.assetId || "ALEX_ACCOUNT",
       significance:
         ev.type === "AUTHENTICATION"
           ? "Unusual foreign location authentication telemetry."
@@ -379,7 +379,7 @@ export class IncidentReportService {
         "ACCOUNT_COMPROMISED",
         "LATERAL_MOVEMENT",
         "DATA_ACCESS",
-        "INCIDENT_DECLARED",
+        "INCIDENT_DETECTED",
       ],
       finalRisk: incidentState.risk,
       detectionDelayMinutes: detectionGapData.detectionDelayMinutes,

@@ -105,7 +105,7 @@ export class ResponseIntelligenceService {
     // Filter out DO_NOTHING for recommendation selection if proactive alternatives exist
     const actionable = candidates.filter((c) => c.action.type !== "DO_NOTHING");
     const sorted = actionable.sort((a, b) => b.score - a.score);
-    const best = sorted[0] || candidates[0];
+    const best = (sorted[0] || candidates[0])!;
 
     const alternatives = candidates.filter((c) => c.id !== best.id);
     const timestamp = minuteToTimestamp(minute);
@@ -184,7 +184,7 @@ export class ResponseIntelligenceService {
     const candidates = this.evaluateCandidates(minute, incidentId);
     const candidate =
       candidates.find((c) => c.action.type === recommendation.recommendedAction.type) ||
-      candidates[0];
+      candidates[0]!;
 
     const decision: ResponseDecision = {
       mode: "AUTO_SIMULATE",

@@ -76,11 +76,11 @@ export function simulateCounterfactualFuture(
 
   // Add historical events leading up to intervention
   for (const evt of demoTimelineEvents) {
-    if (evt.minute <= baseMinute) {
+    if ((evt.minute ?? 0) <= baseMinute) {
       simulatedTimeline.push({
         id: evt.id,
         time: evt.timestamp,
-        minute: evt.minute,
+        minute: evt.minute ?? 0,
         title: evt.title,
         description: evt.description,
         category: evt.category,
@@ -112,7 +112,7 @@ export function simulateCounterfactualFuture(
 
   // Replay future events from (baseMinute .. 42]
   for (const evt of demoTimelineEvents) {
-    if (evt.minute > baseMinute) {
+    if ((evt.minute ?? 0) > baseMinute) {
       let isPrevented = false;
       let reason = "";
       let causalTrigger = "";
@@ -157,7 +157,7 @@ export function simulateCounterfactualFuture(
           originalTime: evt.timestamp,
           title: evt.title,
           category: evt.category,
-          targetAsset: evt.affectedAssetIds[evt.affectedAssetIds.length - 1],
+          targetAsset: evt.affectedAssetIds[evt.affectedAssetIds.length - 1] || "",
           reason,
           causalTrigger,
         };
@@ -166,7 +166,7 @@ export function simulateCounterfactualFuture(
         simulatedTimeline.push({
           id: evt.id,
           time: evt.timestamp,
-          minute: evt.minute,
+          minute: evt.minute ?? 0,
           title: `${evt.title} (PREVENTED)`,
           description: reason,
           category: evt.category,
@@ -178,7 +178,7 @@ export function simulateCounterfactualFuture(
         simulatedTimeline.push({
           id: evt.id,
           time: evt.timestamp,
-          minute: evt.minute,
+          minute: evt.minute ?? 0,
           title: evt.title,
           description: evt.description,
           category: evt.category,
@@ -257,7 +257,7 @@ export function simulateCounterfactualFuture(
   // Filter exposed data resources
   const finalDataResources: DataResource[] = baselineFinalSnapshot.dataResources.map((res) => {
     const parentAsset = finalAssets.find((a) => a.id === res.assetId);
-    const isExposed = parentAsset?.status === "COMPROMISED" || parentAsset?.status === "AFFECTED";
+    const isExposed = parentAsset?.status === "COMPROMISED" || (parentAsset?.status as string) === "AFFECTED";
     return {
       ...res,
       isExposed,

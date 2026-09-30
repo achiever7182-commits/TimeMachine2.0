@@ -26,7 +26,7 @@ export function IncidentsView() {
     (i) =>
       i.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       i.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (i.employeeAccount && i.employeeAccount.toLowerCase().includes(searchQuery.toLowerCase()))
+      ((i as any).employeeAccount && (i as any).employeeAccount.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   // Selected incident details (reads live INC-2048 state from central engine)
@@ -78,7 +78,7 @@ export function IncidentsView() {
             <div>
               <h2 className="text-2xl font-bold text-foreground">{selectedIncident.title}</h2>
               <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                {selectedIncident.description}
+                {selectedIncident.description || selectedIncident.summary}
               </p>
             </div>
 
@@ -183,14 +183,13 @@ export function IncidentsView() {
           const isSelected = display.id === selectedIncidentId;
 
           return (
-            <GlassPanel
-              key={display.id}
-              className={cn(
-                "p-5 cursor-pointer transition-all hover:border-cyan-glow",
-                isSelected && "border-cyan-glow bg-secondary/40 shadow-glow"
-              )}
-              onClick={() => setSelectedIncidentId(display.id)}
-            >
+            <div key={display.id} onClick={() => setSelectedIncidentId(display.id)}>
+              <GlassPanel
+                className={cn(
+                  "p-5 cursor-pointer transition-all hover:border-cyan-glow",
+                  isSelected && "border-cyan-glow bg-secondary/40 shadow-glow"
+                )}
+              >
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex gap-4">
                   <span
@@ -238,8 +237,9 @@ export function IncidentsView() {
                 </div>
               </div>
             </GlassPanel>
-          );
-        })}
+          </div>
+        );
+      })}
       </div>
     </div>
   );

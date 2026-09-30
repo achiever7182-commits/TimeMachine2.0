@@ -107,7 +107,7 @@ export function IrisMessage({ message, onSelectCitation }: IrisMessageProps) {
               <IrisFindingCard
                 key={f.id}
                 finding={f}
-                onSelectCitation={onSelectCitation}
+                onSelectCitation={(cId) => onSelectCitation?.({ id: cId, type: "EVIDENCE", label: cId })}
               />
             ))}
           </div>

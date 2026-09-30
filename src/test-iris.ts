@@ -194,7 +194,7 @@ async function runIrisVerificationSuite() {
   assert(
     ctx1004.timeline.length === initialTimelineLength &&
     baselineStateCheck.timestamp === "10:04" &&
-    digitalTwinCheck.assets[0].id === "LAPTOP-042" &&
+    digitalTwinCheck.assets[0]!.id === "LAPTOP-042" &&
     digitalTwinCheck.assets.length === 6,
     "TEST L — IMMUTABILITY",
     `Zero mutation of baseline incident, clock, timeline, or digital twin state across multiple IRIS queries.`

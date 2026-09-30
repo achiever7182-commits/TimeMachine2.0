@@ -54,7 +54,7 @@ assert(state1007.minute === 25, "10:07 corresponds to minute 25");
 assert(state1007.stage === "LATERAL_MOVEMENT", "Stage at 10:07 is LATERAL_MOVEMENT");
 assert(state1007.risk === "HIGH", "Risk at 10:07 is HIGH");
 assert(state1007.compromisedAssetIds.includes("SERVER-03"), "SERVER-03 is affected/compromised at 10:07");
-assert(state1007.activeAttackNodes.find(n => n.id === "SERVER-03")?.status === "Compromised", "SERVER-03 attack node is Compromised at 10:07");
+assert((state1007.activeAttackNodes.find(n => n.id === "SERVER-03")?.status as string) === "Compromised", "SERVER-03 attack node is Compromised at 10:07");
 
 // TEST 6: Reach 10:12 (Minute 30)
 console.log("\n--- TEST 6: Reach 10:12 (Database Access) ---");
@@ -63,7 +63,7 @@ assert(state1012.minute === 30, "10:12 corresponds to minute 30");
 assert(state1012.stage === "DATA_ACCESS", "Stage at 10:12 is DATA_ACCESS");
 assert(state1012.risk === "CRITICAL", "Risk at 10:12 is CRITICAL");
 assert(state1012.compromisedAssetIds.includes("DB-PROD-01"), "DB-PROD-01 is affected/compromised at 10:12");
-assert(state1012.activeAttackNodes.find(n => n.id === "DB-PROD-01")?.status === "Compromised", "DB-PROD-01 attack node is Compromised at 10:12");
+assert((state1012.activeAttackNodes.find(n => n.id === "DB-PROD-01")?.status as string) === "Compromised", "DB-PROD-01 attack node is Compromised at 10:12");
 
 // TEST 7 & 8: Reach 10:18 (Minute 36)
 console.log("\n--- TEST 7 & 8: Reach 10:18 (Sensitive File Access Attempt) ---");

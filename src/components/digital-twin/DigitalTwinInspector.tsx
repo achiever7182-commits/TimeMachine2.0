@@ -37,7 +37,7 @@ export function DigitalTwinInspector() {
     : digitalTwin.users.find((u) => u.associatedDeviceIds.includes(selectedAsset.id));
 
   // Default to LAPTOP-042 if nothing found
-  const activeAsset = selectedAsset ?? digitalTwin.assets[0];
+  const activeAsset = (selectedAsset ?? digitalTwin.assets[0])!;
 
   // Connected network links
   const relatedConnections = digitalTwin.networkConnections.filter(
@@ -245,7 +245,9 @@ export function DigitalTwinInspector() {
             onClick={() => {
               if (activeAsset.compromiseTime) {
                 // Seek to compromise time
-                const [h, m] = activeAsset.compromiseTime.split(":").map(Number);
+                const parts = activeAsset.compromiseTime.split(":");
+                const h = Number(parts[0] ?? 9);
+                const m = Number(parts[1] ?? 42);
                 const min = (h * 60 + m) - (9 * 60 + 42);
                 setCurrentMinute(min);
               }
