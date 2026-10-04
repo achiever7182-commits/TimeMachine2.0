@@ -126,7 +126,7 @@ function RootComponent() {
       <AuthProvider>
         <TelemetryProvider>
           <DemoProvider>
-            {pathname === "/" ? (
+            {pathname === "/" || pathname === "/login" ? (
               <Outlet />
             ) : (
               <AuthGuard>

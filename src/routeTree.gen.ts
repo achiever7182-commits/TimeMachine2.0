@@ -17,6 +17,7 @@ import { Route as EvidenceRouteImport } from './routes/evidence'
 import { Route as IncidentsRouteImport } from './routes/incidents'
 import { Route as IrisRouteImport } from './routes/iris'
 import { Route as LearningRouteImport } from './routes/learning'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as ResponseCenterRouteImport } from './routes/response-center'
 import { Route as SettingsRouteImport } from './routes/settings'
@@ -63,6 +64,11 @@ const LearningRoute = LearningRouteImport.update({
   path: '/learning',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ReportsRoute = ReportsRouteImport.update({
   id: '/reports',
   path: '/reports',
@@ -98,6 +104,7 @@ export interface FileRoutesByFullPath {
   '/incidents': typeof IncidentsRoute
   '/iris': typeof IrisRoute
   '/learning': typeof LearningRoute
+  '/login': typeof LoginRoute
   '/reports': typeof ReportsRoute
   '/response-center': typeof ResponseCenterRoute
   '/settings': typeof SettingsRoute
@@ -113,6 +120,7 @@ export interface FileRoutesByTo {
   '/incidents': typeof IncidentsRoute
   '/iris': typeof IrisRoute
   '/learning': typeof LearningRoute
+  '/login': typeof LoginRoute
   '/reports': typeof ReportsRoute
   '/response-center': typeof ResponseCenterRoute
   '/settings': typeof SettingsRoute
@@ -129,6 +137,7 @@ export interface FileRoutesById {
   '/incidents': typeof IncidentsRoute
   '/iris': typeof IrisRoute
   '/learning': typeof LearningRoute
+  '/login': typeof LoginRoute
   '/reports': typeof ReportsRoute
   '/response-center': typeof ResponseCenterRoute
   '/settings': typeof SettingsRoute
@@ -146,6 +155,7 @@ export interface FileRouteTypes {
     | '/incidents'
     | '/iris'
     | '/learning'
+    | '/login'
     | '/reports'
     | '/response-center'
     | '/settings'
@@ -161,6 +171,7 @@ export interface FileRouteTypes {
     | '/incidents'
     | '/iris'
     | '/learning'
+    | '/login'
     | '/reports'
     | '/response-center'
     | '/settings'
@@ -176,6 +187,7 @@ export interface FileRouteTypes {
     | '/incidents'
     | '/iris'
     | '/learning'
+    | '/login'
     | '/reports'
     | '/response-center'
     | '/settings'
@@ -192,6 +204,7 @@ export interface RootRouteChildren {
   IncidentsRoute: typeof IncidentsRoute
   IrisRoute: typeof IrisRoute
   LearningRoute: typeof LearningRoute
+  LoginRoute: typeof LoginRoute
   ReportsRoute: typeof ReportsRoute
   ResponseCenterRoute: typeof ResponseCenterRoute
   SettingsRoute: typeof SettingsRoute
@@ -257,6 +270,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LearningRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reports': {
       id: '/reports'
       path: '/reports'
@@ -304,6 +324,7 @@ const rootRouteChildren: RootRouteChildren = {
   IncidentsRoute: IncidentsRoute,
   IrisRoute: IrisRoute,
   LearningRoute: LearningRoute,
+  LoginRoute: LoginRoute,
   ReportsRoute: ReportsRoute,
   ResponseCenterRoute: ResponseCenterRoute,
   SettingsRoute: SettingsRoute,

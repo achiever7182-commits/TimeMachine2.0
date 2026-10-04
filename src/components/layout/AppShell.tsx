@@ -5,7 +5,6 @@ import {
   CircleDot,
   FileText,
   FlaskConical,
-  Gauge,
   GitBranch,
   Home,
   ListChecks,
@@ -17,6 +16,8 @@ import {
   Settings,
   ShieldCheck,
   Siren,
+  Terminal,
+  Activity
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
@@ -28,7 +29,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useLocation } from "@tanstack/react-router";
 import { useDemo } from "@/context/DemoContext";
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
@@ -42,49 +43,96 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const navItems = [
-  { label: "Dashboard", to: "/dashboard", icon: Home },
-  { label: "Incidents", to: "/incidents", icon: Siren },
-  { label: "Digital Twin", to: "/digital-twin", icon: Network },
-  { label: "Incident Time Machine", to: "/time-machine", icon: BrainCircuit },
-  { label: "Attack Graph", to: "/attack-graph", icon: GitBranch },
-  { label: "Simulation Lab", to: "/simulation-lab", icon: FlaskConical },
-  { label: "IRIS Investigator", to: "/iris", icon: Bot },
-  { label: "Evidence", to: "/evidence", icon: Radar },
-  { label: "Response Center", to: "/response-center", icon: ListChecks },
-  { label: "Reports", to: "/reports", icon: FileText },
-  { label: "Settings", to: "/settings", icon: Settings },
-] as const;
+const navSections = [
+  {
+    title: "COMMAND",
+    items: [
+      { label: "Dashboard", to: "/dashboard", icon: Home, shortcut: "⌘1" },
+      { label: "Incidents", to: "/incidents", icon: Siren, shortcut: "⌘2" },
+    ]
+  },
+  {
+    title: "INVESTIGATION",
+    items: [
+      { label: "Time Machine", to: "/time-machine", icon: BrainCircuit, shortcut: "⌘3" },
+      { label: "Attack Graph", to: "/attack-graph", icon: GitBranch, shortcut: "⌘4" },
+      { label: "Digital Twin", to: "/digital-twin", icon: Network },
+      { label: "IRIS Investigator", to: "/iris", icon: Bot },
+      { label: "Evidence", to: "/evidence", icon: Radar },
+    ]
+  },
+  {
+    title: "SIMULATION",
+    items: [
+      { label: "Simulation Lab", to: "/simulation-lab", icon: FlaskConical },
+    ]
+  },
+  {
+    title: "RESPONSE",
+    items: [
+      { label: "Response Center", to: "/response-center", icon: ListChecks },
+    ]
+  },
+  {
+    title: "INTELLIGENCE",
+    items: [
+      { label: "Reports", to: "/reports", icon: FileText },
+    ]
+  },
+  {
+    title: "SYSTEM",
+    items: [
+      { label: "Settings", to: "/settings", icon: Settings },
+    ]
+  }
+];
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   return (
-    <nav className="space-y-1" aria-label="Primary">
-      {navItems.map((item) => {
-        const Icon = item.icon;
-        const active = pathname === item.to;
-        return (
-          <Link
-            key={item.to}
-            to={item.to}
-            onClick={onNavigate}
-            className={cn(
-              "group flex min-h-11 items-center gap-3 rounded-lg border px-3 text-sm font-medium transition-all duration-200",
-              active
-                ? "border-cyan-glow bg-primary/15 text-foreground shadow-glow"
-                : "border-transparent text-muted-foreground hover:border-border hover:bg-secondary/70 hover:text-foreground",
-            )}
-          >
-            <Icon
-              className={cn(
-                "size-4",
-                active ? "text-cyan-signal" : "text-muted-foreground group-hover:text-cyan-signal",
-              )}
-            />
-            <span>{item.label}</span>
-          </Link>
-        );
-      })}
+    <nav className="space-y-6" aria-label="Primary">
+      {navSections.map((section) => (
+        <div key={section.title} className="space-y-2">
+          <div className="px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/70">
+            {section.title}
+          </div>
+          <div className="space-y-0.5">
+            {section.items.map((item) => {
+              const Icon = item.icon;
+              const active = pathname === item.to || pathname.startsWith(item.to + "/");
+              return (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  onClick={onNavigate}
+                  className={cn(
+                    "group relative flex min-h-10 items-center gap-3 rounded-none border-l-2 px-3 text-sm font-medium transition-all duration-200",
+                    active
+                      ? "border-primary bg-primary/10 text-foreground shadow-[inset_40px_0_40px_rgba(0,229,255,0.05)]"
+                      : "border-transparent text-muted-foreground hover:border-border hover:bg-secondary/40 hover:text-foreground",
+                  )}
+                >
+                  <Icon
+                    className={cn(
+                      "size-[14px]",
+                      active ? "text-cyan-signal drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]" : "text-muted-foreground/70 group-hover:text-cyan-signal",
+                    )}
+                  />
+                  <span className="font-sans text-[13px]">{item.label}</span>
+                  {item.shortcut && (
+                    <span className="ml-auto font-mono text-[10px] text-muted-foreground/50 opacity-0 transition-opacity group-hover:opacity-100">
+                      {item.shortcut}
+                    </span>
+                  )}
+                  {active && (
+                    <div className="absolute right-3 size-1.5 rounded-full bg-cyan-signal animate-pulse-ring" />
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </nav>
   );
 }
@@ -101,138 +149,160 @@ export function AppShell({ children }: { children: ReactNode }) {
     resumeSimulation,
     resetDemo,
   } = useDemo();
+  
+  const location = useLocation();
+  const breadcrumbName = navSections.flatMap(s => s.items).find(i => i.to === location.pathname)?.label || location.pathname.substring(1).toUpperCase() || "DASHBOARD";
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="fixed inset-0 -z-10 bg-command-grid opacity-70" />
-      <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_20%_10%,var(--aura-cyan),transparent_28%),radial-gradient(circle_at_90%_0%,var(--aura-violet),transparent_24%),linear-gradient(180deg,var(--background),var(--background))]" />
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-72 border-r border-border bg-sidebar/80 px-4 py-5 backdrop-blur-xl lg:block">
-        <Link to="/" className="mb-6 flex items-center gap-3 rounded-lg px-2">
-          <span className="grid size-11 place-items-center rounded-lg border border-cyan-glow bg-primary/15 shadow-glow">
-            <ShieldCheck className="size-5 text-cyan-signal" />
-          </span>
-          <span>
-            <span className="block text-sm font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-              Incident
+    <div className="min-h-screen bg-background text-foreground font-sans">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-border bg-sidebar px-0 py-0 lg:flex lg:flex-col">
+        <div className="flex items-center gap-3 border-b border-border p-5">
+          <Terminal className="size-5 text-cyan-signal drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]" />
+          <div>
+            <span className="block font-sans text-sm font-bold tracking-[0.1em] text-foreground">
+              TIMEMACHINE
             </span>
-            <span className="block text-lg font-semibold">Time Machine</span>
-          </span>
-        </Link>
-        <NavLinks />
-        <div className="mt-6 rounded-lg border border-border bg-card/70 p-4 shadow-panel">
-          <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-[0.18em] text-cyan-signal">
-            <span className="flex items-center gap-2">
-              <CircleDot className={cn("size-3", isAttackRunning && "animate-pulse")} /> DEMO MODE
+            <span className="block font-mono text-[9px] uppercase tracking-[0.2em] text-cyan-signal/70">
+              Incident Response Platform
             </span>
-            <span className="font-mono text-muted-foreground">{currentTime}</span>
           </div>
-          <p className="mt-2 text-xs text-muted-foreground">
-            Synthetic telemetry only. No real infrastructure actions are connected.
-          </p>
-          {!isAttackRunning && !isPaused ? (
-            <Button className="mt-4 w-full" onClick={startAttackSimulation}>
-              <Radar className="size-4" /> Start Attack Simulation
-            </Button>
-          ) : isAttackRunning ? (
-            <div className="mt-4 flex gap-2">
-              <Button className="flex-1" variant="secondary" size="sm" onClick={pauseSimulation}>
-                Pause
-              </Button>
-              <Button variant="outline" size="sm" onClick={resetDemo}>
-                Reset
-              </Button>
+        </div>
+        
+        <div className="flex items-center gap-2 border-b border-border bg-black/40 px-5 py-2 font-mono text-[10px]">
+          <CircleDot className="size-2 text-cyan-signal animate-pulse" />
+          <span className="text-muted-foreground">NODE: <span className="text-cyan-signal">TM-CORE-01</span></span>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-2 py-6 custom-scrollbar">
+          <NavLinks />
+        </div>
+        
+        <div className="mt-auto border-t border-border bg-black/60 p-4">
+          <div className="mb-3 rounded border border-warning/30 bg-warning/5 p-3">
+            <div className="flex items-center gap-2 font-mono text-[10px] uppercase text-warning">
+              <Activity className={cn("size-3", isAttackRunning && "animate-pulse")} />
+              <span>DEMO ENVIRONMENT</span>
             </div>
-          ) : (
-            <div className="mt-4 flex gap-2">
-              <Button className="flex-1" size="sm" onClick={resumeSimulation}>
-                Resume
+            <p className="mt-1.5 font-sans text-[11px] text-muted-foreground leading-tight">
+              Synthetic telemetry active. No verified live endpoint telemetry connected.
+            </p>
+          </div>
+          
+          <div className="flex flex-col gap-2">
+            {!isAttackRunning && !isPaused ? (
+              <Button size="sm" onClick={startAttackSimulation} className="w-full bg-primary/10 text-cyan-signal border border-primary/30 hover:bg-primary/20 hover:text-white transition-colors font-mono text-xs rounded-sm h-8">
+                [ RUN SIMULATION ]
               </Button>
-              <Button variant="outline" size="sm" onClick={resetDemo}>
-                Reset
-              </Button>
-            </div>
-          )}
+            ) : isAttackRunning ? (
+              <div className="flex gap-2">
+                <Button size="sm" onClick={pauseSimulation} className="flex-1 bg-warning/10 text-warning border border-warning/30 hover:bg-warning/20 rounded-sm font-mono text-xs h-8">
+                  PAUSE
+                </Button>
+                <Button size="sm" variant="outline" onClick={resetDemo} className="rounded-sm font-mono text-xs h-8">
+                  RESET
+                </Button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <Button size="sm" onClick={resumeSimulation} className="flex-1 bg-primary/10 text-cyan-signal border border-primary/30 hover:bg-primary/20 rounded-sm font-mono text-xs h-8">
+                  RESUME
+                </Button>
+                <Button size="sm" variant="outline" onClick={resetDemo} className="rounded-sm font-mono text-xs h-8">
+                  RESET
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </aside>
 
-      <div className="min-h-screen lg:pl-72">
-        <header className="sticky top-0 z-20 border-b border-border bg-background/75 backdrop-blur-xl">
-          <div className="flex min-h-16 items-center gap-3 px-4 sm:px-6 lg:px-8">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  className="lg:hidden"
-                  aria-label="Open navigation"
-                >
-                  <Menu className="size-4" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent
-                side="left"
-                className="w-80 border-border bg-sidebar/95 p-5 backdrop-blur-xl"
-              >
-                <SheetHeader className="mb-5 text-left">
-                  <SheetTitle>Incident Time Machine</SheetTitle>
-                  <SheetDescription>Demo security center navigation.</SheetDescription>
-                </SheetHeader>
-                <NavLinks />
-              </SheetContent>
-            </Sheet>
-            <div className="hidden min-w-0 flex-1 items-center rounded-lg border border-border bg-input/30 px-3 py-2 sm:flex">
-              <Search className="mr-2 size-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">
-                Search incidents, hosts, hashes, evidence
-              </span>
-            </div>
-            <div className="ml-auto flex items-center gap-2">
-              <span className="hidden items-center gap-2 rounded-full border border-green-signal/30 bg-green-signal/10 px-3 py-1.5 text-xs font-semibold text-green-signal sm:inline-flex">
-                <CircleDot className="size-3" /> Systems nominal
-              </span>
-              <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-cyan-signal">
-                DEMO MODE
-              </span>
-              <Button variant="outline" size="icon" aria-label="Notifications">
-                <Bell className="size-4" />
+      <div className="flex min-h-screen flex-col lg:pl-64">
+        <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-4 border-b border-border bg-sidebar/80 px-4 backdrop-blur-xl sm:gap-6 sm:px-6">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" className="shrink-0 lg:hidden rounded-sm">
+                <Menu className="size-4" />
               </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="size-9 rounded-lg border border-border bg-card font-semibold hover:bg-secondary">
-                    {profile?.display_name?.substring(0, 2).toUpperCase() || user?.email?.substring(0, 2).toUpperCase() || "SK"}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{profile?.display_name || "User"}</p>
-                      <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/settings">Profile & Settings</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => signOut()}>
-                    Log out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-64 border-border bg-sidebar p-0">
+              {/* Mobile nav similar to desktop */}
+              <div className="flex items-center gap-3 border-b border-border p-5">
+                <Terminal className="size-5 text-cyan-signal" />
+                <div>
+                  <span className="block font-sans text-sm font-bold tracking-[0.1em] text-foreground">TIMEMACHINE</span>
+                </div>
+              </div>
+              <div className="px-2 py-6">
+                <NavLinks />
+              </div>
+            </SheetContent>
+          </Sheet>
+          
+          <div className="hidden items-center gap-2 font-mono text-[10px] text-muted-foreground/60 sm:flex">
+            <span>TIMEMACHINE</span>
+            <span>/</span>
+            <span>INCIDENT RESPONSE</span>
+            <span>/</span>
+            <span className="text-cyan-signal">{breadcrumbName.toUpperCase()}</span>
+          </div>
+
+          <div className="mx-auto hidden max-w-md flex-1 items-center rounded-sm border border-border bg-black/50 px-3 py-1.5 sm:flex">
+            <Search className="mr-2 size-3 text-muted-foreground" />
+            <input 
+              type="text"
+              placeholder="Search incidents, hosts, hashes, IPs, evidence..." 
+              className="flex-1 bg-transparent font-mono text-xs text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+            />
+          </div>
+
+          <div className="ml-auto flex items-center gap-4">
+            <div className="hidden lg:flex items-center gap-4 border-r border-border pr-4 font-mono text-[10px]">
+              <div className="flex flex-col items-end">
+                <span className="text-muted-foreground/50">EVENTS</span>
+                <span className="text-foreground">12.4K</span>
+              </div>
+              <div className="flex flex-col items-end">
+                <span className="text-muted-foreground/50">ALERTS</span>
+                <span className="text-warning">03</span>
+              </div>
+              <div className="flex flex-col items-end">
+                <span className="text-muted-foreground/50">AGENTS</span>
+                <span className="text-foreground">08</span>
+              </div>
             </div>
+
+            <span className="hidden items-center gap-2 rounded-sm border border-warning/30 bg-warning/10 px-2 py-1 font-mono text-[10px] font-bold text-warning sm:inline-flex">
+              <CircleDot className="size-2 animate-pulse" /> SYNTHETIC DATA
+            </span>
+            
+            <Button variant="ghost" size="icon" className="rounded-sm hover:bg-secondary/50">
+              <Bell className="size-4 text-muted-foreground" />
+            </Button>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="size-8 rounded-sm bg-black/50 font-mono text-xs font-bold text-cyan-signal border-primary/20 hover:bg-primary/10 hover:text-cyan-signal">
+                  {profile?.display_name?.substring(0, 2).toUpperCase() || user?.email?.substring(0, 2).toUpperCase() || "OP"}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 rounded-sm border-border bg-sidebar font-mono text-xs">
+                <DropdownMenuLabel className="font-normal text-muted-foreground">
+                  OPERATOR: {user?.email}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-border" />
+                <DropdownMenuItem asChild className="hover:bg-primary/10 hover:text-cyan-signal focus:bg-primary/10 focus:text-cyan-signal">
+                  <Link to="/settings">SYSTEM SETTINGS</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => signOut()} className="text-destructive hover:bg-destructive/10 focus:bg-destructive/10 focus:text-destructive">
+                  TERMINATE SESSION
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </header>
-        <main className="px-4 py-6 sm:px-6 lg:px-8">{children}</main>
+        <main className="flex-1 p-6">{children}</main>
       </div>
       <IrisCopilot />
-      <Button
-        asChild
-        className="fixed bottom-4 left-4 z-30 hidden shadow-glow lg:inline-flex"
-        variant="secondary"
-      >
-        <Link to="/time-machine">
-          <PanelRightOpen className="size-4" /> Resume demo flow
-        </Link>
-      </Button>
     </div>
   );
 }

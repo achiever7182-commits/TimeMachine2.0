@@ -1,0 +1,543 @@
+import React, { useState } from "react";
+import { supabase } from "@/lib/supabase";
+import {
+  ShieldAlert,
+  Terminal,
+  Activity,
+  Lock,
+  User,
+  KeyRound,
+  Eye,
+  EyeOff,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+  Fingerprint,
+  Radio,
+  FileKey,
+} from "lucide-react";
+import { CyberBackground } from "./CyberBackground";
+import { TemporalCore } from "./TemporalCore";
+import { AuthHud } from "./AuthHud";
+import { PrivacyRobot } from "@/components/ui/privacy-robot";
+
+type AuthMode = "login" | "signup" | "recovery";
+
+interface CyberAuthTerminalProps {
+  onSuccess?: () => void;
+}
+
+export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
+  const [mode, setMode] = useState<AuthMode>("login");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [authStage, setAuthStage] = useState<string | null>(null);
+  const [enteringApp, setEnteringApp] = useState(false);
+  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccessMessage(null);
+    setLoading(true);
+
+    try {
+      if (mode === "login") {
+        setAuthStage("AUTHENTICATING OPERATOR...");
+        const { error: authError } = await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password,
+        });
+
+        if (authError) throw authError;
+
+        // Cinematic 3-phase verification sequence
+        setAuthStage("VERIFYING CREDENTIALS...");
+        await new Promise((r) => setTimeout(r, 260));
+        setAuthStage("OPERATOR SESSION INITIALIZED...");
+        await new Promise((r) => setTimeout(r, 260));
+        setAuthStage("TIMELINE ENGINE READY...");
+        await new Promise((r) => setTimeout(r, 260));
+
+        setEnteringApp(true);
+        if (onSuccess) {
+          setTimeout(() => {
+            onSuccess();
+          }, 300);
+        }
+      } else if (mode === "signup") {
+        if (password !== confirmPassword) {
+          throw new Error("Access keys do not match. Please re-enter.");
+        }
+        if (password.length < 6) {
+          throw new Error("Access key must contain at least 6 characters.");
+        }
+
+        setAuthStage("CREATING OPERATOR PROFILE...");
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+          email: email.trim(),
+          password,
+          options: {
+            data: {
+              display_name: username.trim() || email.split("@")[0],
+            },
+          },
+        });
+
+        if (signUpError) throw signUpError;
+
+        if (signUpData.session) {
+          setAuthStage("INITIALIZING SECURITY SESSION...");
+          await new Promise((r) => setTimeout(r, 260));
+          setAuthStage("TIMELINE ENGINE READY...");
+          await new Promise((r) => setTimeout(r, 260));
+          setEnteringApp(true);
+          if (onSuccess) {
+            setTimeout(() => {
+              onSuccess();
+            }, 300);
+          }
+        } else {
+          setAuthStage("ACCESS READY");
+          setSuccessMessage(
+            "OPERATOR PROFILE CREATED. Registration confirmed. You may now authenticate.",
+          );
+          setLoading(false);
+          setAuthStage(null);
+        }
+      } else if (mode === "recovery") {
+        setAuthStage("DISPATCHING RECOVERY TOKEN...");
+        const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+          redirectTo: `${window.location.origin}/dashboard`,
+        });
+
+        if (resetError) throw resetError;
+
+        setSuccessMessage(
+          "RECOVERY TOKEN DISPATCHED. Check the designated operator email address.",
+        );
+        setLoading(false);
+        setAuthStage(null);
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Authentication subsystem encountered an unexpected fault.");
+      }
+      setAuthStage(null);
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="relative min-h-screen w-full overflow-hidden bg-[#020609] text-foreground font-sans selection:bg-cyan-500/30">
+      {/* Background Animated Systems */}
+      <CyberBackground />
+
+      {/* 3D Privacy Guardian Robot */}
+      <PrivacyRobot isPasswordFocused={isPasswordFocused} />
+
+      {/* Viewport Frame HUD */}
+      <AuthHud />
+
+      {/* Cinematic Transition Overlay when Entering Dashboard */}
+      {enteringApp && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#020609]/95 backdrop-blur-2xl transition-all duration-500 animate-in fade-in">
+          <div className="relative flex flex-col items-center gap-6 text-center font-mono">
+            <div className="relative flex size-20 items-center justify-center rounded-full border border-cyan-400 bg-cyan-950/40 shadow-[0_0_40px_rgba(0,229,255,0.6)]">
+              <Activity className="size-10 animate-pulse text-cyan-400" />
+            </div>
+            <div className="space-y-2">
+              <h2 className="text-xl font-bold tracking-[0.25em] text-cyan-300">
+                ACCESS GRANTED // SESSION ACTIVE
+              </h2>
+              <p className="text-xs text-slate-400 tracking-widest animate-pulse">
+                ENTERING TIMEMACHINE INCIDENT PLATFORM...
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Full-Screen Layout */}
+      <div className="relative z-20 flex min-h-screen w-full flex-col lg:flex-row">
+        {/* Left Side: Cinematic Branding & Temporal Core */}
+        <div className="flex flex-1 flex-col justify-center px-6 py-16 sm:px-12 lg:px-20 xl:px-24">
+          <div className="relative max-w-2xl">
+            {/* Top Brand Badges */}
+            <div className="mb-6 flex flex-wrap items-center gap-3 font-mono text-[11px] tracking-[0.2em] text-cyan-400">
+              <span className="flex items-center gap-1.5 rounded-sm border border-cyan-500/30 bg-[#050B12]/80 px-2.5 py-1 shadow-[0_0_10px_rgba(0,229,255,0.1)]">
+                <Radio className="size-3 animate-pulse text-cyan-400" />
+                SOC INCIDENT TERMINAL
+              </span>
+              <span className="text-slate-600">//</span>
+              <span className="text-slate-400 uppercase tracking-widest">
+                DIGITAL FORENSICS ENGINE
+              </span>
+            </div>
+
+            {/* Main Header with subtle tech styling */}
+            <div className="relative">
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white uppercase font-sans">
+                TIME
+                <span className="text-cyan-400 drop-shadow-[0_0_20px_rgba(0,229,255,0.5)]">
+                  MACHINE
+                </span>
+              </h1>
+              <div className="mt-1 font-mono text-xs sm:text-sm tracking-[0.35em] text-cyan-400/90 uppercase font-semibold">
+                INCIDENT INTELLIGENCE PLATFORM
+              </div>
+            </div>
+
+            <div className="mt-8 space-y-4">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-tight text-slate-200">
+                RECONSTRUCT <br className="hidden sm:inline" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500 drop-shadow-[0_0_25px_rgba(0,229,255,0.3)]">
+                  THE ATTACK.
+                </span>
+              </h2>
+              <p className="max-w-lg text-sm sm:text-base text-slate-400 leading-relaxed">
+                Observe. Investigate. Rewind. Respond. <br />
+                Every attack leaves a timeline. Access the platform to isolate root cause and
+                execute decisive counterfactual mitigation.
+              </p>
+            </div>
+
+            {/* Central Temporal Core & Forensic Timeline Motifs */}
+            <div className="mt-10 flex flex-col md:flex-row items-center gap-8">
+              <TemporalCore />
+
+              {/* Forensic Artifacts Stream */}
+              <div className="w-full max-w-sm rounded border border-cyan-500/20 bg-[#050B12]/70 p-4 font-mono text-xs backdrop-blur-md">
+                <div className="mb-2.5 flex items-center justify-between border-b border-cyan-500/20 pb-2 text-[10px] text-cyan-400">
+                  <span className="flex items-center gap-1.5 font-bold uppercase tracking-wider">
+                    <Fingerprint className="size-3.5" /> RECONSTRUCTED TRACES
+                  </span>
+                  <span className="text-slate-500">LIVE FEED</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-cyan-400 font-semibold">EVT-2048</span>
+                    <span className="text-slate-400">14:32:08</span>
+                    <span className="rounded bg-threat/10 px-1.5 py-0.5 text-[9px] font-bold text-threat border border-threat/20">
+                      AUTH_ANOMALY
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-cyan-400 font-semibold">EVT-2051</span>
+                    <span className="text-slate-400">14:32:15</span>
+                    <span className="rounded bg-warning/10 px-1.5 py-0.5 text-[9px] font-bold text-warning border border-warning/20">
+                      PRIV_ELEVATION
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-cyan-400 font-semibold">EVT-2059</span>
+                    <span className="text-slate-400">14:32:42</span>
+                    <span className="rounded bg-sky-500/10 px-1.5 py-0.5 text-[9px] font-bold text-sky-400 border border-sky-500/20">
+                      LATERAL_MOVE
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Right Side: Secure Authentication Terminal */}
+        <div className="flex w-full items-center justify-center p-4 sm:p-8 lg:w-[34rem] xl:w-[38rem] lg:bg-[#020609]/70 lg:backdrop-blur-xl lg:border-l lg:border-cyan-500/10">
+          <div className="w-full max-w-md">
+            {/* Terminal Container with Sharp Corner Brackets & Inner Glow */}
+            <div className="relative overflow-hidden rounded border border-cyan-500/30 bg-[#050B12]/90 p-6 sm:p-8 shadow-[0_0_50px_rgba(0,229,255,0.06)] backdrop-blur-2xl">
+              {/* Technical Corner Brackets */}
+              <div className="absolute left-0 top-0 size-4 border-l-2 border-t-2 border-cyan-400" />
+              <div className="absolute right-0 top-0 size-4 border-r-2 border-t-2 border-cyan-400" />
+              <div className="absolute bottom-0 left-0 size-4 border-b-2 border-l-2 border-cyan-400" />
+              <div className="absolute bottom-0 right-0 size-4 border-b-2 border-r-2 border-cyan-400" />
+
+              {/* Technical Header & Diagnostic Info */}
+              <div className="mb-6 space-y-2 border-b border-cyan-500/20 pb-4 font-mono">
+                <div className="flex items-center justify-between text-xs text-cyan-400">
+                  <span className="flex items-center gap-2 font-bold tracking-widest uppercase">
+                    <ShieldAlert className="size-4 text-cyan-400" />
+                    {mode === "login" && "◈ SECURE OPERATOR ACCESS"}
+                    {mode === "signup" && "◈ OPERATOR REGISTRATION"}
+                    {mode === "recovery" && "◈ ACCOUNT RECOVERY"}
+                  </span>
+                  <span className="text-[10px] text-slate-400 border border-slate-700/50 px-1.5 py-0.5 rounded bg-black/40">
+                    AES-256 / TLS
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between text-[10px] text-slate-400 uppercase pt-1">
+                  <span>
+                    SYSTEM: <strong className="text-cyan-400">TIMEMACHINE CORE</strong>
+                  </span>
+                  <span>
+                    NODE: <strong className="text-cyan-400">TM-OPS-01</strong>
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    STATUS: <strong className="text-emerald-400">ONLINE</strong>
+                  </span>
+                </div>
+              </div>
+
+              {/* Auth Form */}
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="space-y-4 font-mono">
+                  {/* Email / Operator ID Field */}
+                  <div className="space-y-1.5">
+                    <label
+                      htmlFor="operator-email"
+                      className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300"
+                    >
+                      OPERATOR ID (EMAIL)
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-cyan-400/60" />
+                      <input
+                        id="operator-email"
+                        type="email"
+                        required
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full rounded border border-cyan-500/30 bg-black/60 py-2.5 pl-10 pr-4 text-sm text-cyan-50 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all"
+                        placeholder="operator@time-machine.soc"
+                        autoComplete="email"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Username Field for Registration */}
+                  {mode === "signup" && (
+                    <div className="space-y-1.5">
+                      <label
+                        htmlFor="operator-username"
+                        className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300"
+                      >
+                        OPERATOR ALIAS (CALLSIGN)
+                      </label>
+                      <div className="relative">
+                        <Terminal className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-cyan-400/60" />
+                        <input
+                          id="operator-username"
+                          type="text"
+                          required
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          className="w-full rounded border border-cyan-500/30 bg-black/60 py-2.5 pl-10 pr-4 text-sm text-cyan-50 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all"
+                          placeholder="analyst_alpha"
+                          autoComplete="username"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Password / Access Key Field (Login & Signup) */}
+                  {mode !== "recovery" && (
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <label
+                          htmlFor="operator-password"
+                          className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300"
+                        >
+                          ACCESS KEY (PASSWORD)
+                        </label>
+                        {mode === "login" && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setMode("recovery");
+                              setError(null);
+                              setSuccessMessage(null);
+                            }}
+                            className="text-[10px] text-cyan-400 hover:text-cyan-300 hover:underline transition-colors"
+                          >
+                            FORGOT ACCESS KEY?
+                          </button>
+                        )}
+                      </div>
+                      <div className="relative">
+                        <KeyRound className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-cyan-400/60" />
+                        <input
+                          id="operator-password"
+                          type={showPassword ? "text" : "password"}
+                          required
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          onFocus={() => setIsPasswordFocused(true)}
+                          onBlur={() => setIsPasswordFocused(false)}
+                          className="w-full rounded border border-cyan-500/30 bg-black/60 py-2.5 pl-10 pr-11 text-sm text-cyan-50 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all relative z-10"
+                          placeholder="••••••••••••"
+                          autoComplete={mode === "login" ? "current-password" : "new-password"}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-cyan-400 transition-colors p-1 z-10"
+                          aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="size-4" />
+                          ) : (
+                            <Eye className="size-4" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Confirm Password Field for Registration */}
+                  {mode === "signup" && (
+                    <div className="space-y-1.5">
+                      <label
+                        htmlFor="operator-confirm-password"
+                        className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300"
+                      >
+                        CONFIRM ACCESS KEY
+                      </label>
+                      <div className="relative">
+                        <KeyRound className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-cyan-400/60" />
+                        <input
+                          id="operator-confirm-password"
+                          type={showPassword ? "text" : "password"}
+                          required
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          onFocus={() => setIsPasswordFocused(true)}
+                          onBlur={() => setIsPasswordFocused(false)}
+                          className="w-full rounded border border-cyan-500/30 bg-black/60 py-2.5 pl-10 pr-4 text-sm text-cyan-50 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all relative z-10"
+                          placeholder="••••••••••••"
+                          autoComplete="new-password"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Error Banner */}
+                {error && (
+                  <div
+                    role="alert"
+                    className="relative rounded border border-threat/40 bg-threat/10 p-3.5 font-mono text-xs text-threat-foreground"
+                  >
+                    <div className="absolute left-0 top-0 h-full w-1 bg-threat" />
+                    <div className="flex items-start gap-2">
+                      <AlertTriangle className="size-4 shrink-0 text-threat mt-0.5" />
+                      <div>
+                        <span className="block font-bold text-threat uppercase">
+                          ⚠ AUTHENTICATION FAILED
+                        </span>
+                        <span className="text-slate-300">{error}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Success Banner */}
+                {successMessage && (
+                  <div
+                    role="status"
+                    className="relative rounded border border-emerald-500/40 bg-emerald-500/10 p-3.5 font-mono text-xs text-emerald-300"
+                  >
+                    <div className="absolute left-0 top-0 h-full w-1 bg-emerald-400" />
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="size-4 shrink-0 text-emerald-400 mt-0.5" />
+                      <div>
+                        <span className="block font-bold uppercase">◈ TRANSMISSION CONFIRMED</span>
+                        <span>{successMessage}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Futuristic Authenticate Button */}
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="group relative w-full overflow-hidden rounded border border-cyan-400 bg-cyan-500/10 py-3.5 font-mono text-xs sm:text-sm font-bold tracking-[0.2em] text-cyan-300 transition-all hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_30px_rgba(0,229,255,0.5)] focus:outline-none focus:ring-2 focus:ring-cyan-400 disabled:opacity-60 disabled:pointer-events-none active:scale-[0.99]"
+                >
+                  {/* Hover Scanline effect */}
+                  <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+
+                  <span className="relative flex items-center justify-center gap-2">
+                    {loading ? (
+                      <>
+                        <Activity className="size-4 animate-spin text-cyan-400 group-hover:text-black" />
+                        <span>{authStage || "PROCESSING..."}</span>
+                      </>
+                    ) : (
+                      <>
+                        {mode === "login" && (
+                          <>
+                            <Lock className="size-4" />
+                            <span>[ ◈ AUTHENTICATE OPERATOR ]</span>
+                          </>
+                        )}
+                        {mode === "signup" && (
+                          <>
+                            <FileKey className="size-4" />
+                            <span>[ ◈ INITIALIZE REGISTRATION ]</span>
+                          </>
+                        )}
+                        {mode === "recovery" && (
+                          <>
+                            <ArrowRight className="size-4" />
+                            <span>[ ◈ TRANSMIT RECOVERY TOKEN ]</span>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </span>
+                </button>
+              </form>
+
+              {/* Mode Toggle Secondary Actions */}
+              <div className="mt-6 flex flex-col items-center justify-center gap-3 border-t border-cyan-500/20 pt-4 text-center font-mono text-[11px] tracking-wider text-slate-400">
+                {mode === "login" ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode("signup");
+                      setError(null);
+                      setSuccessMessage(null);
+                    }}
+                    className="hover:text-cyan-400 transition-colors uppercase"
+                  >
+                    NEW OPERATOR?{" "}
+                    <span className="text-cyan-400 font-bold underline">REQUEST ACCESS</span>
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode("login");
+                      setError(null);
+                      setSuccessMessage(null);
+                    }}
+                    className="hover:text-cyan-400 transition-colors uppercase"
+                  >
+                    EXISTING OPERATOR?{" "}
+                    <span className="text-cyan-400 font-bold underline">AUTHENTICATE</span>
+                  </button>
+                )}
+
+                <div className="flex items-center gap-2 text-[10px] text-slate-500">
+                  <Lock className="size-3 text-cyan-500/60" />
+                  <span>SECURE CHANNEL ENCRYPTED // TLS 1.3</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

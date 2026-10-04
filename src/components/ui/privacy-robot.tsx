@@ -13,7 +13,7 @@ class HeartCurve extends THREE.Curve<THREE.Vector3> {
   constructor() {
     super();
   }
-  getPoint(t: number, optionalTarget = new THREE.Vector3()) {
+  override getPoint(t: number, optionalTarget = new THREE.Vector3()) {
     t = t * Math.PI * 2;
     const x = 16 * Math.pow(Math.sin(t), 3);
     const y =
@@ -82,10 +82,11 @@ function GlassCapsule({ color, power, intensity }: { color: string; power: numbe
   );
 
   useFrame(() => {
-    if (materialRef.current) {
-      materialRef.current.uniforms.color.value.set(color);
-      materialRef.current.uniforms.power.value = power;
-      materialRef.current.uniforms.intensity.value = intensity;
+    if (materialRef.current && materialRef.current.uniforms) {
+      const u = materialRef.current.uniforms as Record<string, { value: unknown }>;
+      if (u["color"]) (u["color"].value as THREE.Color).set(color);
+      if (u["power"]) u["power"].value = power;
+      if (u["intensity"]) u["intensity"].value = intensity;
     }
   });
 
@@ -514,24 +515,24 @@ export function PrivacyRobot({ isPasswordFocused }: { isPasswordFocused: boolean
   const cooldownRef = useRef(false);
 
   useEffect(() => {
+    let t1: NodeJS.Timeout | undefined;
+    let t2: NodeJS.Timeout | undefined;
+
     if (isPasswordFocused && !cooldownRef.current) {
       cooldownRef.current = true;
-      // Delay speech bubble slightly so robot can "run away" first
-      const t1 = setTimeout(() => setMessageVisible(true), 600);
-      
-      // Hide message after a few seconds
-      const t2 = setTimeout(() => {
+      t1 = setTimeout(() => setMessageVisible(true), 600);
+      t2 = setTimeout(() => {
         setMessageVisible(false);
-        cooldownRef.current = false; // Reset cooldown
+        cooldownRef.current = false;
       }, 4000);
-
-      return () => {
-        clearTimeout(t1);
-        clearTimeout(t2);
-      };
     } else if (!isPasswordFocused) {
       setMessageVisible(false);
     }
+
+    return () => {
+      if (t1) clearTimeout(t1);
+      if (t2) clearTimeout(t2);
+    };
   }, [isPasswordFocused]);
 
   // If reduced motion is enabled, we could skip canvas entirely or simplify

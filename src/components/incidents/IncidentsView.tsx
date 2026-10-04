@@ -1,9 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Clock, Layers, Search, Server, ShieldAlert, Sparkles } from "lucide-react";
+import { ArrowRight, Clock, Layers, Search, Server, ShieldAlert, Sparkles, Activity, AlertTriangle, CircleDot } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { GlassPanel, PageHeader } from "@/components/layout/PageHeader";
 import { useDemo } from "@/context/DemoContext";
 import { incidents } from "@/data/incidents";
 import { cn } from "@/lib/utils";
@@ -28,219 +27,204 @@ export function IncidentsView() {
     ? incident
     : (incidents.find((i) => i.id === selectedIncidentId) ?? incident);
 
+  const getThreatColor = (severity: string) => {
+    switch (severity?.toUpperCase()) {
+      case "CRITICAL": return "border-threat bg-threat/10 text-threat shadow-[inset_4px_0_0_#FF2A2A]";
+      case "HIGH": return "border-warning bg-warning/10 text-warning shadow-[inset_4px_0_0_#FFA600]";
+      case "MEDIUM": return "border-yellow-500 bg-yellow-500/10 text-yellow-500 shadow-[inset_4px_0_0_#eab308]";
+      default: return "border-cyan-signal bg-cyan-signal/10 text-cyan-signal shadow-[inset_4px_0_0_#00E5FF]";
+    }
+  };
+
+  const getThreatPulse = (severity: string) => {
+    switch (severity?.toUpperCase()) {
+      case "CRITICAL": return "animate-threat-pulse";
+      default: return "";
+    }
+  };
+
   return (
-    <div className="mx-auto max-w-7xl animate-fade-in">
-      <PageHeader
-        eyebrow="Investigation queue"
-        title="Active Incidents"
-        description="Prioritized synthetic incidents awaiting investigation and response decisions."
-        actions={
-          <Button asChild className="gap-2">
-            <Link to="/time-machine">
-              OPEN TIME MACHINE <ArrowRight className="size-4" />
-            </Link>
-          </Button>
-        }
-      />
-
-      {/* Selected Incident Detail Card (Requirement 20) */}
-      <GlassPanel className="mb-6 border-cyan-glow p-6 shadow-glow">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="font-mono text-sm font-semibold text-cyan-signal">
-                {selectedIncident.id}
-              </span>
-              <span
-                className={cn(
-                  "rounded-full border px-2.5 py-0.5 text-xs font-semibold uppercase",
-                  selectedIncident.severity === "CRITICAL"
-                    ? "border-threat/40 bg-threat/10 text-threat"
-                    : selectedIncident.severity === "HIGH"
-                      ? "border-warning/40 bg-warning/10 text-warning"
-                      : "border-cyan-glow bg-primary/10 text-cyan-signal",
-                )}
-              >
-                {selectedIncident.severity}
-              </span>
-              <span className="rounded-full border border-border bg-secondary/60 px-2.5 py-0.5 text-xs font-mono text-muted-foreground uppercase">
-                STATUS: {selectedIncident.status}
-              </span>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-bold text-foreground">{selectedIncident.title}</h2>
-              <p className="mt-1 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                {selectedIncident.description || selectedIncident.summary}
-              </p>
-            </div>
-
-            {/* Key Metadata Grid */}
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 border-t border-border pt-4">
-              <div>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                  Current Stage
-                </p>
-                <p className="mt-1 font-mono text-sm font-semibold text-cyan-signal">
-                  {isTargetSelected ? incidentState.stage : (selectedIncident.stage ?? "NORMAL")}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                  Simulation Time
-                </p>
-                <p className="mt-1 flex items-center gap-1.5 font-mono text-sm font-semibold text-foreground">
-                  <Clock className="size-3.5 text-cyan-signal" />
-                  {isTargetSelected ? currentTime : selectedIncident.detectedAt}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                  Calculated Risk
-                </p>
-                <p
-                  className={cn(
-                    "mt-1 font-mono text-sm font-semibold uppercase",
-                    currentRisk === "CRITICAL" || currentRisk === "Critical"
-                      ? "text-threat"
-                      : currentRisk === "HIGH" || currentRisk === "High"
-                        ? "text-warning"
-                        : "text-cyan-signal",
-                  )}
-                >
-                  {isTargetSelected ? currentRisk : selectedIncident.severity}
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">
-                  Affected Assets
-                </p>
-                <p className="mt-1 flex items-center gap-1.5 font-mono text-sm font-semibold text-foreground">
-                  <Server className="size-3.5 text-cyan-signal" />
-                  {isTargetSelected
-                    ? affectedAssets.length
-                    : (selectedIncident.affectedAssets ?? 0)}{" "}
-                  asset(s)
-                </p>
-              </div>
-            </div>
-
-            {/* Affected Asset Pills */}
-            {isTargetSelected && affectedAssets.length > 0 ? (
-              <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span className="text-xs text-muted-foreground">Entities affected:</span>
-                {affectedAssets.map((asset) => (
-                  <span
-                    key={asset}
-                    className="rounded border border-threat/30 bg-threat/10 px-2 py-0.5 font-mono text-xs text-threat"
-                  >
-                    {asset}
-                  </span>
-                ))}
-              </div>
-            ) : null}
-
-            {/* Timeline Summary */}
-            <div className="rounded-lg border border-border bg-secondary/30 p-3">
-              <p className="text-xs font-semibold uppercase tracking-wider text-cyan-signal">
-                Timeline Summary
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {isTargetSelected
-                  ? incidentState.activeEvent
-                    ? `[${incidentState.activeEvent.time ?? incidentState.activeEvent.timestamp}] ${incidentState.activeEvent.title}: ${incidentState.activeEvent.description}`
-                    : selectedIncident.summary
-                  : selectedIncident.summary}
-              </p>
-            </div>
+    <div className="mx-auto max-w-7xl animate-fade-in font-sans">
+      
+      {/* INCIDENT COMMAND CENTER HEADER */}
+      <div className="mb-6 flex flex-col gap-4 border-b border-border pb-6 md:flex-row md:items-end md:justify-between">
+        <div>
+          <div className="flex items-center gap-2 mb-2">
+            <Activity className="size-4 text-threat animate-pulse" />
+            <h1 className="font-mono text-sm uppercase tracking-[0.2em] text-threat font-bold">
+              Live Threat Investigation
+            </h1>
           </div>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground uppercase">Incident Command Center</h2>
+        </div>
+        
+        {/* Threat Overview Strip */}
+        <div className="flex gap-4 font-mono text-[10px] uppercase">
+          <div className="flex flex-col items-center border border-border bg-black/40 px-4 py-2 min-w-[100px]">
+            <span className="text-muted-foreground mb-1">ACTIVE INCIDENTS</span>
+            <span className="text-xl font-bold text-foreground">04</span>
+          </div>
+          <div className="flex flex-col items-center border border-threat/40 bg-threat/10 px-4 py-2 min-w-[100px] animate-threat-pulse shadow-[inset_0_0_15px_rgba(255,42,42,0.1)]">
+            <span className="text-threat mb-1">CRITICAL</span>
+            <span className="text-xl font-bold text-threat">01</span>
+          </div>
+          <div className="flex flex-col items-center border border-warning/40 bg-warning/10 px-4 py-2 min-w-[100px]">
+            <span className="text-warning mb-1">HIGH</span>
+            <span className="text-xl font-bold text-warning">02</span>
+          </div>
+          <div className="flex flex-col items-center border border-cyan-signal/40 bg-primary/10 px-4 py-2 min-w-[100px]">
+            <span className="text-cyan-signal mb-1">INVESTIGATING</span>
+            <span className="text-xl font-bold text-cyan-signal">03</span>
+          </div>
+        </div>
+      </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row lg:flex-col shrink-0">
-            <Button asChild size="lg" className="gap-2 shadow-glow">
+      {/* Selected Incident Detail Card (Requirement 8) */}
+      <div className={cn("mb-8 relative border border-border bg-base-elevated shadow-panel", getThreatColor(isTargetSelected ? currentRisk : selectedIncident.severity))}>
+        <div className="p-6">
+          <div className="flex items-start justify-between border-b border-border/50 pb-4 mb-4">
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-2 font-mono text-sm font-bold text-foreground">
+                <CircleDot className={cn("size-3", getThreatPulse(isTargetSelected ? currentRisk : selectedIncident.severity))} /> 
+                {isTargetSelected ? currentRisk : selectedIncident.severity}
+              </span>
+              <span className="font-mono text-sm text-muted-foreground">{selectedIncident.id}</span>
+            </div>
+            <Button asChild size="sm" className="font-mono text-xs bg-cyan-signal/10 text-cyan-signal border border-cyan-signal/30 hover:bg-cyan-signal hover:text-black transition-all">
               <Link to="/time-machine">
-                <Sparkles className="size-4 text-cyan-signal" /> OPEN TIME MACHINE
+                [ OPEN INVESTIGATION → ]
               </Link>
             </Button>
           </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="col-span-2 space-y-4">
+              <h3 className="text-xl font-bold text-foreground uppercase tracking-wide">{selectedIncident.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {selectedIncident.description || selectedIncident.summary}
+              </p>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 mt-4 border-t border-border/50 font-mono text-[11px]">
+                <div>
+                  <span className="block text-muted-foreground/60 mb-1">DETECTED</span>
+                  <span className="text-foreground">{isTargetSelected ? currentTime : selectedIncident.detectedAt}</span>
+                </div>
+                <div>
+                  <span className="block text-muted-foreground/60 mb-1">RISK</span>
+                  <span className={cn("font-bold", isTargetSelected ? (currentRisk === "CRITICAL" ? "text-threat" : "text-warning") : "")}>
+                    {isTargetSelected ? currentRisk : selectedIncident.severity}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-muted-foreground/60 mb-1">ASSETS</span>
+                  <span className="text-foreground">{isTargetSelected ? affectedAssets.length : (selectedIncident.affectedAssets ?? 0)}</span>
+                </div>
+                <div>
+                  <span className="block text-muted-foreground/60 mb-1">STAGE</span>
+                  <span className="text-cyan-signal">{isTargetSelected ? incidentState.stage : (selectedIncident.stage ?? "NORMAL")}</span>
+                </div>
+              </div>
+
+              {/* Affected Asset Pills */}
+              {isTargetSelected && affectedAssets.length > 0 && (
+                <div className="pt-2">
+                  <span className="font-mono text-[10px] text-muted-foreground/60 block mb-2">AFFECTED ASSETS</span>
+                  <div className="flex flex-wrap gap-2">
+                    {affectedAssets.map((asset) => (
+                      <span key={asset} className="border border-border bg-black/40 px-2 py-1 font-mono text-[10px] text-muted-foreground">
+                        [{asset}]
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Temporal Activity Tree (Requirement 9) */}
+            <div className="col-span-1 border-l border-border/50 pl-6 flex flex-col justify-end pb-2">
+              <span className="font-mono text-[10px] text-muted-foreground/60 block mb-4">TEMPORAL ACTIVITY</span>
+              <div className="font-mono text-xs space-y-2">
+                <div className="flex gap-3 text-threat">
+                  <span>●</span>
+                  <span>{currentTime}</span>
+                  <span className="truncate">Incident detected</span>
+                </div>
+                <div className="flex gap-3 text-muted-foreground opacity-80">
+                  <span>├─</span>
+                  <span>10:21</span>
+                  <span className="truncate">Credential anomaly</span>
+                </div>
+                <div className="flex gap-3 text-muted-foreground opacity-60">
+                  <span>├─</span>
+                  <span>10:19</span>
+                  <span className="truncate">PowerShell execution</span>
+                </div>
+                <div className="flex gap-3 text-muted-foreground opacity-40">
+                  <span>├─</span>
+                  <span>10:17</span>
+                  <span className="truncate">Endpoint access</span>
+                </div>
+                <div className="flex gap-3 text-muted-foreground opacity-20">
+                  <span>└─</span>
+                  <span>10:14</span>
+                  <span className="truncate">Initial auth</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </GlassPanel>
+      </div>
 
       {/* Search Bar */}
-      <div className="mb-4 flex items-center rounded-lg border border-input bg-input/30 px-3">
-        <Search className="size-4 text-muted-foreground" />
+      <div className="mb-6 flex items-center border border-border bg-black/50 px-3 py-2">
+        <Search className="mr-2 size-4 text-muted-foreground" />
         <Input
-          placeholder="Search incident ID, title, account, or host"
+          placeholder="SEARCH INCIDENTS, HOSTS, HASHES..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="border-0 bg-transparent shadow-none"
+          className="border-0 bg-transparent shadow-none font-mono text-xs focus-visible:ring-0 placeholder:text-muted-foreground/50 uppercase"
         />
       </div>
 
       {/* Incidents Queue List */}
-      <div className="grid gap-4">
+      <div className="grid gap-3">
         {filteredIncidents.map((i) => {
           const isTarget = i.id === "INC-2048";
           const display = isTarget ? incident : i;
           const isSelected = display.id === selectedIncidentId;
 
           return (
-            <div key={display.id} onClick={() => setSelectedIncidentId(display.id)}>
-              <GlassPanel
-                className={cn(
-                  "p-5 cursor-pointer transition-all hover:border-cyan-glow",
-                  isSelected && "border-cyan-glow bg-secondary/40 shadow-glow",
-                )}
-              >
-                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                  <div className="flex gap-4">
-                    <span
-                      className={cn(
-                        "grid size-11 shrink-0 place-items-center rounded-lg",
-                        display.severity === "CRITICAL"
-                          ? "bg-threat/12 text-threat"
-                          : "bg-warning/12 text-warning",
-                      )}
-                    >
-                      <ShieldAlert className="size-5" />
-                    </span>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <p className="font-mono text-xs text-muted-foreground">{display.id}</p>
-                        {isTarget ? (
-                          <span className="rounded bg-primary/20 px-1.5 py-0.5 text-[10px] font-mono text-cyan-signal">
-                            SIMULATED INCIDENT
-                          </span>
-                        ) : null}
-                      </div>
-                      <h3 className="mt-1 text-lg font-semibold">{display.title}</h3>
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        Detected {display.detectedAgo} · {display.affectedAssets} affected assets
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3">
-                    <span
-                      className={cn(
-                        "rounded-full border px-2.5 py-1 text-xs font-semibold uppercase",
-                        display.severity === "CRITICAL"
-                          ? "border-threat/40 text-threat"
-                          : "border-warning/40 text-warning",
-                      )}
-                    >
-                      {display.severity}
-                    </span>
-                    <Button asChild size="sm">
-                      <Link to="/time-machine">
-                        Open Investigation <ArrowRight className="size-4" />
-                      </Link>
-                    </Button>
+            <div 
+              key={display.id} 
+              onClick={() => setSelectedIncidentId(display.id)}
+              className={cn(
+                "border bg-base-panel p-4 cursor-pointer transition-all hover:bg-base-elevated",
+                isSelected ? "border-border shadow-[inset_2px_0_0_#00E5FF]" : "border-transparent",
+                getThreatColor(display.severity).replace("bg-", "hover:bg-").replace("border-", "hover:border-") // subtle hover hint
+              )}
+            >
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div className="flex items-center gap-4">
+                  <span className={cn("font-mono text-xs font-bold w-20", display.severity === "CRITICAL" ? "text-threat" : "text-warning")}>
+                    {display.id}
+                  </span>
+                  <div>
+                    <h3 className="font-sans text-sm font-bold uppercase">{display.title}</h3>
+                    <p className="mt-1 font-mono text-[10px] text-muted-foreground">
+                      DETECTED {display.detectedAgo ? display.detectedAgo.toUpperCase() : "RECENTLY"} • {display.affectedAssets} ASSETS
+                    </p>
                   </div>
                 </div>
-              </GlassPanel>
+
+                <div className="flex items-center gap-4">
+                  <span className={cn(
+                    "font-mono text-[10px] font-bold uppercase",
+                    display.severity === "CRITICAL" ? "text-threat" : "text-warning"
+                  )}>
+                    [{display.severity}]
+                  </span>
+                </div>
+              </div>
             </div>
           );
         })}
