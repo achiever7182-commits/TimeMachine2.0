@@ -24,7 +24,11 @@ import {
   ArrowUpRight,
   Lightbulb,
 } from "lucide-react";
-import type { IncidentReport, ActionItemStatus, RecommendationPriority } from "@/types/incidentReport";
+import type {
+  IncidentReport,
+  ActionItemStatus,
+  RecommendationPriority,
+} from "@/types/incidentReport";
 import { Button } from "@/components/ui/button";
 import { useDemo } from "@/context/DemoContext";
 
@@ -81,7 +85,9 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
         <div className="flex items-center gap-2">
           <Sparkles className="size-4 shrink-0 text-cyan-400" />
           <span>
-            <strong>POST-INCIDENT LEARNING SYSTEM:</strong> Sourced from deterministic Phase 1–5 telemetry, isolated Phase 4 counterfactual simulation branches, and IRIS investigation findings.
+            <strong>POST-INCIDENT LEARNING SYSTEM:</strong> Sourced from deterministic Phase 1–5
+            telemetry, isolated Phase 4 counterfactual simulation branches, and IRIS investigation
+            findings.
           </span>
         </div>
         <span className="font-mono text-[10px] uppercase font-bold text-cyan-400 border border-cyan-500/30 px-2 py-0.5 rounded bg-cyan-500/20">
@@ -99,9 +105,7 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
           <div className="text-2xl font-bold font-mono text-amber-400">
             {learningMetrics.detectionDelayMinutes}m
           </div>
-          <div className="text-[10px] text-muted-foreground mt-1">
-            09:47 to 10:24 gap
-          </div>
+          <div className="text-[10px] text-muted-foreground mt-1">09:47 to 10:24 gap</div>
         </div>
 
         <div className="rounded-xl border border-border/80 bg-card/60 p-4 backdrop-blur-sm">
@@ -125,9 +129,7 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
           <div className="text-2xl font-bold font-mono text-rose-400">
             {learningMetrics.criticalAssetsAffected}
           </div>
-          <div className="text-[10px] text-emerald-400 font-medium mt-1">
-            0 in counterfactual
-          </div>
+          <div className="text-[10px] text-emerald-400 font-medium mt-1">0 in counterfactual</div>
         </div>
 
         <div className="rounded-xl border border-border/80 bg-card/60 p-4 backdrop-blur-sm">
@@ -138,9 +140,7 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
           <div className="text-2xl font-bold font-mono text-emerald-400">
             +{learningMetrics.preventedEventsCount}
           </div>
-          <div className="text-[10px] text-muted-foreground mt-1">
-            Downstream attack stages
-          </div>
+          <div className="text-[10px] text-muted-foreground mt-1">Downstream attack stages</div>
         </div>
 
         <div className="rounded-xl border border-border/80 bg-card/60 p-4 backdrop-blur-sm">
@@ -149,11 +149,10 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
             <span>Data Stores Saved</span>
           </div>
           <div className="text-2xl font-bold font-mono text-cyan-400">
-            {learningMetrics.potentialDataStoresExposed - learningMetrics.counterfactualDataStoresExposed}
+            {learningMetrics.potentialDataStoresExposed -
+              learningMetrics.counterfactualDataStoresExposed}
           </div>
-          <div className="text-[10px] text-muted-foreground mt-1">
-            DB-PROD-01 & FILE-SRV-01
-          </div>
+          <div className="text-[10px] text-muted-foreground mt-1">DB-PROD-01 & FILE-SRV-01</div>
         </div>
 
         <div className="rounded-xl border border-border/80 bg-card/60 p-4 backdrop-blur-sm">
@@ -164,9 +163,7 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
           <div className="text-2xl font-bold font-mono text-indigo-400">
             {learningMetrics.responseEffectivenessScore}%
           </div>
-          <div className="text-[10px] text-emerald-400 font-medium mt-1">
-            Effective containment
-          </div>
+          <div className="text-[10px] text-emerald-400 font-medium mt-1">Effective containment</div>
         </div>
       </div>
 
@@ -180,7 +177,11 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
             </h2>
           </div>
           <Link to="/time-machine">
-            <Button variant="outline" size="sm" className="font-mono text-xs gap-1.5 border-cyan-500/30 text-cyan-300">
+            <Button
+              variant="outline"
+              size="sm"
+              className="font-mono text-xs gap-1.5 border-cyan-500/30 text-cyan-300"
+            >
               <Clock className="size-3.5" />
               Replay Gap in Time Machine
               <ArrowRight className="size-3.5" />
@@ -234,11 +235,10 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
 
           <div className="pt-3 border-t border-border/50 text-xs text-muted-foreground flex flex-wrap items-center justify-between gap-3">
             <span>
-              <strong>Potential Earlier Opportunity:</strong> {detectionGap.potentialDetectionOpportunity}
+              <strong>Potential Earlier Opportunity:</strong>{" "}
+              {detectionGap.potentialDetectionOpportunity}
             </span>
-            <span className="font-mono text-cyan-400">
-              Confidence: {detectionGap.confidence}
-            </span>
+            <span className="font-mono text-cyan-400">Confidence: {detectionGap.confidence}</span>
           </div>
         </div>
       </section>
@@ -253,7 +253,11 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
             </h2>
           </div>
           <Link to="/attack-graph">
-            <Button variant="outline" size="sm" className="font-mono text-xs gap-1.5 border-rose-500/30 text-rose-300">
+            <Button
+              variant="outline"
+              size="sm"
+              className="font-mono text-xs gap-1.5 border-rose-500/30 text-rose-300"
+            >
               <Target className="size-3.5" />
               Interactive Attack Graph
               <ArrowRight className="size-3.5" />
@@ -261,9 +265,7 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
           </Link>
         </div>
 
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          {attackPath.description}
-        </p>
+        <p className="text-xs text-muted-foreground leading-relaxed">{attackPath.description}</p>
 
         {/* Attack Path Visual Sequence */}
         <div className="flex flex-wrap items-center gap-2 pt-2">
@@ -275,10 +277,10 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
                   node === "DB-PROD-01"
                     ? "bg-rose-500/20 text-rose-300 border-rose-500/50 shadow-sm"
                     : node === "LAPTOP-042"
-                    ? "bg-amber-500/20 text-amber-300 border-amber-500/50"
-                    : node === "SERVER-03"
-                    ? "bg-purple-500/20 text-purple-300 border-purple-500/50"
-                    : "bg-background/80 text-foreground border-border/80"
+                      ? "bg-amber-500/20 text-amber-300 border-amber-500/50"
+                      : node === "SERVER-03"
+                        ? "bg-purple-500/20 text-purple-300 border-purple-500/50"
+                        : "bg-background/80 text-foreground border-border/80"
                 }`}
                 title={`Inspect ${node} in Attack Graph`}
               >
@@ -297,7 +299,8 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
               Path Length & Critical Reach
             </span>
             <span className="font-bold text-foreground">
-              {attackPath.hopsCount} Hops · {attackPath.criticalNodesReached.length} Critical Database
+              {attackPath.hopsCount} Hops · {attackPath.criticalNodesReached.length} Critical
+              Database
             </span>
           </div>
           <div className="rounded-lg bg-background/50 p-3 border border-border/60">
@@ -312,9 +315,7 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
             <span className="text-muted-foreground block text-[10px] uppercase font-mono mb-1">
               Downstream Protected Systems
             </span>
-            <span className="font-bold text-cyan-400">
-              SERVER-03, DB-PROD-01, FILE-SRV-01
-            </span>
+            <span className="font-bold text-cyan-400">SERVER-03, DB-PROD-01, FILE-SRV-01</span>
           </div>
         </div>
       </section>
@@ -338,7 +339,10 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
                 </h2>
               </div>
               <Link to="/simulation-lab">
-                <Button size="sm" className="bg-cyan-600 hover:bg-cyan-500 text-white gap-2 font-mono text-xs shadow-lg">
+                <Button
+                  size="sm"
+                  className="bg-cyan-600 hover:bg-cyan-500 text-white gap-2 font-mono text-xs shadow-lg"
+                >
                   <GitBranch className="size-3.5" />
                   Launch in Simulation Lab
                   <ArrowRight className="size-3.5" />
@@ -347,9 +351,12 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
             </div>
 
             <p className="text-sm text-muted-foreground max-w-3xl mb-6">
-              The counterfactual simulation engine tested what would happen if the response action had been taken at{" "}
-              <strong className="text-foreground font-mono">10:04 (Minute 22)</strong> immediately following suspicious PowerShell beaconing, instead of waiting for formal alert escalation at{" "}
-              <strong className="text-foreground font-mono">10:24 (Minute 42)</strong>.
+              The counterfactual simulation engine tested what would happen if the response action
+              had been taken at{" "}
+              <strong className="text-foreground font-mono">10:04 (Minute 22)</strong> immediately
+              following suspicious PowerShell beaconing, instead of waiting for formal alert
+              escalation at <strong className="text-foreground font-mono">10:24 (Minute 42)</strong>
+              .
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -381,9 +388,7 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
                 <div className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground mb-1">
                   3. Simulated Outcome
                 </div>
-                <div className="text-sm font-semibold text-emerald-400">
-                  Lateral Path Severed
-                </div>
+                <div className="text-sm font-semibold text-emerald-400">Lateral Path Severed</div>
                 <p className="text-xs text-muted-foreground mt-2">
                   Outbound connections blocked at host firewall; attacker isolated on LAPTOP-042.
                 </p>
@@ -422,19 +427,29 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="rounded-lg bg-background/40 p-3 border border-border/50">
                   <span className="text-xs text-muted-foreground block">Formal Detection</span>
-                  <span className="font-mono font-bold text-rose-400 text-base">{report.formalDetection}</span>
+                  <span className="font-mono font-bold text-rose-400 text-base">
+                    {report.formalDetection}
+                  </span>
                 </div>
                 <div className="rounded-lg bg-background/40 p-3 border border-border/50">
                   <span className="text-xs text-muted-foreground block">Detection Delay</span>
-                  <span className="font-mono font-bold text-amber-400 text-base">{detectionGap.delayMinutes} Minutes</span>
+                  <span className="font-mono font-bold text-amber-400 text-base">
+                    {detectionGap.delayMinutes} Minutes
+                  </span>
                 </div>
                 <div className="rounded-lg bg-background/40 p-3 border border-border/50">
                   <span className="text-xs text-muted-foreground block">Compromised Assets</span>
-                  <span className="font-mono font-bold text-rose-400 text-base">{learningMetrics.actualCompromisedAssets} Hosts</span>
+                  <span className="font-mono font-bold text-rose-400 text-base">
+                    {learningMetrics.actualCompromisedAssets} Hosts
+                  </span>
                 </div>
                 <div className="rounded-lg bg-background/40 p-3 border border-border/50">
-                  <span className="text-xs text-muted-foreground block">Critical Data Exposure</span>
-                  <span className="font-mono font-bold text-rose-400 text-base">Yes (DB-PROD-01)</span>
+                  <span className="text-xs text-muted-foreground block">
+                    Critical Data Exposure
+                  </span>
+                  <span className="font-mono font-bold text-rose-400 text-base">
+                    Yes (DB-PROD-01)
+                  </span>
                 </div>
               </div>
 
@@ -453,7 +468,9 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
             <div className="flex items-center justify-between pb-4 border-b border-emerald-500/20 mb-4">
               <div className="flex items-center gap-2">
                 <ShieldCheck className="size-5 text-emerald-400" />
-                <h3 className="font-semibold text-lg text-emerald-200">EARLIEST EFFECTIVE RESPONSE</h3>
+                <h3 className="font-semibold text-lg text-emerald-200">
+                  EARLIEST EFFECTIVE RESPONSE
+                </h3>
               </div>
               <span className="font-mono text-xs px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                 SEVERITY: MEDIUM (PREVENTED)
@@ -464,19 +481,29 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div className="rounded-lg bg-background/40 p-3 border border-border/50">
                   <span className="text-xs text-muted-foreground block">Intervention Time</span>
-                  <span className="font-mono font-bold text-emerald-400 text-base">{counterfactualAnalysis.interventionTime}</span>
+                  <span className="font-mono font-bold text-emerald-400 text-base">
+                    {counterfactualAnalysis.interventionTime}
+                  </span>
                 </div>
                 <div className="rounded-lg bg-background/40 p-3 border border-border/50">
                   <span className="text-xs text-muted-foreground block">Action Taken</span>
-                  <span className="font-mono font-bold text-cyan-400 text-sm truncate">{counterfactualAnalysis.recommendedAction.label}</span>
+                  <span className="font-mono font-bold text-cyan-400 text-sm truncate">
+                    {counterfactualAnalysis.recommendedAction.label}
+                  </span>
                 </div>
                 <div className="rounded-lg bg-background/40 p-3 border border-border/50">
                   <span className="text-xs text-muted-foreground block">Compromised Assets</span>
-                  <span className="font-mono font-bold text-emerald-400 text-base">{learningMetrics.counterfactualCompromisedAssets} Host (LAPTOP-042 only)</span>
+                  <span className="font-mono font-bold text-emerald-400 text-base">
+                    {learningMetrics.counterfactualCompromisedAssets} Host (LAPTOP-042 only)
+                  </span>
                 </div>
                 <div className="rounded-lg bg-background/40 p-3 border border-border/50">
-                  <span className="text-xs text-muted-foreground block">Critical Data Exposure</span>
-                  <span className="font-mono font-bold text-emerald-400 text-base">0 (Fully Protected)</span>
+                  <span className="text-xs text-muted-foreground block">
+                    Critical Data Exposure
+                  </span>
+                  <span className="font-mono font-bold text-emerald-400 text-base">
+                    0 (Fully Protected)
+                  </span>
                 </div>
               </div>
 
@@ -484,7 +511,8 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
                 <div className="font-semibold text-emerald-300">Verified Prevented Events:</div>
                 {counterfactualAnalysis.preventedEvents.map((pe) => (
                   <p key={pe.eventId}>
-                    • <span className="font-mono text-emerald-300">[{pe.originalTime}]</span> {pe.title} ({pe.targetAsset})
+                    • <span className="font-mono text-emerald-300">[{pe.originalTime}]</span>{" "}
+                    {pe.title} ({pe.targetAsset})
                   </p>
                 ))}
                 <p className="text-emerald-400 font-medium pt-1">
@@ -506,7 +534,11 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
             </h2>
           </div>
           <Link to="/evidence">
-            <Button variant="outline" size="sm" className="font-mono text-xs gap-1.5 border-amber-500/30 text-amber-300">
+            <Button
+              variant="outline"
+              size="sm"
+              className="font-mono text-xs gap-1.5 border-amber-500/30 text-amber-300"
+            >
               <FileSearch className="size-3.5" />
               Inspect Underlying Evidence
               <ArrowRight className="size-3.5" />
@@ -516,15 +548,22 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {whatWeMissed.missedSignalsList.map((sig) => (
-            <div key={sig.id} className="rounded-xl border border-border/70 bg-background/50 p-4 space-y-2">
+            <div
+              key={sig.id}
+              className="rounded-xl border border-border/70 bg-background/50 p-4 space-y-2"
+            >
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs font-bold text-amber-400">{sig.timestamp} UTC</span>
+                <span className="font-mono text-xs font-bold text-amber-400">
+                  {sig.timestamp} UTC
+                </span>
                 <span className="font-mono text-[10px] text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/30">
                   {sig.relatedEvidence}
                 </span>
               </div>
               <h4 className="text-xs font-semibold text-foreground">{sig.signal}</h4>
-              <p className="text-[11px] text-muted-foreground">{sig.whatDefendersCouldHaveObserved}</p>
+              <p className="text-[11px] text-muted-foreground">
+                {sig.whatDefendersCouldHaveObserved}
+              </p>
               <div className="pt-2 border-t border-border/50 text-[10px] text-emerald-400 font-medium">
                 Opportunity: {sig.potentialResponseOpportunity}
               </div>
@@ -544,12 +583,17 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {lessonsLearned.map((ll) => (
-            <div key={ll.id} className="rounded-xl border border-border/80 bg-background/50 p-5 space-y-3">
+            <div
+              key={ll.id}
+              className="rounded-xl border border-border/80 bg-background/50 p-5 space-y-3"
+            >
               <div className="flex items-center justify-between">
                 <span className="font-mono text-[10px] uppercase font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/30">
                   {ll.category}
                 </span>
-                <span className="font-mono text-[10px] text-muted-foreground">{ll.confidence} CONFIDENCE</span>
+                <span className="font-mono text-[10px] text-muted-foreground">
+                  {ll.confidence} CONFIDENCE
+                </span>
               </div>
               <h4 className="text-sm font-semibold text-foreground">{ll.title}</h4>
               <p className="text-xs text-muted-foreground leading-relaxed">{ll.lesson}</p>
@@ -572,10 +616,15 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {recommendations.map((rec) => (
-            <div key={rec.id} className="rounded-xl border border-border/80 bg-background/50 p-5 space-y-3">
+            <div
+              key={rec.id}
+              className="rounded-xl border border-border/80 bg-background/50 p-5 space-y-3"
+            >
               <div className="flex items-center justify-between">
                 <span className="font-mono text-xs font-semibold text-cyan-400">{rec.title}</span>
-                <span className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded border ${getPriorityBadgeClass(rec.priority)}`}>
+                <span
+                  className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded border ${getPriorityBadgeClass(rec.priority)}`}
+                >
                   {rec.priority} PRIORITY
                 </span>
               </div>
@@ -583,7 +632,9 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
               <p className="text-[11px] text-muted-foreground">{rec.reason}</p>
               <div className="flex flex-wrap items-center justify-between pt-2 border-t border-border/50 text-[11px]">
                 <span className="text-emerald-400 font-medium">Benefit: {rec.expectedBenefit}</span>
-                <span className="font-mono text-[10px] text-muted-foreground">Finding: {rec.relatedFinding}</span>
+                <span className="font-mono text-[10px] text-muted-foreground">
+                  Finding: {rec.relatedFinding}
+                </span>
               </div>
             </div>
           ))}
@@ -600,12 +651,14 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
                 Section 7: Post-Incident Remediation Action Plan
               </h2>
               <p className="text-xs text-muted-foreground">
-                Interactive workflow state. Updating status changes in-memory execution state without modifying incident facts.
+                Interactive workflow state. Updating status changes in-memory execution state
+                without modifying incident facts.
               </p>
             </div>
           </div>
           <span className="font-mono text-xs px-2.5 py-1 rounded bg-secondary/60 text-muted-foreground border border-border/60">
-            {actionItems.filter((a) => a.status === "COMPLETED").length} of {actionItems.length} Completed
+            {actionItems.filter((a) => a.status === "COMPLETED").length} of {actionItems.length}{" "}
+            Completed
           </span>
         </div>
 
@@ -627,21 +680,21 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
                     <div className="font-semibold">{item.title}</div>
                     <div className="text-[11px] text-muted-foreground mt-0.5">{item.action}</div>
                   </td>
-                  <td className="p-3 font-mono text-[10px] text-cyan-400">
-                    {item.category}
-                  </td>
-                  <td className="p-3 font-mono text-muted-foreground">
-                    {item.ownerRole}
-                  </td>
+                  <td className="p-3 font-mono text-[10px] text-cyan-400">{item.category}</td>
+                  <td className="p-3 font-mono text-muted-foreground">{item.ownerRole}</td>
                   <td className="p-3">
-                    <span className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded border ${getPriorityBadgeClass(item.priority)}`}>
+                    <span
+                      className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded border ${getPriorityBadgeClass(item.priority)}`}
+                    >
                       {item.priority}
                     </span>
                   </td>
                   <td className="p-3">
                     <select
                       value={item.status}
-                      onChange={(e) => handleStatusChange(item.id, e.target.value as ActionItemStatus)}
+                      onChange={(e) =>
+                        handleStatusChange(item.id, e.target.value as ActionItemStatus)
+                      }
                       className={`font-mono text-xs font-semibold rounded px-2.5 py-1 border bg-background text-foreground transition-all cursor-pointer ${getStatusBadgeClass(item.status)}`}
                     >
                       <option value="OPEN">OPEN</option>

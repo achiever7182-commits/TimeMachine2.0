@@ -41,9 +41,7 @@ export function IrisFindingCard({ finding, onSelectCitation }: IrisFindingCardPr
         </span>
       </div>
 
-      <p className="text-muted-foreground text-[11px] leading-relaxed mb-2">
-        {finding.summary}
-      </p>
+      <p className="text-muted-foreground text-[11px] leading-relaxed mb-2">{finding.summary}</p>
 
       {/* Citations badges */}
       {finding.citations.length > 0 && (

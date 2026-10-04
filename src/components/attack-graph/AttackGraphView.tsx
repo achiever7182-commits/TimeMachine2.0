@@ -77,7 +77,7 @@ export function AttackGraphView() {
       setSelectedEntityId(nodeId);
       setSelectedEdgeId(null);
     },
-    [setSelectedEntityId, setSelectedEdgeId]
+    [setSelectedEntityId, setSelectedEdgeId],
   );
 
   const handleSelectEdge = useCallback(
@@ -85,7 +85,7 @@ export function AttackGraphView() {
       setSelectedEdgeId(edgeId);
       setSelectedEntityId(null);
     },
-    [setSelectedEdgeId, setSelectedEntityId]
+    [setSelectedEdgeId, setSelectedEntityId],
   );
 
   // Focus Entry Point (Requirement 16)
@@ -112,7 +112,7 @@ export function AttackGraphView() {
       }
       navigate({ to: "/time-machine" });
     },
-    [navigate, setSelectedEventId]
+    [navigate, setSelectedEventId],
   );
 
   // Navigate to Evidence
@@ -120,7 +120,7 @@ export function AttackGraphView() {
     (_evidenceIds: string[]) => {
       navigate({ to: "/evidence" });
     },
-    [navigate]
+    [navigate],
   );
 
   return (
@@ -139,7 +139,9 @@ export function AttackGraphView() {
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Dynamic forensic graph reconstructed at <strong className="text-foreground font-mono">{currentTime}</strong> (T+{currentMinute}m)
+              Dynamic forensic graph reconstructed at{" "}
+              <strong className="text-foreground font-mono">{currentTime}</strong> (T+
+              {currentMinute}m)
             </p>
           </div>
         </div>
@@ -236,11 +238,7 @@ export function AttackGraphView() {
       </div>
 
       {/* Filter toolbar */}
-      <AttackGraphFilters
-        filters={filters}
-        onChange={setFilters}
-        onReset={handleResetFilters}
-      />
+      <AttackGraphFilters filters={filters} onChange={setFilters} onReset={handleResetFilters} />
 
       {/* Main 2-Column Layout: Left Graph Canvas, Right Inspector */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_360px]">

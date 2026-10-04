@@ -146,7 +146,10 @@ export function AttackGraphCanvas({
           const cy2 = dstPos.y;
           const pathD = `M ${srcPos.x} ${srcPos.y} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${dstPos.x} ${dstPos.y}`;
 
-          const isKillchain = isOnHighlightedPath || edge.relationshipType === "LATERALLY_MOVED_TO" || edge.relationshipType === "ACCESSED_DATA";
+          const isKillchain =
+            isOnHighlightedPath ||
+            edge.relationshipType === "LATERALLY_MOVED_TO" ||
+            edge.relationshipType === "ACCESSED_DATA";
 
           let strokeColor = "rgba(148, 163, 184, 0.4)";
           let markerEnd = "url(#arrow-default)";
@@ -189,7 +192,9 @@ export function AttackGraphCanvas({
               />
 
               {/* Edge label badge mid-point */}
-              <g transform={`translate(${(srcPos.x + dstPos.x) / 2}, ${(srcPos.y + dstPos.y) / 2})`}>
+              <g
+                transform={`translate(${(srcPos.x + dstPos.x) / 2}, ${(srcPos.y + dstPos.y) / 2})`}
+              >
                 <rect
                   x="-35"
                   y="-9"
@@ -197,7 +202,13 @@ export function AttackGraphCanvas({
                   height="18"
                   rx="4"
                   fill="rgba(15, 23, 42, 0.85)"
-                  stroke={isSelected ? "#22d3ee" : isOnHighlightedPath ? "#ef4444" : "rgba(148, 163, 184, 0.3)"}
+                  stroke={
+                    isSelected
+                      ? "#22d3ee"
+                      : isOnHighlightedPath
+                        ? "#ef4444"
+                        : "rgba(148, 163, 184, 0.3)"
+                  }
                   strokeWidth="1"
                 />
                 <text
@@ -231,10 +242,12 @@ export function AttackGraphCanvas({
         let statusBadge = <CheckCircle className="size-3 text-emerald-400" />;
 
         if (node.status === "COMPROMISED") {
-          statusBg = "bg-threat/15 border-threat/60 text-threat shadow-[0_0_15px_rgba(239,68,68,0.25)]";
+          statusBg =
+            "bg-threat/15 border-threat/60 text-threat shadow-[0_0_15px_rgba(239,68,68,0.25)]";
           statusBadge = <ShieldAlert className="size-3 text-threat animate-pulse" />;
         } else if (node.status === "AFFECTED") {
-          statusBg = "bg-amber-500/15 border-amber-500/60 text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.2)]";
+          statusBg =
+            "bg-amber-500/15 border-amber-500/60 text-amber-300 shadow-[0_0_12px_rgba(245,158,11,0.2)]";
           statusBadge = <AlertTriangle className="size-3 text-amber-400" />;
         } else if (node.status === "SUSPICIOUS") {
           statusBg = "bg-amber-400/10 border-amber-400/40 text-amber-400";

@@ -15,17 +15,22 @@ export type IncidentStage =
   | "RESOLVED";
 
 export type AssetType =
-  | "USER"
-  | "ENDPOINT"
-  | "SERVER"
-  | "DATABASE"
-  | "NETWORK"
-  | "CLOUD_RESOURCE"
-  | "FILE_STORE";
+  "USER" | "ENDPOINT" | "SERVER" | "DATABASE" | "NETWORK" | "CLOUD_RESOURCE" | "FILE_STORE";
 
-export type AssetStatus = "HEALTHY" | "SUSPICIOUS" | "COMPROMISED" | "ISOLATED" | "UNKNOWN" | "Clean" | "Potential" | "Contained" | "Suspicious" | "Compromised";
+export type AssetStatus =
+  | "HEALTHY"
+  | "SUSPICIOUS"
+  | "COMPROMISED"
+  | "ISOLATED"
+  | "UNKNOWN"
+  | "Clean"
+  | "Potential"
+  | "Contained"
+  | "Suspicious"
+  | "Compromised";
 
-export type RiskLevel = "Normal" | "Elevated" | "High" | "Critical" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+export type RiskLevel =
+  "Normal" | "Elevated" | "High" | "Critical" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 
 export type EventType =
   | "AUTHENTICATION"
@@ -222,4 +227,3 @@ export type EvidenceType = "AUTH" | "ENDPOINT" | "NETWORK" | "CLOUD" | "PROCESS"
 
 export type EvidenceEvent = Evidence;
 export type EvidenceItem = Evidence;
-

@@ -1,7 +1,4 @@
-import {
-  simulateCounterfactualFuture,
-  getStandardResponseActions,
-} from "../counterfactualService";
+import { simulateCounterfactualFuture, getStandardResponseActions } from "../counterfactualService";
 import { minuteToTimestamp } from "../stateReconstruction";
 import type {
   ResponseCandidate,
@@ -46,7 +43,7 @@ export class ResponseIntelligenceService {
           dataExposureWeight +
           eventsWeight +
           riskReductionWeight -
-          baselinePenalty
+          baselinePenalty,
       );
 
       // Determine confidence grounded in deterministic simulation completeness
@@ -167,7 +164,7 @@ export class ResponseIntelligenceService {
    */
   autoSimulate(
     minute = 22,
-    incidentId = "INC-2048"
+    incidentId = "INC-2048",
   ): {
     decision: ResponseDecision;
     branch: CounterfactualBranch;
@@ -178,7 +175,7 @@ export class ResponseIntelligenceService {
     const branch = simulateCounterfactualFuture(
       minute,
       recommendation.recommendedAction,
-      incidentId
+      incidentId,
     );
 
     const candidates = this.evaluateCandidates(minute, incidentId);
@@ -225,7 +222,7 @@ export class ResponseIntelligenceService {
       rec.alternatives
         .map(
           (alt) =>
-            `• ${alt.action.label}: Score ${alt.score} pts | Simulated Risk: ${alt.simulatedRisk} | Prevented: ${alt.preventedCompromises.length} assets (${alt.rationale})`
+            `• ${alt.action.label}: Score ${alt.score} pts | Simulated Risk: ${alt.simulatedRisk} | Prevented: ${alt.preventedCompromises.length} assets (${alt.rationale})`,
         )
         .join("\n") +
       `\n\n` +
@@ -248,7 +245,7 @@ export class ResponseIntelligenceService {
             `• Prevented Compromises: ${c.preventedCompromises.length} (${c.preventedCompromises.join(", ") || "None"})\n` +
             `• Prevented Events: ${c.preventedEvents.length} stages\n` +
             `• Protected Data Stores: ${c.preventedDataExposure}\n` +
-            `• Confidence: ${c.confidence} | Score: ${c.score} pts`
+            `• Confidence: ${c.confidence} | Score: ${c.score} pts`,
         )
         .join("\n\n") +
       `\n\nSAFETY NOTICE: SIMULATION ONLY — All outcomes derived from Phase 4 counterfactual simulation.`

@@ -1,7 +1,7 @@
 # Incident Time Machine — Rewind. Reconstruct. Simulate. Learn.
 
 > **Cybersecurity Decision-Support & Counterfactual Simulation Platform**  
-> *"Don't just respond to an attack. Rewind it. Understand it. Simulate it. Stop it."*
+> _"Don't just respond to an attack. Rewind it. Understand it. Simulate it. Stop it."_
 
 ---
 
@@ -16,9 +16,10 @@
 Traditional SIEMs and SOAR tools are forward-only and reactive: alerts fire, analysts triage amidst incomplete visibility, and decisions are made with high uncertainty.
 
 Incident Time Machine changes this paradigm:
+
 1. **Temporal State Reconstruction**: Travel backward and forward in time across the incident lifecycle.
 2. **Actual Reality vs. Known Security State**: Contrast what actually happened in the enterprise with what defenders knew at that precise moment.
-3. **Counterfactual Simulation Lab**: Fork alternate branches at pivotal moments (e.g., T+22m) to test interventions (*"What if we isolate the endpoint now instead of doing nothing?"*).
+3. **Counterfactual Simulation Lab**: Fork alternate branches at pivotal moments (e.g., T+22m) to test interventions (_"What if we isolate the endpoint now instead of doing nothing?"_).
 4. **Deterministic Explainability**: IRIS AI copilot cites concrete timeline milestones, graph edges, and evidence items without external hallucinations.
 5. **Closed-Loop Post-Incident Learning**: Aggregate all forensic artifacts, detection gaps, and counterfactual ROI into an immutable report and actionable post-incident roadmap.
 
@@ -34,6 +35,7 @@ ACTION ITEMS <── LEARN <── GENERATE REPORT <── SIMULATE <── TEST
 ## 3. Hackathon Purpose
 
 Incident Time Machine was built for the **Incident Response / AI in Cybersecurity Hackathon** to demonstrate how AI and counterfactual modeling can radically transform:
+
 - **Mean Time to Detect (MTTD)**: Pinpointing the 37-minute gap between early anomalous signals and formal SIEM alerts.
 - **Mean Time to Contain (MTTC)**: Demonstrating that early containment at 10:04 prevents 100% of downstream database access and file staging.
 - **Incident Post-Mortems**: Replacing manual, multi-week post-mortem drafting with deterministic, evidence-backed reporting.
@@ -43,33 +45,39 @@ Incident Time Machine was built for the **Incident Response / AI in Cybersecurit
 ## 4. Main Features by Phase
 
 ### Phase 1 — Synthetic Incident Simulation Engine
+
 - Central simulation clock governing incident progression (09:42 to 10:24 UTC).
 - Deterministic reconstruction of ACME Corporation credential compromise (**INC-2048**).
 - Dynamic risk engine computing organizational threat severity (`LOW` $\rightarrow$ `CRITICAL`).
 
 ### Phase 2 — Temporal Digital Twin & Forensic Timeline
+
 - Deep state reconstruction across hosts (`LAPTOP-042`, `SERVER-03`, `DB-PROD-01`, `FILE-SRV-01`), identity (`alex.m`), network sockets, processes, and sensitive data vaults.
 - Strict dual-world perspective: **Actual Ground Truth** vs. **Known Security State at the Time**.
 - Forensic evidence ledger with verified SHA-256 hashes and telemetry sources.
 
 ### Phase 3 — Interactive Attack Graph
+
 - Temporal graph visualization illustrating attacker entry points, compromised nodes, and lateral traversal edges.
 - Pathfinding engine identifying the critical path to sensitive customer database records.
 - Blast radius analyzer tracking confirmed vs. potential asset exposure.
 
 ### Phase 4 — Counterfactual Simulation Lab
+
 - Isolated scenario forking at any historical minute.
 - Standard response actions: `DO_NOTHING`, `ISOLATE_ENDPOINT`, `DISABLE_USER`, and `BLOCK_LATERAL_CONNECTION`.
 - Instant diffing of prevented compromises, saved critical assets, and avoided data exposures.
 - Strict baseline immutability: simulated futures never contaminate historical reality.
 
 ### Phase 5 — IRIS Investigation & Response Intelligence
+
 - Specialized cybersecurity AI copilot with zero hallucinations and strongly typed citations.
 - Detection gap analyzer identifying earliest detectable signals and latency.
 - Response recommendation engine ranking response candidates with safety tradeoffs and human-in-the-loop approval.
 - Autonomous simulated response execution inside isolated counterfactual branches.
 
 ### Phase 6 — Incident Resolution Report & Learning System
+
 - One-click deterministic report generation aggregating Phases 1–5 data into executive summaries, classifications, evidence ledgers, and root cause findings.
 - Report snapshots and finalization locking (`DRAFT` $\rightarrow$ `FINAL`).
 - 7-section **Post-Incident Learning Dashboard** (`/learning`) converting incident facts into organizational learning.
@@ -211,9 +219,9 @@ Experience the full hackathon demonstration scenario:
    - Select **Option A — Isolate Endpoint** on `LAPTOP-042`.
    - Run simulation: Notice the lateral edge is severed, preventing 3 downstream attack stages and reducing risk from `CRITICAL` to `MEDIUM`.
 5. **IRIS Copilot** (`/iris`):
-   - Ask: *"What happened?"*
-   - Ask: *"What was the detection gap?"* (Explains the 37-minute delay from 09:47 to 10:24).
-   - Ask: *"What should we do now?"* (Evaluates candidates and recommends isolating `LAPTOP-042`).
+   - Ask: _"What happened?"_
+   - Ask: _"What was the detection gap?"_ (Explains the 37-minute delay from 09:47 to 10:24).
+   - Ask: _"What should we do now?"_ (Evaluates candidates and recommends isolating `LAPTOP-042`).
 6. **Incident Resolution Report** (`/reports`):
    - Click **Generate Report** to review executive summaries, detection gaps, attack paths, counterfactual outcomes, and evidence ledgers.
    - Click **Finalize Report** to lock the report snapshot.

@@ -3,10 +3,7 @@ import { minuteToTimestamp } from "../stateReconstruction";
 import { demoTimelineEvents } from "../../data/incidentData";
 import { getActualDigitalTwinState } from "../digitalTwinService";
 import { getAttackGraphAtTime } from "../attackGraphService";
-import {
-  simulateCounterfactualFuture,
-  getStandardResponseActions,
-} from "../counterfactualService";
+import { simulateCounterfactualFuture, getStandardResponseActions } from "../counterfactualService";
 import { findEarliestDetectableOpportunity } from "../iris/detectionGapService";
 import { responseIntelligenceService } from "../iris/responseIntelligenceService";
 import type {
@@ -57,7 +54,7 @@ export class IncidentReportService {
    */
   generateIncidentReport(
     incidentId = "INC-2048",
-    options: GenerateReportOptions = {}
+    options: GenerateReportOptions = {},
   ): IncidentReport {
     // Check if an immutable final report already exists for this ID
     if (this.finalizedReports.has(incidentId) && options.status !== "DRAFT") {
@@ -66,7 +63,7 @@ export class IncidentReportService {
 
     const minute = Math.max(0, Math.min(42, options.minute ?? 42));
     const status: ReportStatus = options.status ?? "DRAFT";
-    const currentVersion = options.version ?? ((this.reportVersions.get(incidentId) ?? 0) + 1);
+    const currentVersion = options.version ?? (this.reportVersions.get(incidentId) ?? 0) + 1;
     this.reportVersions.set(incidentId, currentVersion);
 
     // 1. Authoritative Phase 1 Incident State
@@ -157,7 +154,8 @@ export class IncidentReportService {
       let roleInAttack = "Monitored infrastructure asset.";
       let impact = "Normal telemetry operation.";
       if (a.id === "LAPTOP-042") {
-        roleInAttack = "Initial compromised workstation; beachhead endpoint used for script execution.";
+        roleInAttack =
+          "Initial compromised workstation; beachhead endpoint used for script execution.";
         impact = "Foothold endpoint; local token extraction.";
       } else if (a.id === "SERVER-03") {
         roleInAttack = "Internal application host reached via lateral SMB/WinRM connection.";
@@ -166,7 +164,8 @@ export class IncidentReportService {
         roleInAttack = "Production database target containing customer identity records.";
         impact = "Direct query execution and sensitive database schema exploration.";
       } else if (a.id === "FILE-SRV-01") {
-        roleInAttack = "Confidential file repository containing strategic organizational documents.";
+        roleInAttack =
+          "Confidential file repository containing strategic organizational documents.";
         impact = "Directory listing traversal and bulk staging.";
       }
 
@@ -178,7 +177,14 @@ export class IncidentReportService {
         owner: a.owner,
         status: a.status,
         firstAffectedAt: a.status === "COMPROMISED" ? "10:00" : undefined,
-        compromiseTimestamp: a.status === "COMPROMISED" ? (a.id === "LAPTOP-042" ? "10:00" : a.id === "SERVER-03" ? "10:07" : "10:12") : undefined,
+        compromiseTimestamp:
+          a.status === "COMPROMISED"
+            ? a.id === "LAPTOP-042"
+              ? "10:00"
+              : a.id === "SERVER-03"
+                ? "10:07"
+                : "10:12"
+            : undefined,
         roleInAttack,
         impact,
         criticality: a.criticality,
@@ -186,8 +192,8 @@ export class IncidentReportService {
           a.id === "DB-PROD-01"
             ? "Customer profile records in DATA-CUST-VAULT"
             : a.id === "FILE-SRV-01"
-            ? "Strategic files in DATA-CONF-FILES"
-            : "No direct data repository hosted",
+              ? "Strategic files in DATA-CONF-FILES"
+              : "No direct data repository hosted",
         confidence: "HIGH",
       };
     });
@@ -203,7 +209,8 @@ export class IncidentReportService {
       firstSuspiciousAt: "09:42",
       compromisedAt: u.status === "COMPROMISED" ? "10:00" : undefined,
       compromiseTimestamp: u.status === "COMPROMISED" ? "10:00" : undefined,
-      securityImpact: "Corporate identity credentials replayed by adversary; session tokens abused for SSO access.",
+      securityImpact:
+        "Corporate identity credentials replayed by adversary; session tokens abused for SSO access.",
       relevantEvents: ["evt-0942", "evt-0947", "evt-1000", "evt-1004"],
       evidenceIds: ["ev-idp-0942", "ev-idp-0947", "ev-host-1000"],
       confidence: "HIGH",
@@ -224,7 +231,8 @@ export class IncidentReportService {
       database: "DB-PROD-01",
       fileServer: minute >= 36 ? "FILE-SRV-01" : undefined,
       sensitiveResources: ["DATA-CUST-VAULT", "DATA-CONF-FILES"],
-      finalImpact: "Unauthorized query extraction against production customer database and file staging.",
+      finalImpact:
+        "Unauthorized query extraction against production customer database and file staging.",
       hopsCount: traversalSequence.length - 1,
       compromisedNodesCount: digitalTwin.blastRadius.confirmedAffectedAssets,
       criticalNodesReached: ["DB-PROD-01"],
@@ -251,7 +259,8 @@ export class IncidentReportService {
       timestamp: ev.timestamp,
       source: ev.source,
       description: ev.content,
-      relatedEvent: ev.type === "AUTHENTICATION" ? "evt-0947" : ev.type === "PROCESS" ? "evt-1004" : "evt-1012",
+      relatedEvent:
+        ev.type === "AUTHENTICATION" ? "evt-0947" : ev.type === "PROCESS" ? "evt-1004" : "evt-1012",
       relatedAsset: (ev as any).relatedAssetId || ev.assetId,
       relatedUser: (ev as any).relatedUserId,
       attackNode: (ev as any).relatedAssetId || ev.assetId || "ALEX_ACCOUNT",
@@ -259,10 +268,10 @@ export class IncidentReportService {
         ev.type === "AUTHENTICATION"
           ? "Unusual foreign location authentication telemetry."
           : ev.type === "PROCESS"
-          ? "Suspicious base64-encoded command execution telemetry."
-          : ev.type === "NETWORK"
-          ? "Internal SMB/WinRM lateral traversal NetFlow record."
-          : "Database table extraction audit query event.",
+            ? "Suspicious base64-encoded command execution telemetry."
+            : ev.type === "NETWORK"
+              ? "Internal SMB/WinRM lateral traversal NetFlow record."
+              : "Database table extraction audit query event.",
       confidence: "HIGH",
       content: ev.content,
     }));
@@ -274,7 +283,8 @@ export class IncidentReportService {
       formalDetection: detectionGapData.formalDetectionTimestamp || "10:24",
       delayMinutes: detectionGapData.detectionDelayMinutes,
       detectionDelay: `${detectionGapData.detectionDelayMinutes} minutes`,
-      potentialDetectionOpportunity: "09:47 UTC via Auth0 MFA fatigue & unrecognized ASN correlation",
+      potentialDetectionOpportunity:
+        "09:47 UTC via Auth0 MFA fatigue & unrecognized ASN correlation",
       signalsAvailableBeforeDetection: [
         "09:42 Unusual authentication from unrecognized foreign IP (198.51.100.42)",
         "09:47 Multiple MFA prompt failures followed by single acceptance from off-hours ASN",
@@ -297,15 +307,22 @@ export class IncidentReportService {
     const knownSecurityState: KnownSecurityStateSummary = {
       asOfMinute: minute,
       asOfTime: minuteToTimestamp(minute),
-      knownSeverity: minute < 5 ? "LOW" : minute < 18 ? "MEDIUM" : minute < 42 ? "HIGH" : "CRITICAL",
+      knownSeverity:
+        minute < 5 ? "LOW" : minute < 18 ? "MEDIUM" : minute < 42 ? "HIGH" : "CRITICAL",
       knownCompromisedAssetIds:
-        minute < 18 ? [] : minute < 25 ? ["LAPTOP-042"] : minute < 30 ? ["LAPTOP-042", "SERVER-03"] : ["LAPTOP-042", "SERVER-03", "DB-PROD-01"],
+        minute < 18
+          ? []
+          : minute < 25
+            ? ["LAPTOP-042"]
+            : minute < 30
+              ? ["LAPTOP-042", "SERVER-03"]
+              : ["LAPTOP-042", "SERVER-03", "DB-PROD-01"],
       unobservedThreats:
         minute < 25
           ? ["SERVER-03 lateral traversal undetected by perimeter sensors"]
           : minute < 30
-          ? ["DB-PROD-01 database extraction ongoing in unmonitored SQL session"]
-          : [],
+            ? ["DB-PROD-01 database extraction ongoing in unmonitored SQL session"]
+            : [],
       visibilityMilestones: [
         {
           timestamp: "09:47",
@@ -359,7 +376,8 @@ export class IncidentReportService {
           timestamp: "10:24",
           minute: 42,
           actualState: "Full compromise of 4 hosts across endpoint, app, and data tiers.",
-          knownSecurityState: "Formal SIEM incident alert triggered: CRITICAL credential compromise.",
+          knownSecurityState:
+            "Formal SIEM incident alert triggered: CRITICAL credential compromise.",
           gap: "Incident finally declared 37 minutes after first detectable signal.",
           telemetryAvailable: "SIEM correlated alert",
         },
@@ -370,7 +388,9 @@ export class IncidentReportService {
     // Build Actual Impact
     const actualImpact: ActualImpactSummary = {
       compromisedAssetsCount: digitalTwin.blastRadius.confirmedAffectedAssets,
-      compromisedAssetIds: digitalTwin.assets.filter((a) => a.status === "COMPROMISED").map((a) => a.id),
+      compromisedAssetIds: digitalTwin.assets
+        .filter((a) => a.status === "COMPROMISED")
+        .map((a) => a.id),
       criticalAssetsAffected: ["DB-PROD-01"],
       dataResourcesAffected: ["DATA-CUST-VAULT", "DATA-CONF-FILES"],
       dataStoresAffected: 2,
@@ -401,8 +421,10 @@ export class IncidentReportService {
       protectedDataExposureCount: comp.preventedDataExposure,
       riskReduction: comp.riskChange,
       alternateFinalRisk: comp.counterfactualFinalRisk,
-      attackPathChanges: "Lateral pivot edge (LAPTOP-042 → SERVER-03) dropped; DB-PROD-01 unreached.",
-      simulatedOutcome: "Simulated host isolation prevents lateral traversal to internal servers and eliminates all database querying.",
+      attackPathChanges:
+        "Lateral pivot edge (LAPTOP-042 → SERVER-03) dropped; DB-PROD-01 unreached.",
+      simulatedOutcome:
+        "Simulated host isolation prevents lateral traversal to internal servers and eliminates all database querying.",
       causalExplanation:
         "Isolating LAPTOP-042 at 10:04 severs outbound network connectivity, breaking the attack graph lateral traversal edge to SERVER-03 and preventing downstream access to DB-PROD-01 and FILE-SRV-01.",
       confidence: "HIGH",
@@ -461,7 +483,8 @@ export class IncidentReportService {
       ],
       rationale: recommendation.rationale,
       decisionBasis: recommendation.decisionBasis,
-      expectedImpactReduction: "Prevents 3 downstream attack stages and saves 3 assets from compromise.",
+      expectedImpactReduction:
+        "Prevents 3 downstream attack stages and saves 3 assets from compromise.",
       humanApprovalRequired: true,
       humanApprovalState: "APPROVED",
       autoSimulateUsed: false,
@@ -487,7 +510,8 @@ export class IncidentReportService {
         {
           id: "rc-1",
           category: "Initial Access",
-          finding: "Adversary used stolen credentials from unfamiliar foreign IP to gain initial foothold.",
+          finding:
+            "Adversary used stolen credentials from unfamiliar foreign IP to gain initial foothold.",
           evidence: ["ev-idp-0942", "ev-idp-0947"],
           confidence: "HIGH",
           isObservedFact: true,
@@ -495,7 +519,8 @@ export class IncidentReportService {
         {
           id: "rc-2",
           category: "Endpoint Security",
-          finding: "Workstation permitted base64-encoded PowerShell process execution without script block logging blocking.",
+          finding:
+            "Workstation permitted base64-encoded PowerShell process execution without script block logging blocking.",
           evidence: ["ev-host-1004"],
           confidence: "HIGH",
           isObservedFact: true,
@@ -503,7 +528,8 @@ export class IncidentReportService {
         {
           id: "rc-3",
           category: "Lateral Movement",
-          finding: "Workstation was permitted direct SMB/WinRM access into tier-1 application infrastructure.",
+          finding:
+            "Workstation was permitted direct SMB/WinRM access into tier-1 application infrastructure.",
           evidence: ["ev-net-1007"],
           confidence: "HIGH",
           isObservedFact: true,
@@ -511,7 +537,8 @@ export class IncidentReportService {
         {
           id: "rc-4",
           category: "Detection Gap",
-          finding: "The 37-minute delay between early IdP warnings and formal EDR declaration allowed deep database penetration.",
+          finding:
+            "The 37-minute delay between early IdP warnings and formal EDR declaration allowed deep database penetration.",
           evidence: ["ev-idp-0947", "ev-host-1024"],
           confidence: "HIGH",
           isObservedFact: false,
@@ -525,11 +552,13 @@ export class IncidentReportService {
         id: "ms-1",
         timestamp: "09:47",
         signal: "Multiple failed MFA challenges followed by successful foreign ASN login",
-        whatDefendersCouldHaveObserved: "Identity provider risk event indicating impossible travel / credential replay",
+        whatDefendersCouldHaveObserved:
+          "Identity provider risk event indicating impossible travel / credential replay",
         relatedEvidence: "ev-idp-0947",
         relatedAsset: "LAPTOP-042",
         relatedUser: "alex.m",
-        potentialResponseOpportunity: "Force immediate password reset and invalidate active SSO refresh tokens",
+        potentialResponseOpportunity:
+          "Force immediate password reset and invalidate active SSO refresh tokens",
         confidence: "HIGH",
       },
       {
@@ -540,7 +569,8 @@ export class IncidentReportService {
         relatedEvidence: "ev-host-1004",
         relatedAsset: "LAPTOP-042",
         relatedUser: "alex.m",
-        potentialResponseOpportunity: "Isolate LAPTOP-042 from network immediately, severing lateral movement",
+        potentialResponseOpportunity:
+          "Isolate LAPTOP-042 from network immediately, severing lateral movement",
         confidence: "HIGH",
       },
       {
@@ -557,7 +587,8 @@ export class IncidentReportService {
     ];
 
     const whatWeMissed: ReportWhatWeMissed = {
-      earliestSignal: "09:42 UTC — Authentication attempt from unfamiliar foreign IP address (198.51.100.42).",
+      earliestSignal:
+        "09:42 UTC — Authentication attempt from unfamiliar foreign IP address (198.51.100.42).",
       earliestDetectableOpportunity:
         "09:47 UTC — Composite anomaly: Unfamiliar location combined with repeated failed logons.",
       detectionDelay: "37 minutes (09:47 → 10:24).",
@@ -583,8 +614,10 @@ export class IncidentReportService {
         lessonId: "ll-1",
         category: "Detection",
         title: "Cross-Domain Telemetry Correlation",
-        lesson: "Correlate authentication anomalies with initial endpoint process creation within 5 minutes.",
-        description: "Correlation between identity provider anomalies and initial process execution must happen automatically.",
+        lesson:
+          "Correlate authentication anomalies with initial endpoint process creation within 5 minutes.",
+        description:
+          "Correlation between identity provider anomalies and initial process execution must happen automatically.",
         observation:
           "IdP and EDR alerts remained siloed for 37 minutes, allowing the attacker to establish interactive persistence.",
         evidence: ["ev-idp-0947", "ev-host-1004"],
@@ -597,8 +630,10 @@ export class IncidentReportService {
         lessonId: "ll-2",
         category: "Endpoint",
         title: "Behavioral Script Interpreter Blocking",
-        lesson: "Suspicious PowerShell activity should receive earlier investigation and behavioral containment.",
-        description: "Encoded commands and script execution cradles must be quarantined automatically.",
+        lesson:
+          "Suspicious PowerShell activity should receive earlier investigation and behavioral containment.",
+        description:
+          "Encoded commands and script execution cradles must be quarantined automatically.",
         observation:
           "Adversary executed base64-encoded PowerShell download cradle on LAPTOP-042 without triggering behavioral blocking.",
         evidence: ["ev-host-1004"],
@@ -611,8 +646,10 @@ export class IncidentReportService {
         lessonId: "ll-3",
         category: "Lateral Movement",
         title: "Workstation-to-Server Network Isolation",
-        lesson: "Segment workstation VLANs from internal application and database server management ports.",
-        description: "Zero Trust micro-segmentation should block direct workstation SMB/WinRM into server infrastructure.",
+        lesson:
+          "Segment workstation VLANs from internal application and database server management ports.",
+        description:
+          "Zero Trust micro-segmentation should block direct workstation SMB/WinRM into server infrastructure.",
         observation:
           "Direct SMB and WinRM connectivity existed between employee laptop LAPTOP-042 and internal server SERVER-03.",
         evidence: ["ev-net-1007"],
@@ -625,8 +662,10 @@ export class IncidentReportService {
         lessonId: "ll-4",
         category: "Response",
         title: "Automated Endpoint Isolation Delegation",
-        lesson: "Empower Tier-1 SOC analysts with pre-approved one-click endpoint isolation playbooks.",
-        description: "Authorization friction must not delay endpoint quarantine when high-confidence signals align.",
+        lesson:
+          "Empower Tier-1 SOC analysts with pre-approved one-click endpoint isolation playbooks.",
+        description:
+          "Authorization friction must not delay endpoint quarantine when high-confidence signals align.",
         observation:
           "Analysts hesitated during the 10:04 window awaiting manual tier-2 escalation approval.",
         evidence: ["ev-host-1004"],
@@ -639,8 +678,10 @@ export class IncidentReportService {
         lessonId: "ll-5",
         category: "Identity",
         title: "Adaptive Risk-Based Authentication",
-        lesson: "Enforce adaptive conditional access requiring FIDO2 WebAuthn challenges for foreign IP sessions.",
-        description: "Untrusted networks and unusual geographic logins must require phishing-resistant credentials.",
+        lesson:
+          "Enforce adaptive conditional access requiring FIDO2 WebAuthn challenges for foreign IP sessions.",
+        description:
+          "Untrusted networks and unusual geographic logins must require phishing-resistant credentials.",
         observation:
           "Attacker successfully authenticated using stolen session tokens from an anomalous geographical location.",
         evidence: ["ev-idp-0942", "ev-idp-0947"],
@@ -653,8 +694,10 @@ export class IncidentReportService {
         lessonId: "ll-6",
         category: "Data Protection",
         title: "Database Tier Connection Brokering",
-        lesson: "Implement database connection brokers requiring service-account-only authentication.",
-        description: "Interactive employee accounts must never have direct TCP connectivity to production databases.",
+        lesson:
+          "Implement database connection brokers requiring service-account-only authentication.",
+        description:
+          "Interactive employee accounts must never have direct TCP connectivity to production databases.",
         observation:
           "The adversary queried production customer tables directly from internal application host SERVER-03.",
         evidence: ["ev-db-1012"],
@@ -671,8 +714,10 @@ export class IncidentReportService {
         recommendationId: "rec-1",
         category: "DETECTION",
         title: "Automated IdP to EDR SIEM Correlation",
-        recommendation: "Implement automated SIEM correlation rule linking foreign IdP anomalies with EDR process spawns.",
-        description: "Configure real-time stream correlation linking Auth0 anomaly webhooks with CrowdStrike/EDR process launch alerts.",
+        recommendation:
+          "Implement automated SIEM correlation rule linking foreign IdP anomalies with EDR process spawns.",
+        description:
+          "Configure real-time stream correlation linking Auth0 anomaly webhooks with CrowdStrike/EDR process launch alerts.",
         reason: "Eliminates the 37-minute detection gap observed between 09:47 and 10:24.",
         relatedEvidence: ["ev-idp-0947", "ev-host-1004"],
         evidenceIds: ["ev-idp-0947", "ev-host-1004"],
@@ -686,8 +731,10 @@ export class IncidentReportService {
         recommendationId: "rec-2",
         category: "ENDPOINT",
         title: "EDR Behavioral Blocking on Encoded Scripts",
-        recommendation: "Deploy EDR behavioral blocking for encoded PowerShell arguments and non-standard parent processes.",
-        description: "Enforce script block logging and automated quarantine on high-entropy base64 commands.",
+        recommendation:
+          "Deploy EDR behavioral blocking for encoded PowerShell arguments and non-standard parent processes.",
+        description:
+          "Enforce script block logging and automated quarantine on high-entropy base64 commands.",
         reason: "Prevents execution of download cradles used to stage reconnaissance tools.",
         relatedEvidence: ["ev-host-1004"],
         evidenceIds: ["ev-host-1004"],
@@ -701,9 +748,12 @@ export class IncidentReportService {
         recommendationId: "rec-3",
         category: "NETWORK",
         title: "Workstation-to-Server East-West Micro-segmentation",
-        recommendation: "Enforce micro-segmentation firewall rules dropping port 445/5985 traffic between workstation and server tiers.",
-        description: "Sever direct TCP 445 and 5985 paths from end-user devices to production application subnets.",
-        reason: "Severing the lateral movement edge protects SERVER-03 and downstream database systems.",
+        recommendation:
+          "Enforce micro-segmentation firewall rules dropping port 445/5985 traffic between workstation and server tiers.",
+        description:
+          "Sever direct TCP 445 and 5985 paths from end-user devices to production application subnets.",
+        reason:
+          "Severing the lateral movement edge protects SERVER-03 and downstream database systems.",
         relatedEvidence: ["ev-net-1007"],
         evidenceIds: ["ev-net-1007"],
         expectedBenefit: "Prevents lateral traversal across network boundaries.",
@@ -716,9 +766,12 @@ export class IncidentReportService {
         recommendationId: "rec-4",
         category: "IDENTITY",
         title: "FIDO2 Phishing-Resistant Step-Up Challenge",
-        recommendation: "Configure risk-based conditional access policy requiring biometric MFA on impossible travel alerts.",
-        description: "Prompt user for hardware token verification when authentication origin deviates from baseline.",
-        reason: "Stolen credential replay from foreign IPs would be challenged and blocked at 09:42.",
+        recommendation:
+          "Configure risk-based conditional access policy requiring biometric MFA on impossible travel alerts.",
+        description:
+          "Prompt user for hardware token verification when authentication origin deviates from baseline.",
+        reason:
+          "Stolen credential replay from foreign IPs would be challenged and blocked at 09:42.",
         relatedEvidence: ["ev-idp-0942", "ev-idp-0947"],
         evidenceIds: ["ev-idp-0942", "ev-idp-0947"],
         expectedBenefit: "Pre-compromise containment of compromised passwords.",
@@ -731,9 +784,11 @@ export class IncidentReportService {
         recommendationId: "rec-5",
         category: "DATA_PROTECTION",
         title: "Database Activity Monitoring (DAM) & Vault Auditing",
-        recommendation: "Implement database activity monitoring (DAM) alerting on abnormal bulk SELECT queries.",
+        recommendation:
+          "Implement database activity monitoring (DAM) alerting on abnormal bulk SELECT queries.",
         description: "Detect anomaly volume spikes in queries targeting customer profile vaults.",
-        reason: "Immediate detection of extraction behavior on DB-PROD-01 even if lateral movement succeeds.",
+        reason:
+          "Immediate detection of extraction behavior on DB-PROD-01 even if lateral movement succeeds.",
         relatedEvidence: ["ev-db-1012"],
         evidenceIds: ["ev-db-1012"],
         expectedBenefit: "Immediate containment before data exfiltration completes.",
@@ -746,9 +801,12 @@ export class IncidentReportService {
         recommendationId: "rec-6",
         category: "INCIDENT_RESPONSE",
         title: "Simulation Lab Drills for Rapid Isolation",
-        recommendation: "Conduct periodic SOC drills on 10:04 endpoint isolation playbooks in Simulation Lab.",
-        description: "Exercise analyst workflows for validating counterfactual branches and executing rapid network isolation.",
-        reason: "Ensures operational readiness and reduces human approval hesitation during live incidents.",
+        recommendation:
+          "Conduct periodic SOC drills on 10:04 endpoint isolation playbooks in Simulation Lab.",
+        description:
+          "Exercise analyst workflows for validating counterfactual branches and executing rapid network isolation.",
+        reason:
+          "Ensures operational readiness and reduces human approval hesitation during live incidents.",
         relatedEvidence: ["ev-host-1004"],
         evidenceIds: ["ev-host-1004"],
         expectedBenefit: "Reduces mean time to contain (MTTC) by 75%.",
@@ -759,14 +817,16 @@ export class IncidentReportService {
     ];
 
     // Build Action Items (retains user-modified statuses if existing)
-    const existingStatuses = this.actionItemStatuses.get(incidentId) || new Map<string, ActionItemStatus>();
+    const existingStatuses =
+      this.actionItemStatuses.get(incidentId) || new Map<string, ActionItemStatus>();
 
     const baseActionItems: ActionItem[] = [
       {
         id: "act-1",
         title: "Deploy IdP + EDR SIEM Correlation Rule",
         action: "Deploy SIEM correlation rule linking Auth0 foreign logins with EDR process alerts",
-        description: "Create real-time query in SIEM alerting when impossible travel is followed by script launch within 30m.",
+        description:
+          "Create real-time query in SIEM alerting when impossible travel is followed by script launch within 30m.",
         category: "DETECTION",
         ownerRole: "SOC Engineering",
         priority: "HIGH",
@@ -780,7 +840,8 @@ export class IncidentReportService {
         id: "act-2",
         title: "Block Encoded PowerShell Execution",
         action: "Update EDR policy to block -EncodedCommand PowerShell invocations on endpoints",
-        description: "Enforce host restriction policy preventing execution of base64-encoded script commands.",
+        description:
+          "Enforce host restriction policy preventing execution of base64-encoded script commands.",
         category: "ENDPOINT",
         ownerRole: "Endpoint Team",
         priority: "HIGH",
@@ -794,7 +855,8 @@ export class IncidentReportService {
         id: "act-3",
         title: "Enforce Workstation East-West Firewall Rules",
         action: "Deploy internal firewall ACL blocking East-West SMB traffic from workstations",
-        description: "Restrict port 445/5985 traffic so workstations cannot initiate inbound sessions to server VLAN.",
+        description:
+          "Restrict port 445/5985 traffic so workstations cannot initiate inbound sessions to server VLAN.",
         category: "NETWORK",
         ownerRole: "Network Security Team",
         priority: "HIGH",
@@ -822,7 +884,8 @@ export class IncidentReportService {
         id: "act-5",
         title: "Conduct Rapid Isolation Drills in Simulation Lab",
         action: "Conduct SOC drill on 10:04 endpoint isolation workflow in Simulation Lab",
-        description: "Train Tier-1 analysts on counterfactual branch analysis and rapid endpoint isolation approval.",
+        description:
+          "Train Tier-1 analysts on counterfactual branch analysis and rapid endpoint isolation approval.",
         category: "INCIDENT_RESPONSE",
         ownerRole: "Incident Response Team",
         priority: "MEDIUM",
@@ -935,7 +998,8 @@ export class IncidentReportService {
       detection: "10:24 Formal SIEM alert escalation",
       overallImpact: "4 compromised hosts, 1 critical database accessed, CRITICAL final risk",
       responseOpportunity: "10:04 Earliest high-confidence intervention window on LAPTOP-042",
-      counterfactualOutcome: "Isolating LAPTOP-042 prevents all downstream database and file intrusions, reducing risk to MEDIUM",
+      counterfactualOutcome:
+        "Isolating LAPTOP-042 prevents all downstream database and file intrusions, reducing risk to MEDIUM",
       fullNarrative: executiveSummaryNarrative,
     };
 
@@ -1058,7 +1122,7 @@ export class IncidentReportService {
   updateActionItemStatus(
     incidentId = "INC-2048",
     actionItemId: string,
-    newStatus: ActionItemStatus
+    newStatus: ActionItemStatus,
   ): void {
     let map = this.actionItemStatuses.get(incidentId);
     if (!map) {

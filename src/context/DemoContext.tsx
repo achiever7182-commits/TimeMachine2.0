@@ -9,19 +9,13 @@ import {
   type ReactNode,
 } from "react";
 import { demoIncident, demoTimelineEvents } from "@/data/incidentData";
-import {
-  getActualDigitalTwinState,
-  getKnownSecurityState,
-} from "@/services/digitalTwinService";
+import { getActualDigitalTwinState, getKnownSecurityState } from "@/services/digitalTwinService";
 import { getAttackGraphAtTime } from "@/services/attackGraphService";
 import {
   simulateCounterfactualFuture,
   getStandardResponseActions,
 } from "@/services/counterfactualService";
-import type {
-  CounterfactualAction,
-  CounterfactualBranch,
-} from "@/types/counterfactual";
+import type { CounterfactualAction, CounterfactualBranch } from "@/types/counterfactual";
 import { responseIntelligenceService } from "@/services/iris/responseIntelligenceService";
 import type {
   ResponseCandidate,
@@ -48,11 +42,7 @@ import {
   saveLastSimulationTime,
   saveSimulationSpeed,
 } from "@/services/simulationService";
-import type {
-  DigitalTwinSnapshot,
-  TimelineBookmark,
-  TimelineZoom,
-} from "@/types/digitalTwin";
+import type { DigitalTwinSnapshot, TimelineBookmark, TimelineZoom } from "@/types/digitalTwin";
 import type { Incident, IncidentStage, Severity } from "@/types/incident";
 
 const DEFAULT_BOOKMARKS: TimelineBookmark[] = [
@@ -77,7 +67,8 @@ const DEFAULT_BOOKMARKS: TimelineBookmark[] = [
     timestamp: "10:07",
     minute: 25,
     name: "Lateral Movement Begins",
-    description: "Authenticated WinRM/SMB connection initiated to internal application server SERVER-03.",
+    description:
+      "Authenticated WinRM/SMB connection initiated to internal application server SERVER-03.",
     createdAt: "2026-09-29T10:07:00Z",
   },
   {
@@ -254,17 +245,19 @@ export function DemoProvider({ children }: { children: ReactNode }) {
 
   // Phase 4: Counterfactual Simulation State
   const [isCounterfactualMode, setIsCounterfactualMode] = useState<boolean>(false);
-  const [availableActions, setAvailableActions] = useState<CounterfactualAction[]>(() =>
-    getStandardResponseActions(22) // default to 10:04
+  const [availableActions, setAvailableActions] = useState<CounterfactualAction[]>(
+    () => getStandardResponseActions(22), // default to 10:04
   );
   const [activeAction, setActiveAction] = useState<CounterfactualAction>(() => {
     const actions = getStandardResponseActions(22);
     return actions[1]!; // default Option A: Isolate LAPTOP-042
   });
-  const [counterfactualBranch, setCounterfactualBranch] = useState<CounterfactualBranch | null>(() => {
-    const actions = getStandardResponseActions(22);
-    return simulateCounterfactualFuture(22, actions[1]!);
-  });
+  const [counterfactualBranch, setCounterfactualBranch] = useState<CounterfactualBranch | null>(
+    () => {
+      const actions = getStandardResponseActions(22);
+      return simulateCounterfactualFuture(22, actions[1]!);
+    },
+  );
   const [scenarioHistory, setScenarioHistory] = useState<CounterfactualBranch[]>(() => {
     const actions = getStandardResponseActions(22);
     const branch0 = simulateCounterfactualFuture(22, actions[0]!); // Do Nothing
@@ -276,18 +269,20 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   // Phase 5 Extension: Response Intelligence & Autonomous Simulation States
   const [responseMode, setResponseMode] = useState<ResponseMode>("IRIS_RECOMMEND");
   const [responseCandidates, setResponseCandidates] = useState<ResponseCandidate[]>(() =>
-    responseIntelligenceService.evaluateCandidates(22)
+    responseIntelligenceService.evaluateCandidates(22),
   );
-  const [responseRecommendation, setResponseRecommendation] = useState<ResponseRecommendation | null>(() =>
-    responseIntelligenceService.generateRecommendation(22)
-  );
+  const [responseRecommendation, setResponseRecommendation] =
+    useState<ResponseRecommendation | null>(() =>
+      responseIntelligenceService.generateRecommendation(22),
+    );
   const [responseDecision, setResponseDecision] = useState<ResponseDecision | null>(null);
-  const [responseSimulationStatus, setResponseSimulationStatus] = useState<ResponseDecisionStatus>("PROPOSED");
+  const [responseSimulationStatus, setResponseSimulationStatus] =
+    useState<ResponseDecisionStatus>("PROPOSED");
 
   // Phase 6: Incident Report & Learning State
   const [reportStatus, setReportStatus] = useState<ReportStatus>("DRAFT");
   const [currentReport, setCurrentReport] = useState<IncidentReport | null>(() =>
-    incidentReportService.generateIncidentReport("INC-2048", { minute: 42, status: "DRAFT" })
+    incidentReportService.generateIncidentReport("INC-2048", { minute: 42, status: "DRAFT" }),
   );
 
   // Timer Ref
@@ -311,7 +306,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     (time: string) => {
       setCurrentMinute(timestampToMinute(time));
     },
-    [setCurrentMinute]
+    [setCurrentMinute],
   );
 
   const setSimulationSpeed = useCallback((speed: number) => {
@@ -329,7 +324,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
         setIsPaused(true);
       }
     },
-    [clearSimulationTimer]
+    [clearSimulationTimer],
   );
 
   const toggleInvestigationMode = useCallback(() => {
@@ -357,7 +352,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
         return updated;
       });
     },
-    [currentMinute]
+    [currentMinute],
   );
 
   const removeBookmark = useCallback((id: string) => {
@@ -379,7 +374,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
         setCurrentMinute(bookmark.minute);
       }
     },
-    [bookmarks, setCurrentMinute]
+    [bookmarks, setCurrentMinute],
   );
 
   // Step Controls (Requirement 19)
@@ -512,7 +507,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       setShowMissed(false);
       setRewindTarget(targetMinute);
     },
-    [clearSimulationTimer]
+    [clearSimulationTimer],
   );
 
   useEffect(() => {
@@ -561,7 +556,9 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       const branch = simulateCounterfactualFuture(currentMinute, act);
       setCounterfactualBranch(branch);
       setScenarioHistory((prev) => {
-        const filtered = prev.filter((b) => b.action.type !== act.type || b.baseMinute !== currentMinute);
+        const filtered = prev.filter(
+          (b) => b.action.type !== act.type || b.baseMinute !== currentMinute,
+        );
         return [...filtered, branch];
       });
       setIsCounterfactualMode(true);
@@ -571,7 +568,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
         setIsSimulating(false);
       }, 350);
     },
-    [activeAction, currentMinute]
+    [activeAction, currentMinute],
   );
 
   const selectBranch = useCallback((branchId: string) => {
@@ -626,7 +623,8 @@ export function DemoProvider({ children }: { children: ReactNode }) {
 
   const approveResponse = useCallback(() => {
     setResponseApproved(true);
-    const rec = responseRecommendation || responseIntelligenceService.generateRecommendation(currentMinute);
+    const rec =
+      responseRecommendation || responseIntelligenceService.generateRecommendation(currentMinute);
     setResponseDecision((prev) =>
       prev
         ? { ...prev, status: "APPROVED", approved: true }
@@ -638,7 +636,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
             approved: true,
             recommendationId: rec.id,
             timestamp: minuteToTimestamp(currentMinute),
-          }
+          },
     );
     setResponseSimulationStatus("APPROVED");
   }, [responseRecommendation, responseMode, currentMinute]);
@@ -650,7 +648,8 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const simulateRecommendedResponse = useCallback(() => {
-    const rec = responseRecommendation || responseIntelligenceService.generateRecommendation(currentMinute);
+    const rec =
+      responseRecommendation || responseIntelligenceService.generateRecommendation(currentMinute);
     simulateAction(rec.recommendedAction);
     setResponseDecision({
       mode: responseMode,
@@ -677,7 +676,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     setCounterfactualBranch(branch);
     setScenarioHistory((prev) => {
       const filtered = prev.filter(
-        (b) => b.action.type !== branch.action.type || b.baseMinute !== currentMinute
+        (b) => b.action.type !== branch.action.type || b.baseMinute !== currentMinute,
       );
       return [...filtered, branch];
     });
@@ -701,7 +700,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       }
       return rpt;
     },
-    [currentMinute, reportStatus, activeAction]
+    [currentMinute, reportStatus, activeAction],
   );
 
   const finalizeReport = useCallback(() => {
@@ -719,22 +718,19 @@ export function DemoProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const updateActionItemStatus = useCallback(
-    (actionItemId: string, status: ActionItemStatus) => {
-      incidentReportService.updateActionItemStatus("INC-2048", actionItemId, status);
-      setCurrentReport((prev) => {
-        if (!prev) return prev;
-        const updated = prev.actionItems.map((item) =>
-          item.id === actionItemId ? { ...item, status } : item
-        );
-        return {
-          ...prev,
-          actionItems: updated,
-        };
-      });
-    },
-    []
-  );
+  const updateActionItemStatus = useCallback((actionItemId: string, status: ActionItemStatus) => {
+    incidentReportService.updateActionItemStatus("INC-2048", actionItemId, status);
+    setCurrentReport((prev) => {
+      if (!prev) return prev;
+      const updated = prev.actionItems.map((item) =>
+        item.id === actionItemId ? { ...item, status } : item,
+      );
+      return {
+        ...prev,
+        actionItems: updated,
+      };
+    });
+  }, []);
 
   // Sync available actions & response evaluation whenever currentMinute changes (e.g., historical rewind)
   useEffect(() => {
@@ -972,7 +968,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       archiveReport,
       updateActionItemStatus,
       reportStatus,
-    ]
+    ],
   );
 
   return <DemoContext.Provider value={value}>{children}</DemoContext.Provider>;

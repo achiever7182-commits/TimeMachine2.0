@@ -34,38 +34,42 @@ console.log("=======================================================\n");
 const graph0947 = getAttackGraphAtTime("INC-2048", "09:47");
 const laptop0947 = graph0947.nodes.find((n) => n.id === "LAPTOP-042");
 const server0947 = graph0947.nodes.find((n) => n.id === "SERVER-03");
-const lateralEdge0947 = graph0947.edges.find((e) => e.source === "LAPTOP-042" && e.target === "SERVER-03");
+const lateralEdge0947 = graph0947.edges.find(
+  (e) => e.source === "LAPTOP-042" && e.target === "SERVER-03",
+);
 
 assert(
-  Boolean(laptop0947) &&
-  server0947?.status !== "COMPROMISED" &&
-  !lateralEdge0947,
+  Boolean(laptop0947) && server0947?.status !== "COMPROMISED" && !lateralEdge0947,
   "TEST A — GRAPH AT 09:47",
-  `LAPTOP status: ${laptop0947?.status}, SERVER-03 status: ${server0947?.status}, Lateral Edge: ${Boolean(lateralEdge0947)}`
+  `LAPTOP status: ${laptop0947?.status}, SERVER-03 status: ${server0947?.status}, Lateral Edge: ${Boolean(lateralEdge0947)}`,
 );
 
 // TEST B — GRAPH AT 10:07
 // Expected: SERVER-03 becomes compromised/affected according to incident state. LAPTOP-042 → SERVER-03 exists.
 const graph1007 = getAttackGraphAtTime("INC-2048", "10:07");
 const server1007 = graph1007.nodes.find((n) => n.id === "SERVER-03");
-const lateralEdge1007 = graph1007.edges.find((e) => e.source === "LAPTOP-042" && e.target === "SERVER-03");
+const lateralEdge1007 = graph1007.edges.find(
+  (e) => e.source === "LAPTOP-042" && e.target === "SERVER-03",
+);
 
 assert(
   server1007?.status === "COMPROMISED" && Boolean(lateralEdge1007),
   "TEST B — GRAPH AT 10:07",
-  `SERVER-03 status: ${server1007?.status}, Lateral Edge: ${lateralEdge1007?.id} (${lateralEdge1007?.relationshipType})`
+  `SERVER-03 status: ${server1007?.status}, Lateral Edge: ${lateralEdge1007?.id} (${lateralEdge1007?.relationshipType})`,
 );
 
 // TEST C — GRAPH AT 10:12
 // Expected: DB-PROD-01 appears as compromised/affected. SERVER-03 → DB-PROD-01 relationship exists.
 const graph1012 = getAttackGraphAtTime("INC-2048", "10:12");
 const db1012 = graph1012.nodes.find((n) => n.id === "DB-PROD-01");
-const dbEdge1012 = graph1012.edges.find((e) => e.source === "SERVER-03" && e.target === "DB-PROD-01");
+const dbEdge1012 = graph1012.edges.find(
+  (e) => e.source === "SERVER-03" && e.target === "DB-PROD-01",
+);
 
 assert(
   db1012?.status === "COMPROMISED" && Boolean(dbEdge1012),
   "TEST C — GRAPH AT 10:12",
-  `DB-PROD-01 status: ${db1012?.status}, Edge: ${dbEdge1012?.id} (${dbEdge1012?.relationshipType})`
+  `DB-PROD-01 status: ${db1012?.status}, Edge: ${dbEdge1012?.id} (${dbEdge1012?.relationshipType})`,
 );
 
 // TEST D — GRAPH REWIND
@@ -80,7 +84,7 @@ const edgeServerRewound = rewoundGraph.edges.find((e) => e.target === "SERVER-03
 assert(
   Boolean(edgeFileSrv1018) && !edgeFileSrvRewound && !edgeServerRewound,
   "TEST D — GRAPH REWIND",
-  `10:18 had FILE-SRV-01 edge: ${Boolean(edgeFileSrv1018)}. Rewound 09:47 edges count: ${rewoundGraph.edges.length}`
+  `10:18 had FILE-SRV-01 edge: ${Boolean(edgeFileSrv1018)}. Rewound 09:47 edges count: ${rewoundGraph.edges.length}`,
 );
 
 // TEST E — GRAPH FORWARD RECONSTRUCTION
@@ -92,22 +96,24 @@ const g4 = getAttackGraphAtTime("INC-2048", "10:18");
 
 assert(
   g1.edges.length < g2.edges.length &&
-  g2.edges.length < g3.edges.length &&
-  g3.edges.length < g4.edges.length &&
-  g4.edges.length === 7,
+    g2.edges.length < g3.edges.length &&
+    g3.edges.length < g4.edges.length &&
+    g4.edges.length === 7,
   "TEST E — GRAPH FORWARD RECONSTRUCTION",
-  `Edge counts across progression: ${g1.edges.length} -> ${g2.edges.length} -> ${g3.edges.length} -> ${g4.edges.length}`
+  `Edge counts across progression: ${g1.edges.length} -> ${g2.edges.length} -> ${g3.edges.length} -> ${g4.edges.length}`,
 );
 
 // TEST F — NODE INSPECTION
 // Select LAPTOP-042. Expected: Inspector returns correct temporal state.
-const laptopAt1000 = getAttackGraphAtTime("INC-2048", "10:00").nodes.find((n) => n.id === "LAPTOP-042");
+const laptopAt1000 = getAttackGraphAtTime("INC-2048", "10:00").nodes.find(
+  (n) => n.id === "LAPTOP-042",
+);
 assert(
   laptopAt1000?.status === "COMPROMISED" &&
-  laptopAt1000?.owner === "alex.m" &&
-  laptopAt1000?.confidence > 0.9,
+    laptopAt1000?.owner === "alex.m" &&
+    laptopAt1000?.confidence > 0.9,
   "TEST F — NODE INSPECTION",
-  `LAPTOP-042 status at 10:00: ${laptopAt1000?.status}, Owner: ${laptopAt1000?.owner}, Conf: ${laptopAt1000?.confidence}`
+  `LAPTOP-042 status at 10:00: ${laptopAt1000?.status}, Owner: ${laptopAt1000?.owner}, Conf: ${laptopAt1000?.confidence}`,
 );
 
 // TEST G — EDGE INSPECTION
@@ -115,11 +121,11 @@ assert(
 const edgeLateral = g2.edges.find((e) => e.source === "LAPTOP-042" && e.target === "SERVER-03");
 assert(
   edgeLateral?.firstSeen === "10:07" &&
-  edgeLateral?.eventIds.includes("raw-1007-smb") &&
-  edgeLateral?.evidenceIds.includes("ev-4") &&
-  edgeLateral?.confidence === 0.92,
+    edgeLateral?.eventIds.includes("raw-1007-smb") &&
+    edgeLateral?.evidenceIds.includes("ev-4") &&
+    edgeLateral?.confidence === 0.92,
   "TEST G — EDGE INSPECTION",
-  `Edge: ${edgeLateral?.id}, FirstSeen: ${edgeLateral?.firstSeen}, Confidence: ${edgeLateral?.confidence}`
+  `Edge: ${edgeLateral?.id}, FirstSeen: ${edgeLateral?.firstSeen}, Confidence: ${edgeLateral?.confidence}`,
 );
 
 // TEST H — PATH FINDING
@@ -127,12 +133,12 @@ assert(
 const foundPath = findPath("ALEX_ACCOUNT", "DB-PROD-01", g3);
 assert(
   foundPath.length === 4 &&
-  foundPath[0] === "ALEX_ACCOUNT" &&
-  foundPath[1] === "LAPTOP-042" &&
-  foundPath[2] === "SERVER-03" &&
-  foundPath[3] === "DB-PROD-01",
+    foundPath[0] === "ALEX_ACCOUNT" &&
+    foundPath[1] === "LAPTOP-042" &&
+    foundPath[2] === "SERVER-03" &&
+    foundPath[3] === "DB-PROD-01",
   "TEST H — PATH FINDING",
-  `Found traversal sequence: ${foundPath.join(" -> ")}`
+  `Found traversal sequence: ${foundPath.join(" -> ")}`,
 );
 
 // TEST I — PATH DETERMINISM
@@ -142,7 +148,7 @@ const pathRun2 = findPath("ATTACKER", "DB-PROD-01", g4);
 assert(
   JSON.stringify(pathRun1) === JSON.stringify(pathRun2) && pathRun1.length > 0,
   "TEST I — PATH DETERMINISM",
-  `Path 1 and Path 2 identically match: ${pathRun1.join(" -> ")}`
+  `Path 1 and Path 2 identically match: ${pathRun1.join(" -> ")}`,
 );
 
 // TEST J — FILTERS
@@ -155,11 +161,9 @@ const filterServer: AttackGraphFilter = {
 };
 const filtered = filterAttackGraph(g4, filterServer);
 assert(
-  filtered.nodes.length === 1 &&
-  filtered.nodes[0]!.id === "SERVER-03" &&
-  g4.nodes.length === 7,
+  filtered.nodes.length === 1 && filtered.nodes[0]!.id === "SERVER-03" && g4.nodes.length === 7,
   "TEST J — FILTERS",
-  `Filtered nodes: ${filtered.nodes.length}, Original underlying nodes: ${g4.nodes.length}`
+  `Filtered nodes: ${filtered.nodes.length}, Original underlying nodes: ${g4.nodes.length}`,
 );
 
 // TEST K — EVIDENCE SYNCHRONIZATION
@@ -172,7 +176,7 @@ const hasEv4At1018 = knownAt1018.evidence.some((e) => e.id === "ev-4");
 assert(
   !hasEv4At0947 && hasEv4At1018,
   "TEST K — EVIDENCE SYNCHRONIZATION",
-  `09:47 has ev-4: ${hasEv4At0947}, 10:18 has ev-4: ${hasEv4At1018}`
+  `09:47 has ev-4: ${hasEv4At0947}, 10:18 has ev-4: ${hasEv4At1018}`,
 );
 
 // TEST L — GRAPH/DIGITAL TWIN SYNCHRONIZATION
@@ -181,19 +185,20 @@ const dtState1012 = getActualDigitalTwinState(30);
 const agState1012 = getAttackGraphAtTime("INC-2048", 30);
 assert(
   dtState1012.timestamp === agState1012.timestamp &&
-  dtState1012.blastRadius.confirmedAffectedAssets === agState1012.blastRadius.confirmedAffectedAssets,
+    dtState1012.blastRadius.confirmedAffectedAssets ===
+      agState1012.blastRadius.confirmedAffectedAssets,
   "TEST L — GRAPH/DIGITAL TWIN SYNCHRONIZATION",
-  `DT Timestamp: ${dtState1012.timestamp} == AG Timestamp: ${agState1012.timestamp}`
+  `DT Timestamp: ${dtState1012.timestamp} == AG Timestamp: ${agState1012.timestamp}`,
 );
 
 // TEST M — BLAST RADIUS
 // Verify: confirmedAffectedAssets, potentiallyAffectedAssets, criticalAssetsAffected match deterministic model.
 assert(
   agState1012.blastRadius.confirmedAffectedAssets >= 3 &&
-  agState1012.blastRadius.criticalAssetsAffected >= 1 &&
-  agState1012.compromisedNodes.some((n) => n.id === "DB-PROD-01"),
+    agState1012.blastRadius.criticalAssetsAffected >= 1 &&
+    agState1012.compromisedNodes.some((n) => n.id === "DB-PROD-01"),
   "TEST M — BLAST RADIUS",
-  `Confirmed Assets: ${agState1012.blastRadius.confirmedAffectedAssets}, Critical: ${agState1012.blastRadius.criticalAssetsAffected}, Has DB: true`
+  `Confirmed Assets: ${agState1012.blastRadius.confirmedAffectedAssets}, Critical: ${agState1012.blastRadius.criticalAssetsAffected}, Has DB: true`,
 );
 
 console.log("\n-------------------------------------------------------");

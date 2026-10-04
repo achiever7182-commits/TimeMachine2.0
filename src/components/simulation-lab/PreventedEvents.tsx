@@ -13,7 +13,8 @@ export function PreventedEvents({ preventedEvents, actionLabel }: PreventedEvent
         <HelpCircle className="size-6 text-muted-foreground/60 mb-2" />
         <p className="font-semibold text-foreground">No Attack Events Prevented</p>
         <p className="mt-1 text-[11px] max-w-sm">
-          No simulated response action was selected or the selected action did not interrupt the active attack path.
+          No simulated response action was selected or the selected action did not interrupt the
+          active attack path.
         </p>
       </div>
     );
@@ -53,14 +54,16 @@ export function PreventedEvents({ preventedEvents, actionLabel }: PreventedEvent
                 </span>
               </div>
 
-              <p className="text-[11px] text-emerald-300 font-medium">
-                {evt.reason}
-              </p>
+              <p className="text-[11px] text-emerald-300 font-medium">{evt.reason}</p>
 
               <div className="flex items-center gap-2 pt-1 font-mono text-[10px] text-muted-foreground">
-                <span>Target: <strong className="text-foreground">{evt.targetAsset}</strong></span>
+                <span>
+                  Target: <strong className="text-foreground">{evt.targetAsset}</strong>
+                </span>
                 <span>•</span>
-                <span>Trigger: <strong className="text-cyan-signal">{evt.causalTrigger}</strong></span>
+                <span>
+                  Trigger: <strong className="text-cyan-signal">{evt.causalTrigger}</strong>
+                </span>
               </div>
             </div>
           </div>

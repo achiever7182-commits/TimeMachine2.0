@@ -30,9 +30,7 @@ export function IrisEvidence({ citations, onSelectCitation }: IrisEvidenceProps)
           >
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
-                <span className="font-mono font-bold text-foreground truncate">
-                  {c.label}
-                </span>
+                <span className="font-mono font-bold text-foreground truncate">{c.label}</span>
               </div>
               <div className="flex items-center gap-2 text-[9px] text-muted-foreground">
                 <span className="uppercase text-cyan-signal font-semibold">

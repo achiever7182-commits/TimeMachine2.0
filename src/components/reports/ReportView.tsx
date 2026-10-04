@@ -98,7 +98,9 @@ export function ReportView() {
     window.print();
   };
 
-  const report = currentReport || incidentReportService.generateIncidentReport("INC-2048", { minute: currentMinute });
+  const report =
+    currentReport ||
+    incidentReportService.generateIncidentReport("INC-2048", { minute: currentMinute });
 
   return (
     <div className="mx-auto max-w-7xl animate-fade-in space-y-6 pb-16">
@@ -116,15 +118,15 @@ export function ReportView() {
                   reportStatus === "FINAL"
                     ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                     : reportStatus === "ARCHIVED"
-                    ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
-                    : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                      ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
+                      : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
                 }`}
               >
                 {reportStatus === "FINAL"
                   ? "STATUS: FINAL (LOCKED)"
                   : reportStatus === "ARCHIVED"
-                  ? "STATUS: ARCHIVED"
-                  : "STATUS: DRAFT"}
+                    ? "STATUS: ARCHIVED"
+                    : "STATUS: DRAFT"}
               </span>
               {report && (
                 <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-secondary/50 text-muted-foreground border border-border/60">
@@ -136,7 +138,8 @@ export function ReportView() {
               Incident Resolution Report & Post-Mortem
             </h1>
             <p className="text-sm text-muted-foreground">
-              Deterministic synthesis of forensic timeline, digital twin telemetry, counterfactual simulation, and root-cause analysis.
+              Deterministic synthesis of forensic timeline, digital twin telemetry, counterfactual
+              simulation, and root-cause analysis.
             </p>
           </div>
 
@@ -151,7 +154,9 @@ export function ReportView() {
                 className="font-mono text-xs gap-1.5 border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/10"
                 title="Create a new versioned report draft from current investigation state"
               >
-                <RefreshCw className={`size-3.5 ${isGenerating ? "animate-spin text-cyan-400" : ""}`} />
+                <RefreshCw
+                  className={`size-3.5 ${isGenerating ? "animate-spin text-cyan-400" : ""}`}
+                />
                 {isGenerating ? "Regenerating..." : "Regenerate as New Version"}
               </Button>
             ) : (
@@ -163,7 +168,9 @@ export function ReportView() {
                 className="font-mono text-xs gap-1.5"
                 title="Generate incident report from current simulation snapshot"
               >
-                <RefreshCw className={`size-3.5 ${isGenerating ? "animate-spin text-cyan-400" : ""}`} />
+                <RefreshCw
+                  className={`size-3.5 ${isGenerating ? "animate-spin text-cyan-400" : ""}`}
+                />
                 {isGenerating ? "Generating..." : "Generate Incident Report"}
               </Button>
             )}
@@ -238,9 +245,15 @@ export function ReportView() {
 
           {report && (
             <div className="hidden sm:flex items-center gap-3 text-xs font-mono text-muted-foreground">
-              <span>Snapshot Minute: <strong className="text-foreground">T+{report.snapshotMinute}m</strong></span>
+              <span>
+                Snapshot Minute:{" "}
+                <strong className="text-foreground">T+{report.snapshotMinute}m</strong>
+              </span>
               <span>•</span>
-              <span>Generated: <strong className="text-foreground">{report.generatedAt.slice(11, 19)} UTC</strong></span>
+              <span>
+                Generated:{" "}
+                <strong className="text-foreground">{report.generatedAt.slice(11, 19)} UTC</strong>
+              </span>
             </div>
           )}
         </div>
@@ -253,36 +266,53 @@ export function ReportView() {
               <span className="font-bold text-rose-400">{report.severity}</span>
             </div>
             <div className="rounded-lg border border-border/80 bg-background/60 p-2.5">
-              <span className="text-[10px] text-muted-foreground uppercase block">Detection Gap</span>
+              <span className="text-[10px] text-muted-foreground uppercase block">
+                Detection Gap
+              </span>
               <span className="font-bold text-amber-400">{report.detectionGap.delayMinutes}m</span>
             </div>
             <div className="rounded-lg border border-border/80 bg-background/60 p-2.5">
               <span className="text-[10px] text-muted-foreground uppercase block">Compromised</span>
-              <span className="font-bold text-rose-400">{report.actualImpact.compromisedAssetsCount} Hosts</span>
+              <span className="font-bold text-rose-400">
+                {report.actualImpact.compromisedAssetsCount} Hosts
+              </span>
             </div>
             <div className="rounded-lg border border-border/80 bg-background/60 p-2.5">
-              <span className="text-[10px] text-muted-foreground uppercase block">Critical Assets</span>
-              <span className="font-bold text-rose-400">{report.actualImpact.criticalAssetsAffected.length}</span>
+              <span className="text-[10px] text-muted-foreground uppercase block">
+                Critical Assets
+              </span>
+              <span className="font-bold text-rose-400">
+                {report.actualImpact.criticalAssetsAffected.length}
+              </span>
             </div>
             <div className="rounded-lg border border-border/80 bg-background/60 p-2.5">
               <span className="text-[10px] text-muted-foreground uppercase block">Data Stores</span>
-              <span className="font-bold text-cyan-400">{report.actualImpact.dataStoresAffected}</span>
+              <span className="font-bold text-cyan-400">
+                {report.actualImpact.dataStoresAffected}
+              </span>
             </div>
             <div className="rounded-lg border border-border/80 bg-background/60 p-2.5">
               <span className="text-[10px] text-muted-foreground uppercase block">Attack Path</span>
               <span className="font-bold text-foreground">{report.attackPath.hopsCount} Hops</span>
             </div>
             <div className="rounded-lg border border-border/80 bg-background/60 p-2.5">
-              <span className="text-[10px] text-muted-foreground uppercase block">Earliest Opp</span>
+              <span className="text-[10px] text-muted-foreground uppercase block">
+                Earliest Opp
+              </span>
               <span className="font-bold text-cyan-300">{report.firstDetectableOpportunity}</span>
             </div>
             <div className="rounded-lg border border-border/80 bg-background/60 p-2.5">
               <span className="text-[10px] text-muted-foreground uppercase block">Preventable</span>
-              <span className="font-bold text-emerald-400">+{report.counterfactualAnalysis.preventedEvents.length} Stages</span>
+              <span className="font-bold text-emerald-400">
+                +{report.counterfactualAnalysis.preventedEvents.length} Stages
+              </span>
             </div>
             <div className="rounded-lg border border-border/80 bg-background/60 p-2.5">
               <span className="text-[10px] text-muted-foreground uppercase block">Recommended</span>
-              <span className="font-bold text-cyan-300 truncate block" title={report.responseAnalysis.recommendedAction.label}>
+              <span
+                className="font-bold text-cyan-300 truncate block"
+                title={report.responseAnalysis.recommendedAction.label}
+              >
                 Isolate Host
               </span>
             </div>
@@ -336,10 +366,14 @@ export function ReportView() {
                   VERSION: <span className="text-cyan-400 font-bold">v{report.version}</span>
                 </div>
                 <div className="text-[10px] font-mono text-muted-foreground mt-0.5">
-                  CONFIDENCE: <span className="text-emerald-400 font-bold">{report.confidence}</span>
+                  CONFIDENCE:{" "}
+                  <span className="text-emerald-400 font-bold">{report.confidence}</span>
                 </div>
                 <div className="text-[10px] font-mono text-muted-foreground mt-0.5">
-                  CITATIONS: <span className="text-cyan-400 font-bold">{report.citations.length} Verified</span>
+                  CITATIONS:{" "}
+                  <span className="text-cyan-400 font-bold">
+                    {report.citations.length} Verified
+                  </span>
                 </div>
               </div>
             </div>

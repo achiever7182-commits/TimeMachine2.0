@@ -1,8 +1,4 @@
-import {
-  demoEvidence,
-  demoRawEvents,
-  demoTimelineEvents,
-} from "@/data/incidentData";
+import { demoEvidence, demoRawEvents, demoTimelineEvents } from "@/data/incidentData";
 import { timestampToMinute } from "./stateReconstruction";
 import type { Event, Evidence, TimelineEvent } from "@/types/incident";
 

@@ -1,13 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  Clock,
-  Layers,
-  Search,
-  Server,
-  ShieldAlert,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight, Clock, Layers, Search, Server, ShieldAlert, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,14 +18,15 @@ export function IncidentsView() {
     (i) =>
       i.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       i.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ((i as any).employeeAccount && (i as any).employeeAccount.toLowerCase().includes(searchQuery.toLowerCase()))
+      ((i as any).employeeAccount &&
+        (i as any).employeeAccount.toLowerCase().includes(searchQuery.toLowerCase())),
   );
 
   // Selected incident details (reads live INC-2048 state from central engine)
   const isTargetSelected = selectedIncidentId === "INC-2048";
   const selectedIncident = isTargetSelected
     ? incident
-    : incidents.find((i) => i.id === selectedIncidentId) ?? incident;
+    : (incidents.find((i) => i.id === selectedIncidentId) ?? incident);
 
   return (
     <div className="mx-auto max-w-7xl animate-fade-in">
@@ -64,8 +57,8 @@ export function IncidentsView() {
                   selectedIncident.severity === "CRITICAL"
                     ? "border-threat/40 bg-threat/10 text-threat"
                     : selectedIncident.severity === "HIGH"
-                    ? "border-warning/40 bg-warning/10 text-warning"
-                    : "border-cyan-glow bg-primary/10 text-cyan-signal"
+                      ? "border-warning/40 bg-warning/10 text-warning"
+                      : "border-cyan-glow bg-primary/10 text-cyan-signal",
                 )}
               >
                 {selectedIncident.severity}
@@ -85,14 +78,18 @@ export function IncidentsView() {
             {/* Key Metadata Grid */}
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 border-t border-border pt-4">
               <div>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">Current Stage</p>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Current Stage
+                </p>
                 <p className="mt-1 font-mono text-sm font-semibold text-cyan-signal">
                   {isTargetSelected ? incidentState.stage : (selectedIncident.stage ?? "NORMAL")}
                 </p>
               </div>
 
               <div>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">Simulation Time</p>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Simulation Time
+                </p>
                 <p className="mt-1 flex items-center gap-1.5 font-mono text-sm font-semibold text-foreground">
                   <Clock className="size-3.5 text-cyan-signal" />
                   {isTargetSelected ? currentTime : selectedIncident.detectedAt}
@@ -100,15 +97,17 @@ export function IncidentsView() {
               </div>
 
               <div>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">Calculated Risk</p>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Calculated Risk
+                </p>
                 <p
                   className={cn(
                     "mt-1 font-mono text-sm font-semibold uppercase",
                     currentRisk === "CRITICAL" || currentRisk === "Critical"
                       ? "text-threat"
                       : currentRisk === "HIGH" || currentRisk === "High"
-                      ? "text-warning"
-                      : "text-cyan-signal"
+                        ? "text-warning"
+                        : "text-cyan-signal",
                   )}
                 >
                   {isTargetSelected ? currentRisk : selectedIncident.severity}
@@ -116,10 +115,15 @@ export function IncidentsView() {
               </div>
 
               <div>
-                <p className="text-xs uppercase tracking-wider text-muted-foreground">Affected Assets</p>
+                <p className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Affected Assets
+                </p>
                 <p className="mt-1 flex items-center gap-1.5 font-mono text-sm font-semibold text-foreground">
                   <Server className="size-3.5 text-cyan-signal" />
-                  {isTargetSelected ? affectedAssets.length : (selectedIncident.affectedAssets ?? 0)} asset(s)
+                  {isTargetSelected
+                    ? affectedAssets.length
+                    : (selectedIncident.affectedAssets ?? 0)}{" "}
+                  asset(s)
                 </p>
               </div>
             </div>
@@ -187,59 +191,59 @@ export function IncidentsView() {
               <GlassPanel
                 className={cn(
                   "p-5 cursor-pointer transition-all hover:border-cyan-glow",
-                  isSelected && "border-cyan-glow bg-secondary/40 shadow-glow"
+                  isSelected && "border-cyan-glow bg-secondary/40 shadow-glow",
                 )}
               >
-              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <div className="flex gap-4">
-                  <span
-                    className={cn(
-                      "grid size-11 shrink-0 place-items-center rounded-lg",
-                      display.severity === "CRITICAL"
-                        ? "bg-threat/12 text-threat"
-                        : "bg-warning/12 text-warning"
-                    )}
-                  >
-                    <ShieldAlert className="size-5" />
-                  </span>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <p className="font-mono text-xs text-muted-foreground">{display.id}</p>
-                      {isTarget ? (
-                        <span className="rounded bg-primary/20 px-1.5 py-0.5 text-[10px] font-mono text-cyan-signal">
-                          SIMULATED INCIDENT
-                        </span>
-                      ) : null}
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                  <div className="flex gap-4">
+                    <span
+                      className={cn(
+                        "grid size-11 shrink-0 place-items-center rounded-lg",
+                        display.severity === "CRITICAL"
+                          ? "bg-threat/12 text-threat"
+                          : "bg-warning/12 text-warning",
+                      )}
+                    >
+                      <ShieldAlert className="size-5" />
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <p className="font-mono text-xs text-muted-foreground">{display.id}</p>
+                        {isTarget ? (
+                          <span className="rounded bg-primary/20 px-1.5 py-0.5 text-[10px] font-mono text-cyan-signal">
+                            SIMULATED INCIDENT
+                          </span>
+                        ) : null}
+                      </div>
+                      <h3 className="mt-1 text-lg font-semibold">{display.title}</h3>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        Detected {display.detectedAgo} · {display.affectedAssets} affected assets
+                      </p>
                     </div>
-                    <h3 className="mt-1 text-lg font-semibold">{display.title}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      Detected {display.detectedAgo} · {display.affectedAssets} affected assets
-                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={cn(
+                        "rounded-full border px-2.5 py-1 text-xs font-semibold uppercase",
+                        display.severity === "CRITICAL"
+                          ? "border-threat/40 text-threat"
+                          : "border-warning/40 text-warning",
+                      )}
+                    >
+                      {display.severity}
+                    </span>
+                    <Button asChild size="sm">
+                      <Link to="/time-machine">
+                        Open Investigation <ArrowRight className="size-4" />
+                      </Link>
+                    </Button>
                   </div>
                 </div>
-
-                <div className="flex items-center gap-3">
-                  <span
-                    className={cn(
-                      "rounded-full border px-2.5 py-1 text-xs font-semibold uppercase",
-                      display.severity === "CRITICAL"
-                        ? "border-threat/40 text-threat"
-                        : "border-warning/40 text-warning"
-                    )}
-                  >
-                    {display.severity}
-                  </span>
-                  <Button asChild size="sm">
-                    <Link to="/time-machine">
-                      Open Investigation <ArrowRight className="size-4" />
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            </GlassPanel>
-          </div>
-        );
-      })}
+              </GlassPanel>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

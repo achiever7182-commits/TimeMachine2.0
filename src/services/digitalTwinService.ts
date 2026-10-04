@@ -27,9 +27,7 @@ import type { Severity } from "@/types/incident";
  * Reconstructs the complete objective reality of the synthetic enterprise (ACME Corporation)
  * at any given minute (0 to 42) or timestamp (09:42 to 10:24).
  */
-export function getActualDigitalTwinState(
-  timestampOrMinute: string | number
-): DigitalTwinSnapshot {
+export function getActualDigitalTwinState(timestampOrMinute: string | number): DigitalTwinSnapshot {
   const minute =
     typeof timestampOrMinute === "number"
       ? Math.max(0, Math.min(42, Math.floor(timestampOrMinute)))
@@ -40,17 +38,17 @@ export function getActualDigitalTwinState(
 
   // 1. Reconstruct Active Network Connections
   const activeConnections: NetworkConnection[] = initialSyntheticConnections.filter(
-    (conn) => timestampToMinute(conn.firstSeen) <= minute
+    (conn) => timestampToMinute(conn.firstSeen) <= minute,
   );
 
   // 2. Reconstruct Active Sessions
   const activeSessions: ActiveSession[] = initialSyntheticSessions.filter(
-    (sess) => timestampToMinute(sess.startedAt) <= minute
+    (sess) => timestampToMinute(sess.startedAt) <= minute,
   );
 
   // 3. Reconstruct Active Processes
   const activeProcesses: ProcessActivity[] = initialSyntheticProcesses.filter(
-    (proc) => timestampToMinute(proc.timestamp) <= minute
+    (proc) => timestampToMinute(proc.timestamp) <= minute,
   );
 
   // 4. Reconstruct Data Resources & Exposure
@@ -67,9 +65,7 @@ export function getActualDigitalTwinState(
   // 5. Reconstruct Users Temporal State
   const users: UserTemporalState[] = demoUsers.map((user) => {
     const isAlex = user.username === "alex.m";
-    const userSessions = activeSessions
-      .filter((s) => s.userId === user.id)
-      .map((s) => s.id);
+    const userSessions = activeSessions.filter((s) => s.userId === user.id).map((s) => s.id);
 
     let status = user.status as any;
     if (isAlex) {
@@ -141,16 +137,14 @@ export function getActualDigitalTwinState(
       }
     }
 
-    const assetProcesses = activeProcesses
-      .filter((p) => p.assetId === asset.id)
-      .map((p) => p.id);
+    const assetProcesses = activeProcesses.filter((p) => p.assetId === asset.id).map((p) => p.id);
 
     const assetConnections = activeConnections
       .filter((c) => c.sourceId === asset.id || c.destinationId === asset.id)
       .map((c) => c.id);
 
     const assetEvidenceCount = baseIncidentState.availableEvidence.filter(
-      (e) => e.assetId === asset.id
+      (e) => e.assetId === asset.id,
     ).length;
 
     return {
@@ -176,8 +170,12 @@ export function getActualDigitalTwinState(
 
   // 7. Blast Radius Calculation
   const confirmedAffected = assets.filter((a) => a.status === "COMPROMISED");
-  const potentiallyAffected = assets.filter((a) => a.status === "SUSPICIOUS" || a.status === "MONITORED");
-  const criticalAffected = assets.filter((a) => a.status === "COMPROMISED" && a.criticality === "CRITICAL");
+  const potentiallyAffected = assets.filter(
+    (a) => a.status === "SUSPICIOUS" || a.status === "MONITORED",
+  );
+  const criticalAffected = assets.filter(
+    (a) => a.status === "COMPROMISED" && a.criticality === "CRITICAL",
+  );
   const usersAffected = users.filter((u) => u.status === "COMPROMISED").length;
   const dataResourcesAtRisk = dataResources.filter((d) => d.isExposed).length;
 
@@ -188,10 +186,27 @@ export function getActualDigitalTwinState(
     usersAffected,
     dataResourcesAtRisk,
     details: [
-      { label: "Compromised Identities", count: usersAffected, severity: usersAffected > 0 ? "HIGH" : "LOW" },
-      { label: "Confirmed Assets", count: confirmedAffected.length, severity: confirmedAffected.length > 2 ? "CRITICAL" : confirmedAffected.length > 0 ? "HIGH" : "LOW" },
-      { label: "Exposed Data Stores", count: dataResourcesAtRisk, severity: dataResourcesAtRisk > 0 ? "CRITICAL" : "LOW" },
-      { label: "Active Attacker Sessions", count: activeSessions.length, severity: activeSessions.length > 2 ? "HIGH" : "LOW" },
+      {
+        label: "Compromised Identities",
+        count: usersAffected,
+        severity: usersAffected > 0 ? "HIGH" : "LOW",
+      },
+      {
+        label: "Confirmed Assets",
+        count: confirmedAffected.length,
+        severity:
+          confirmedAffected.length > 2 ? "CRITICAL" : confirmedAffected.length > 0 ? "HIGH" : "LOW",
+      },
+      {
+        label: "Exposed Data Stores",
+        count: dataResourcesAtRisk,
+        severity: dataResourcesAtRisk > 0 ? "CRITICAL" : "LOW",
+      },
+      {
+        label: "Active Attacker Sessions",
+        count: activeSessions.length,
+        severity: activeSessions.length > 2 ? "HIGH" : "LOW",
+      },
     ],
   };
 
@@ -224,9 +239,7 @@ export function getActualDigitalTwinState(
  * Prevents future undetected events (like lateral movement or db access before detection)
  * from being presented as known evidence to the analyst when rewinding.
  */
-export function getKnownSecurityState(
-  timestampOrMinute: string | number
-): DigitalTwinSnapshot {
+export function getKnownSecurityState(timestampOrMinute: string | number): DigitalTwinSnapshot {
   const actualState = getActualDigitalTwinState(timestampOrMinute);
   const minute = actualState.minute;
 
@@ -274,8 +287,6 @@ export function getKnownSecurityState(
  * Returns a deterministic snapshot of the digital twin at timestamp (Requirement 22).
  * Calling getSnapshotAtTime with the same timestamp returns strictly equivalent data.
  */
-export function getSnapshotAtTime(
-  timestampOrMinute: string | number
-): DigitalTwinSnapshot {
+export function getSnapshotAtTime(timestampOrMinute: string | number): DigitalTwinSnapshot {
   return getActualDigitalTwinState(timestampOrMinute);
 }

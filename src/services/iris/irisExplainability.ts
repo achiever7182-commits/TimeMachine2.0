@@ -13,7 +13,7 @@ import type { AttackGraphEdge } from "@/types/attackGraph";
  */
 export function explainWhyAssetProtected(
   assetId: string,
-  comparison: CounterfactualComparison
+  comparison: CounterfactualComparison,
 ): string {
   const isPrevented = comparison.preventedCompromises.includes(assetId);
   if (!isPrevented) {
@@ -24,9 +24,7 @@ export function explainWhyAssetProtected(
   }
 
   // Check specific prevented event details
-  const matchingEvent = comparison.preventedEvents.find(
-    (pe) => pe.targetAsset === assetId
-  );
+  const matchingEvent = comparison.preventedEvents.find((pe) => pe.targetAsset === assetId);
 
   if (matchingEvent) {
     return (
@@ -45,9 +43,7 @@ export function explainWhyAssetProtected(
  * Constructs a causal explanation of why the downstream attack path failed
  * following an intervention.
  */
-export function explainCounterfactualPrevention(
-  comparison: CounterfactualComparison
-): {
+export function explainCounterfactualPrevention(comparison: CounterfactualComparison): {
   summary: string;
   causalChain: string[];
 } {
@@ -64,7 +60,7 @@ export function explainCounterfactualPrevention(
     }
 
     causalChain.push(
-      `[${pe.originalTime}] [${pe.eventId}] ${pe.title} was prevented because ${causalTrigger} (${pe.reason})`
+      `[${pe.originalTime}] [${pe.eventId}] ${pe.title} was prevented because ${causalTrigger} (${pe.reason})`,
     );
   }
 
@@ -84,7 +80,7 @@ export function explainKnownVsActual(
   actualCompromised: string[],
   knownCompromised: string[],
   minute: number,
-  timestamp: string
+  timestamp: string,
 ): string {
   const unknownToSoc = actualCompromised.filter((id) => !knownCompromised.includes(id));
 
@@ -98,8 +94,7 @@ export function explainKnownVsActual(
       `• Crucially, downstream movement to SERVER-03 (10:07) and database queries (10:12) had NOT yet occurred in either reality.\n\n` +
       `Defenders at ${timestamp} possessed enough evidence to isolate LAPTOP-042, but did not yet know the intrusion had succeeded.`;
   } else {
-    narrative +=
-      `At ${timestamp}, the SOC had confirmed compromise on: [${knownCompromised.join(", ") || "None"}].\n`;
+    narrative += `At ${timestamp}, the SOC had confirmed compromise on: [${knownCompromised.join(", ") || "None"}].\n`;
     if (unknownToSoc.length > 0) {
       narrative +=
         `However, undetected compromises existed on: [${unknownToSoc.join(", ")}]. ` +

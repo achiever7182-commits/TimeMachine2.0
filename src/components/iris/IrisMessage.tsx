@@ -22,8 +22,7 @@ export function IrisMessage({ message, onSelectCitation }: IrisMessageProps) {
     });
   }, []);
 
-  const isThisMessagePlaying =
-    voiceState.isSpeaking && voiceState.activeMessageId === message.id;
+  const isThisMessagePlaying = voiceState.isSpeaking && voiceState.activeMessageId === message.id;
 
   const handleToggleVoice = () => {
     if (isThisMessagePlaying) {
@@ -56,8 +55,8 @@ export function IrisMessage({ message, onSelectCitation }: IrisMessageProps) {
                   resp.worldPerspective === "COUNTERFACTUAL"
                     ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                     : resp.worldPerspective === "KNOWN_AT_TIME"
-                    ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
-                    : "bg-cyan-signal/20 text-cyan-signal border border-cyan-signal/30"
+                      ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                      : "bg-cyan-signal/20 text-cyan-signal border border-cyan-signal/30"
                 }`}
               >
                 [{resp.worldPerspective.replace(/_/g, " ")}]
@@ -107,7 +106,9 @@ export function IrisMessage({ message, onSelectCitation }: IrisMessageProps) {
               <IrisFindingCard
                 key={f.id}
                 finding={f}
-                onSelectCitation={(cId) => onSelectCitation?.({ id: cId, type: "EVIDENCE", label: cId })}
+                onSelectCitation={(cId) =>
+                  onSelectCitation?.({ id: cId, type: "EVIDENCE", label: cId })
+                }
               />
             ))}
           </div>
@@ -117,11 +118,7 @@ export function IrisMessage({ message, onSelectCitation }: IrisMessageProps) {
         {resp?.citations && resp.citations.length > 0 && (
           <div className="mt-3 border-t border-border/40 pt-2 flex flex-wrap gap-1.5">
             {resp.citations.slice(0, 6).map((c) => (
-              <IrisTimelineCitation
-                key={c.id}
-                citation={c}
-                onClick={onSelectCitation}
-              />
+              <IrisTimelineCitation key={c.id} citation={c} onClick={onSelectCitation} />
             ))}
           </div>
         )}

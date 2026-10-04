@@ -266,7 +266,8 @@ export const demoRawEvents: Event[] = [
     userId: "usr-alex-m",
     sourceIp: "185.220.101.5",
     destinationIp: "10.0.0.1",
-    description: "Anomalous velocity + unfamiliar ASN + authentication sequence (detection opportunity)",
+    description:
+      "Anomalous velocity + unfamiliar ASN + authentication sequence (detection opportunity)",
     evidenceIds: ["ev-1"],
     relatedAssetIds: ["VPN-GW-01"],
     confidence: 0.9,
@@ -281,7 +282,8 @@ export const demoRawEvents: Event[] = [
     assetId: "LAPTOP-042",
     sourceIp: "10.0.0.1",
     destinationIp: "10.0.4.42",
-    description: "Attacker established interactive remote desktop session on LAPTOP-042 using alex.m credentials",
+    description:
+      "Attacker established interactive remote desktop session on LAPTOP-042 using alex.m credentials",
     evidenceIds: ["ev-2"],
     relatedAssetIds: ["LAPTOP-042"],
     confidence: 0.95,
@@ -294,7 +296,8 @@ export const demoRawEvents: Event[] = [
     severity: "HIGH",
     userId: "usr-alex-m",
     assetId: "LAPTOP-042",
-    description: "powershell.exe executed with encoded command: powershell -enc JABzACAAPQAgAE5ldwAt...",
+    description:
+      "powershell.exe executed with encoded command: powershell -enc JABzACAAPQAgAE5ldwAt...",
     evidenceIds: ["ev-3"],
     relatedAssetIds: ["LAPTOP-042"],
     confidence: 0.97,
@@ -323,7 +326,8 @@ export const demoRawEvents: Event[] = [
     assetId: "DB-PROD-01",
     sourceIp: "10.0.12.3",
     destinationIp: "10.0.20.10",
-    description: "Mass query execution against customer_identities table on DB-PROD-01 from SERVER-03",
+    description:
+      "Mass query execution against customer_identities table on DB-PROD-01 from SERVER-03",
     evidenceIds: ["ev-5"],
     relatedAssetIds: ["SERVER-03", "DB-PROD-01"],
     confidence: 0.96,
@@ -337,7 +341,8 @@ export const demoRawEvents: Event[] = [
     assetId: "FILE-SRV-01",
     sourceIp: "10.0.12.3",
     destinationIp: "10.0.30.5",
-    description: "Bulk enumeration and read attempt of 37 confidential financial documents on FILE-SRV-01",
+    description:
+      "Bulk enumeration and read attempt of 37 confidential financial documents on FILE-SRV-01",
     evidenceIds: ["ev-6"],
     relatedAssetIds: ["FILE-SRV-01"],
     confidence: 0.95,
@@ -348,7 +353,8 @@ export const demoRawEvents: Event[] = [
     type: "ALERT",
     source: "SIEM-Correlation",
     severity: "CRITICAL",
-    description: "Correlation Rule CR-8812 triggered: Multi-hop credential compromise & database exfiltration path",
+    description:
+      "Correlation Rule CR-8812 triggered: Multi-hop credential compromise & database exfiltration path",
     evidenceIds: ["ev-1", "ev-2", "ev-3", "ev-4", "ev-5", "ev-6"],
     relatedAssetIds: ["LAPTOP-042", "SERVER-03", "DB-PROD-01", "FILE-SRV-01"],
     confidence: 0.99,
@@ -503,7 +509,8 @@ export const demoEvidence: Evidence[] = [
     type: "AUTH",
     source: "IdP-Okta",
     title: "Anomalous Login Pattern",
-    content: "Unfamiliar IP 185.220.101.5 targeting alex.m followed by rapid authentication attempts.",
+    content:
+      "Unfamiliar IP 185.220.101.5 targeting alex.m followed by rapid authentication attempts.",
     severity: "HIGH",
     eventId: "raw-0947-signal",
     assetId: "VPN-GW-01",
@@ -554,7 +561,8 @@ export const demoEvidence: Evidence[] = [
     type: "NETWORK",
     source: "Zeek-Flow",
     title: "Lateral Movement to Application Tier",
-    content: "Unusual internal RPC / SMB connection from workstation segment (10.0.4.42) to app tier (10.0.12.3).",
+    content:
+      "Unusual internal RPC / SMB connection from workstation segment (10.0.4.42) to app tier (10.0.12.3).",
     severity: "HIGH",
     eventId: "raw-1007-smb",
     assetId: "SERVER-03",
@@ -571,7 +579,8 @@ export const demoEvidence: Evidence[] = [
     type: "DATABASE",
     source: "PostgreSQL-Audit",
     title: "Privileged Database Query Surge",
-    content: "SELECT query on table public.customer_identities from SERVER-03 with 50,000 row batch limit.",
+    content:
+      "SELECT query on table public.customer_identities from SERVER-03 with 50,000 row batch limit.",
     severity: "CRITICAL",
     eventId: "raw-1012-db",
     assetId: "DB-PROD-01",
@@ -588,7 +597,8 @@ export const demoEvidence: Evidence[] = [
     type: "PROCESS",
     source: "FileShare-Monitor",
     title: "Mass File Read & Enumeration",
-    content: "Rapid read requests targeting 37 sensitive documents across confidential financial folders.",
+    content:
+      "Rapid read requests targeting 37 sensitive documents across confidential financial folders.",
     severity: "CRITICAL",
     eventId: "raw-1018-share",
     assetId: "FILE-SRV-01",

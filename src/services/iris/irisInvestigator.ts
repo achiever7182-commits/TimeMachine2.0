@@ -1,9 +1,6 @@
 import { findEarliestDetectableOpportunity } from "./detectionGapService";
 import { classifyIrisIntent, getContextualSuggestedQuestions } from "./irisQuestions";
-import {
-  simulateCounterfactualFuture,
-  getStandardResponseActions,
-} from "../counterfactualService";
+import { simulateCounterfactualFuture, getStandardResponseActions } from "../counterfactualService";
 import {
   explainKnownVsActual,
   explainDetectionGap,
@@ -81,10 +78,34 @@ export class DeterministicIrisProvider implements IrisProvider {
         const formalDetection = "10:24";
 
         const citations: IrisCitation[] = [
-          { id: "cit-0942", type: "TIMELINE_EVENT", label: "09:42 Unusual Authentication", sourceId: "evt-0942", timestamp: "09:42" },
-          { id: "cit-0947", type: "TIMELINE_EVENT", label: "09:47 First Detection Opportunity", sourceId: "evt-0947", timestamp: "09:47" },
-          { id: "cit-1000", type: "TIMELINE_EVENT", label: "10:00 Account Compromised", sourceId: "evt-1000", timestamp: "10:00" },
-          { id: "cit-1024", type: "TIMELINE_EVENT", label: "10:24 Incident Detected", sourceId: "evt-1024", timestamp: "10:24" },
+          {
+            id: "cit-0942",
+            type: "TIMELINE_EVENT",
+            label: "09:42 Unusual Authentication",
+            sourceId: "evt-0942",
+            timestamp: "09:42",
+          },
+          {
+            id: "cit-0947",
+            type: "TIMELINE_EVENT",
+            label: "09:47 First Detection Opportunity",
+            sourceId: "evt-0947",
+            timestamp: "09:47",
+          },
+          {
+            id: "cit-1000",
+            type: "TIMELINE_EVENT",
+            label: "10:00 Account Compromised",
+            sourceId: "evt-1000",
+            timestamp: "10:00",
+          },
+          {
+            id: "cit-1024",
+            type: "TIMELINE_EVENT",
+            label: "10:24 Incident Detected",
+            sourceId: "evt-1024",
+            timestamp: "10:24",
+          },
         ];
 
         const answer =
@@ -127,7 +148,12 @@ export class DeterministicIrisProvider implements IrisProvider {
         const unknownToSocAssets = actualAssets.filter((id) => !knownAssets.includes(id));
 
         const citations: IrisCitation[] = [
-          { id: "cit-known-snap", type: "SNAPSHOT", label: `SOC Known State at ${timestamp}`, timestamp },
+          {
+            id: "cit-known-snap",
+            type: "SNAPSHOT",
+            label: `SOC Known State at ${timestamp}`,
+            timestamp,
+          },
         ];
 
         const answer = explainKnownVsActual(actualAssets, knownAssets, minute, timestamp);
@@ -154,7 +180,11 @@ export class DeterministicIrisProvider implements IrisProvider {
       }
 
       case "ATTACK_PATH": {
-        const path = context.attackGraph.activePath?.nodeIds ?? ["ATTACKER", "ALEX_ACCOUNT", "LAPTOP-042"];
+        const path = context.attackGraph.activePath?.nodeIds ?? [
+          "ATTACKER",
+          "ALEX_ACCOUNT",
+          "LAPTOP-042",
+        ];
         const edges = context.attackGraph.edges;
         const citations: IrisCitation[] = edges.map((e) => ({
           id: `cit-${e.id}`,
@@ -172,7 +202,12 @@ export class DeterministicIrisProvider implements IrisProvider {
             `The attacker reached downstream assets via the following reconstructed causal sequence:\n` +
             path.map((node, i) => `${i + 1}. ${node}`).join(" → ") +
             `\n\nTraversal Details:\n` +
-            edges.map((e) => `• [${e.firstSeen}] ${e.source} ${e.relationshipType.replace(/_/g, " ").toLowerCase()} ${e.target} via technique ${e.techniqueCategory}`).join("\n");
+            edges
+              .map(
+                (e) =>
+                  `• [${e.firstSeen}] ${e.source} ${e.relationshipType.replace(/_/g, " ").toLowerCase()} ${e.target} via technique ${e.techniqueCategory}`,
+              )
+              .join("\n");
         }
 
         return {
@@ -211,7 +246,7 @@ export class DeterministicIrisProvider implements IrisProvider {
           assets
             .map(
               (a) =>
-                `• ${a.id} (${a.name}): Criticality ${a.criticality}, Compromise Time: ${a.compromiseTime ?? a.firstSeen}, Owner: ${a.owner}`
+                `• ${a.id} (${a.name}): Criticality ${a.criticality}, Compromise Time: ${a.compromiseTime ?? a.firstSeen}, Owner: ${a.owner}`,
             )
             .join("\n") +
           `\n\nPotentially affected/monitored assets: ${context.actualState.blastRadius.potentiallyAffectedAssets}.`;
@@ -240,8 +275,18 @@ export class DeterministicIrisProvider implements IrisProvider {
       case "DETECTION_GAP": {
         const gap = findEarliestDetectableOpportunity();
         const citations: IrisCitation[] = [
-          { id: "cit-gap-opp", type: "TIMELINE_EVENT", label: `${gap.timestamp} First Detection Opportunity`, timestamp: gap.timestamp },
-          { id: "cit-gap-alert", type: "TIMELINE_EVENT", label: `${gap.formalDetectionTimestamp} Formal Incident Detection`, timestamp: gap.formalDetectionTimestamp },
+          {
+            id: "cit-gap-opp",
+            type: "TIMELINE_EVENT",
+            label: `${gap.timestamp} First Detection Opportunity`,
+            timestamp: gap.timestamp,
+          },
+          {
+            id: "cit-gap-alert",
+            type: "TIMELINE_EVENT",
+            label: `${gap.formalDetectionTimestamp} Formal Incident Detection`,
+            timestamp: gap.formalDetectionTimestamp,
+          },
         ];
 
         const answer = explainDetectionGap(gap);
@@ -270,7 +315,12 @@ export class DeterministicIrisProvider implements IrisProvider {
       case "CURRENT_RISK": {
         const br = context.actualState.blastRadius;
         const citations: IrisCitation[] = [
-          { id: "cit-risk", type: "RISK_STATE", label: `Risk: ${context.incident.currentRisk} (${context.incident.stage})`, timestamp },
+          {
+            id: "cit-risk",
+            type: "RISK_STATE",
+            label: `Risk: ${context.incident.currentRisk} (${context.incident.stage})`,
+            timestamp,
+          },
         ];
 
         const answer =
@@ -313,8 +363,13 @@ export class DeterministicIrisProvider implements IrisProvider {
 
         const targetAction = standardActions.find((a) => {
           if (qLower.includes("do nothing") && a.type === "DO_NOTHING") return true;
-          if ((qLower.includes("disable") || qLower.includes("alex")) && a.type === "DISABLE_USER") return true;
-          if ((qLower.includes("block") || qLower.includes("lateral")) && a.type === "BLOCK_LATERAL_CONNECTION") return true;
+          if ((qLower.includes("disable") || qLower.includes("alex")) && a.type === "DISABLE_USER")
+            return true;
+          if (
+            (qLower.includes("block") || qLower.includes("lateral")) &&
+            a.type === "BLOCK_LATERAL_CONNECTION"
+          )
+            return true;
           if (qLower.includes("isolate") && a.type === "ISOLATE_ENDPOINT") return true;
           return false;
         });
@@ -325,7 +380,7 @@ export class DeterministicIrisProvider implements IrisProvider {
         } else if (!branch) {
           branch = simulateCounterfactualFuture(
             22,
-            standardActions.find((a) => a.type === "ISOLATE_ENDPOINT") || standardActions[1]!
+            standardActions.find((a) => a.type === "ISOLATE_ENDPOINT") || standardActions[1]!,
           );
         }
 
@@ -346,7 +401,9 @@ export class DeterministicIrisProvider implements IrisProvider {
         const preventedSection =
           comp.preventedCount > 0
             ? `1. PREVENTED ATTACK TRANSITIONS (${comp.preventedCount}):\n` +
-              comp.preventedEvents.map((p) => `• [${p.originalTime}] ${p.title}: ${p.reason}`).join("\n")
+              comp.preventedEvents
+                .map((p) => `• [${p.originalTime}] ${p.title}: ${p.reason}`)
+                .join("\n")
             : `1. PREVENTED ATTACK TRANSITIONS: None (0 attack steps prevented).`;
 
         const answer =
@@ -394,7 +451,9 @@ export class DeterministicIrisProvider implements IrisProvider {
         const answer =
           `[FORENSIC EVIDENCE INVENTORY at ${timestamp}]\n` +
           `The reconstructed timeline contains ${evList.length} supporting evidence artifacts at ${timestamp}:\n` +
-          evList.map((e) => `• [${e.timestamp}] ${e.id} (${e.type}): ${e.title} — ${e.content}`).join("\n");
+          evList
+            .map((e) => `• [${e.timestamp}] ${e.id} (${e.type}): ${e.title} — ${e.content}`)
+            .join("\n");
 
         return {
           id: `iris-ans-${Date.now()}`,
@@ -450,7 +509,7 @@ export class DeterministicIrisProvider implements IrisProvider {
       case "RESPONSE_RECOMMENDATION": {
         const rec = responseIntelligenceService.generateRecommendation(
           context.incident.currentMinute,
-          context.incident.id
+          context.incident.id,
         );
         const answer = responseIntelligenceService.formatRecommendationAnswer(rec);
 
@@ -485,7 +544,7 @@ export class DeterministicIrisProvider implements IrisProvider {
       case "RESPONSE_COMPARISON": {
         const candidates = responseIntelligenceService.evaluateCandidates(
           context.incident.currentMinute,
-          context.incident.id
+          context.incident.id,
         );
         const answer = responseIntelligenceService.formatComparisonAnswer(candidates);
         const citations: IrisCitation[] = candidates
@@ -527,7 +586,7 @@ export class DeterministicIrisProvider implements IrisProvider {
       case "RESPONSE_EXPLANATION": {
         const rec = responseIntelligenceService.generateRecommendation(
           context.incident.currentMinute,
-          context.incident.id
+          context.incident.id,
         );
 
         const answer =
@@ -543,7 +602,7 @@ export class DeterministicIrisProvider implements IrisProvider {
                   alt.score < rec.score
                     ? "Sub-optimal protection. Allows greater downstream damage or has narrower containment scope."
                     : "Comparable containment but higher administrative overhead."
-                }`
+                }`,
             )
             .join("\n") +
           `\n\n` +
@@ -580,7 +639,7 @@ export class DeterministicIrisProvider implements IrisProvider {
         const { decision, branch, candidate, recommendation } =
           responseIntelligenceService.autoSimulate(
             context.incident.currentMinute,
-            context.incident.id
+            context.incident.id,
           );
 
         const answer =
@@ -683,7 +742,7 @@ export class DeterministicIrisProvider implements IrisProvider {
           report.lessonsLearned
             .map(
               (ll, idx) =>
-                `${idx + 1}. [${ll.category}] ${ll.lesson}\n   • Observation: ${ll.observation}\n   • Impact if Applied: ${ll.impactIfApplied}`
+                `${idx + 1}. [${ll.category}] ${ll.lesson}\n   • Observation: ${ll.observation}\n   • Impact if Applied: ${ll.impactIfApplied}`,
             )
             .join("\n\n") +
           `\n\nCORE TAKEAWAY: Intervening at 10:04 via host isolation eliminates all downstream database and file repository compromises.`;

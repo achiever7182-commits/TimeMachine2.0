@@ -1,14 +1,5 @@
 import { useMemo, useState } from "react";
-import {
-  Clock,
-  Filter,
-  Layers,
-  Search,
-  Shield,
-  ShieldAlert,
-  Sparkles,
-  X,
-} from "lucide-react";
+import { Clock, Filter, Layers, Search, Shield, ShieldAlert, Sparkles, X } from "lucide-react";
 import { GlassPanel, PageHeader } from "@/components/layout/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -145,7 +136,10 @@ export function EvidenceView() {
         </select>
 
         {/* Reset Filter Button */}
-        {(selectedType !== "ALL" || selectedSeverity !== "ALL" || selectedAsset !== "ALL" || searchQuery) && (
+        {(selectedType !== "ALL" ||
+          selectedSeverity !== "ALL" ||
+          selectedAsset !== "ALL" ||
+          searchQuery) && (
           <Button
             variant="ghost"
             size="sm"
@@ -179,10 +173,7 @@ export function EvidenceView() {
             </thead>
             <tbody className="divide-y divide-border">
               {filteredEvidence.map((e) => (
-                <tr
-                  key={e.id}
-                  className="hover:bg-secondary/25 transition-colors"
-                >
+                <tr key={e.id} className="hover:bg-secondary/25 transition-colors">
                   <td className="p-4 font-mono text-cyan-signal text-xs font-semibold whitespace-nowrap">
                     {e.time ?? e.timestamp}
                   </td>
@@ -192,7 +183,9 @@ export function EvidenceView() {
                     </span>
                   </td>
                   <td className="p-4 font-mono text-xs">{e.actor ?? "alex.m"}</td>
-                  <td className="p-4 font-mono text-xs text-muted-foreground">{e.action ?? e.title}</td>
+                  <td className="p-4 font-mono text-xs text-muted-foreground">
+                    {e.action ?? e.title}
+                  </td>
                   <td className="p-4 font-mono text-xs font-semibold text-foreground">
                     {e.target ?? e.assetId}
                   </td>
@@ -203,8 +196,8 @@ export function EvidenceView() {
                         e.severity === "CRITICAL"
                           ? "border-threat/40 bg-threat/10 text-threat"
                           : e.severity === "HIGH"
-                          ? "border-warning/40 bg-warning/10 text-warning"
-                          : "border-cyan-glow bg-primary/10 text-cyan-signal"
+                            ? "border-warning/40 bg-warning/10 text-warning"
+                            : "border-cyan-glow bg-primary/10 text-cyan-signal",
                       )}
                     >
                       {e.severity}
@@ -213,15 +206,21 @@ export function EvidenceView() {
                   <td className="max-w-md p-4 text-xs text-muted-foreground">
                     <p className="line-clamp-2">{e.detail ?? e.content}</p>
                     {e.hash ? (
-                      <p className="mt-1 font-mono text-[10px] text-cyan-signal/70 truncate">{e.hash}</p>
+                      <p className="mt-1 font-mono text-[10px] text-cyan-signal/70 truncate">
+                        {e.hash}
+                      </p>
                     ) : null}
                   </td>
                 </tr>
               ))}
               {filteredEvidence.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="p-8 text-center text-xs text-muted-foreground font-mono">
-                    No evidence records matching the current filters at simulation time {currentTime}.
+                  <td
+                    colSpan={7}
+                    className="p-8 text-center text-xs text-muted-foreground font-mono"
+                  >
+                    No evidence records matching the current filters at simulation time{" "}
+                    {currentTime}.
                   </td>
                 </tr>
               ) : null}

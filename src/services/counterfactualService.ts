@@ -1,13 +1,6 @@
-import {
-  getActualDigitalTwinState,
-} from "./digitalTwinService";
-import {
-  getAttackGraphAtTime,
-} from "./attackGraphService";
-import {
-  minuteToTimestamp,
-  timestampToMinute,
-} from "./stateReconstruction";
+import { getActualDigitalTwinState } from "./digitalTwinService";
+import { getAttackGraphAtTime } from "./attackGraphService";
+import { minuteToTimestamp, timestampToMinute } from "./stateReconstruction";
 import { demoTimelineEvents } from "@/data/incidentData";
 import type {
   CounterfactualAction,
@@ -48,7 +41,7 @@ export function forkSnapshot(snapshot: DigitalTwinSnapshot): DigitalTwinSnapshot
 export function forkCounterfactual(
   snapshot: DigitalTwinSnapshot,
   action: CounterfactualAction,
-  incidentId = "INC-2048"
+  incidentId = "INC-2048",
 ): CounterfactualBranch {
   return simulateCounterfactualFuture(snapshot.minute, action, incidentId);
 }
@@ -60,7 +53,7 @@ export function forkCounterfactual(
 export function simulateCounterfactualFuture(
   baseMinute: number,
   action: CounterfactualAction,
-  incidentId = "INC-2048"
+  incidentId = "INC-2048",
 ): CounterfactualBranch {
   const baseTimestamp = minuteToTimestamp(baseMinute);
   const baseSnapshot = getActualDigitalTwinState(baseMinute);
@@ -105,10 +98,15 @@ export function simulateCounterfactualFuture(
   }
 
   // Flags representing alternate reality state
-  let isLaptopIsolated = action.type === "ISOLATE_ENDPOINT" && action.targetId === "LAPTOP-042";
-  let isAlexUserDisabled = action.type === "DISABLE_USER" && (action.targetId === "alex.m" || action.targetId === "usr-alex-m");
-  let isLateralConnBlocked = action.type === "BLOCK_LATERAL_CONNECTION" &&
-    (action.targetId.includes("SERVER-03") || action.targetId.includes("LAPTOP-042") || action.targetId === "conn-laptop-server");
+  const isLaptopIsolated = action.type === "ISOLATE_ENDPOINT" && action.targetId === "LAPTOP-042";
+  const isAlexUserDisabled =
+    action.type === "DISABLE_USER" &&
+    (action.targetId === "alex.m" || action.targetId === "usr-alex-m");
+  const isLateralConnBlocked =
+    action.type === "BLOCK_LATERAL_CONNECTION" &&
+    (action.targetId.includes("SERVER-03") ||
+      action.targetId.includes("LAPTOP-042") ||
+      action.targetId === "conn-laptop-server");
 
   // Replay future events from (baseMinute .. 42]
   for (const evt of demoTimelineEvents) {
@@ -121,32 +119,43 @@ export function simulateCounterfactualFuture(
         // Lateral movement to SERVER-03
         if (isLaptopIsolated) {
           isPrevented = true;
-          reason = "LAPTOP-042 was isolated at " + action.timestamp + ", severing outbound network connectivity.";
+          reason =
+            "LAPTOP-042 was isolated at " +
+            action.timestamp +
+            ", severing outbound network connectivity.";
           causalTrigger = "ISOLATE_ENDPOINT(LAPTOP-042)";
         } else if (isLateralConnBlocked) {
           isPrevented = true;
-          reason = "Lateral network connection between LAPTOP-042 and SERVER-03 was blocked by boundary firewall rule.";
+          reason =
+            "Lateral network connection between LAPTOP-042 and SERVER-03 was blocked by boundary firewall rule.";
           causalTrigger = "BLOCK_LATERAL_CONNECTION";
         } else if (isAlexUserDisabled) {
           isPrevented = true;
-          reason = "Compromised identity alex.m was disabled at " + action.timestamp + "; Kerberos ticket validation failed.";
+          reason =
+            "Compromised identity alex.m was disabled at " +
+            action.timestamp +
+            "; Kerberos ticket validation failed.";
           causalTrigger = "DISABLE_USER(alex.m)";
         }
       } else if (evt.id === "evt-1012") {
         // Database Access to DB-PROD-01
         // DB-PROD-01 is accessed FROM SERVER-03
-        const server03Compromised = !isLaptopIsolated && !isLateralConnBlocked && !isAlexUserDisabled;
+        const server03Compromised =
+          !isLaptopIsolated && !isLateralConnBlocked && !isAlexUserDisabled;
         if (!server03Compromised) {
           isPrevented = true;
-          reason = "SERVER-03 was never compromised; attacker has no pivoting foothold to execute database queries.";
+          reason =
+            "SERVER-03 was never compromised; attacker has no pivoting foothold to execute database queries.";
           causalTrigger = "CAUSAL_DEPENDENCY(SERVER-03 unreached)";
         }
       } else if (evt.id === "evt-1018") {
         // Sensitive File Access on FILE-SRV-01
-        const server03Compromised = !isLaptopIsolated && !isLateralConnBlocked && !isAlexUserDisabled;
+        const server03Compromised =
+          !isLaptopIsolated && !isLateralConnBlocked && !isAlexUserDisabled;
         if (!server03Compromised) {
           isPrevented = true;
-          reason = "FILE-SRV-01 was never accessed because the upstream pivot host SERVER-03 was secured.";
+          reason =
+            "FILE-SRV-01 was never accessed because the upstream pivot host SERVER-03 was secured.";
           causalTrigger = "CAUSAL_DEPENDENCY(SERVER-03 unreached)";
         }
       }
@@ -233,19 +242,27 @@ export function simulateCounterfactualFuture(
   // Filter connections: if source/dest isolated or blocked
   const finalConnections: NetworkConnection[] = baselineFinalSnapshot.networkConnections.filter(
     (conn) => {
-      if (isLaptopIsolated && (conn.sourceId === "LAPTOP-042" || conn.destinationId === "LAPTOP-042")) {
+      if (
+        isLaptopIsolated &&
+        (conn.sourceId === "LAPTOP-042" || conn.destinationId === "LAPTOP-042")
+      ) {
         return false;
       }
-      if (isLateralConnBlocked && conn.sourceId === "LAPTOP-042" && conn.destinationId === "SERVER-03") {
+      if (
+        isLateralConnBlocked &&
+        conn.sourceId === "LAPTOP-042" &&
+        conn.destinationId === "SERVER-03"
+      ) {
         return false;
       }
       // If SERVER-03 was not compromised, drop its outbound connections to DB and File server
-      const serverCompromised = finalAssets.find((a) => a.id === "SERVER-03")?.status === "COMPROMISED";
+      const serverCompromised =
+        finalAssets.find((a) => a.id === "SERVER-03")?.status === "COMPROMISED";
       if (!serverCompromised && conn.sourceId === "SERVER-03") {
         return false;
       }
       return true;
-    }
+    },
   );
 
   // Filter processes
@@ -257,7 +274,8 @@ export function simulateCounterfactualFuture(
   // Filter exposed data resources
   const finalDataResources: DataResource[] = baselineFinalSnapshot.dataResources.map((res) => {
     const parentAsset = finalAssets.find((a) => a.id === res.assetId);
-    const isExposed = parentAsset?.status === "COMPROMISED" || (parentAsset?.status as string) === "AFFECTED";
+    const isExposed =
+      parentAsset?.status === "COMPROMISED" || (parentAsset?.status as string) === "AFFECTED";
     return {
       ...res,
       isExposed,
@@ -267,9 +285,11 @@ export function simulateCounterfactualFuture(
 
   // Calculate final blast radius metrics
   const confirmedAffected = finalAssets.filter((a) => a.status === "COMPROMISED");
-  const potentiallyAffected = finalAssets.filter((a) => a.status === "SUSPICIOUS" || a.status === "MONITORED");
+  const potentiallyAffected = finalAssets.filter(
+    (a) => a.status === "SUSPICIOUS" || a.status === "MONITORED",
+  );
   const criticalAffected = finalAssets.filter(
-    (a) => a.status === "COMPROMISED" && a.criticality === "CRITICAL"
+    (a) => a.status === "COMPROMISED" && a.criticality === "CRITICAL",
   );
   const usersAffected = finalUsers.filter((u) => u.status === "COMPROMISED").length;
   const dataResourcesAtRisk = finalDataResources.filter((d) => d.isExposed).length;
@@ -301,9 +321,21 @@ export function simulateCounterfactualFuture(
     usersAffected,
     dataResourcesAtRisk,
     details: [
-      { label: "Compromised Identities", count: usersAffected, severity: usersAffected > 0 ? "HIGH" : "LOW" },
-      { label: "Confirmed Assets", count: confirmedAffected.length, severity: confirmedAffected.length > 0 ? "HIGH" : "LOW" },
-      { label: "Exposed Data Stores", count: dataResourcesAtRisk, severity: dataResourcesAtRisk > 0 ? "CRITICAL" : "LOW" },
+      {
+        label: "Compromised Identities",
+        count: usersAffected,
+        severity: usersAffected > 0 ? "HIGH" : "LOW",
+      },
+      {
+        label: "Confirmed Assets",
+        count: confirmedAffected.length,
+        severity: confirmedAffected.length > 0 ? "HIGH" : "LOW",
+      },
+      {
+        label: "Exposed Data Stores",
+        count: dataResourcesAtRisk,
+        severity: dataResourcesAtRisk > 0 ? "CRITICAL" : "LOW",
+      },
       { label: "Active Connections", count: finalConnections.length, severity: "LOW" },
     ],
   };
@@ -385,7 +417,8 @@ export function simulateCounterfactualFuture(
     suspiciousNodes: cfNodes.filter((n) => n.status === "SUSPICIOUS" || n.status === "MONITORED"),
     affectedNodes: cfNodes.filter((n) => n.status === "COMPROMISED" || n.status === "AFFECTED"),
     criticalNodes: cfNodes.filter(
-      (n) => (n.status === "COMPROMISED" || n.status === "AFFECTED") && n.criticality === "CRITICAL"
+      (n) =>
+        (n.status === "COMPROMISED" || n.status === "AFFECTED") && n.criticality === "CRITICAL",
     ),
     activePath: cfPrimaryPath,
     attackPaths: [cfPrimaryPath],
@@ -421,9 +454,10 @@ export function simulateCounterfactualFuture(
   const riskChange: "REDUCED" | "UNCHANGED" | "INCREASED" =
     finalRisk === baselineFinalSnapshot.riskLevel
       ? "UNCHANGED"
-      : finalRisk === "LOW" || (finalRisk === "MEDIUM" && baselineFinalSnapshot.riskLevel === "CRITICAL")
-      ? "REDUCED"
-      : "UNCHANGED";
+      : finalRisk === "LOW" ||
+          (finalRisk === "MEDIUM" && baselineFinalSnapshot.riskLevel === "CRITICAL")
+        ? "REDUCED"
+        : "UNCHANGED";
 
   const comparison: CounterfactualComparison = {
     baselineFinalRisk: baselineFinalSnapshot.riskLevel,
@@ -468,7 +502,7 @@ export function simulateCounterfactualFuture(
  * Creates predefined standard response actions for the analyst at any timestamp.
  */
 export function getStandardResponseActions(
-  minute = 22 // 10:04 default
+  minute = 22, // 10:04 default
 ): CounterfactualAction[] {
   const timestamp = minuteToTimestamp(minute);
   return [
@@ -480,7 +514,8 @@ export function getStandardResponseActions(
       targetId: "NONE",
       targetType: "NONE",
       label: "Option 0 — Do Nothing (Baseline)",
-      description: "Allow the incident to proceed without active intervention. Observes unmitigated attack progression.",
+      description:
+        "Allow the incident to proceed without active intervention. Observes unmitigated attack progression.",
     },
     {
       id: "act-isolate-laptop",
@@ -490,7 +525,8 @@ export function getStandardResponseActions(
       targetId: "LAPTOP-042",
       targetType: "ENDPOINT",
       label: "Option A — Isolate LAPTOP-042",
-      description: "Sever all inbound and outbound network connectivity for LAPTOP-042, stopping lateral movement attempts.",
+      description:
+        "Sever all inbound and outbound network connectivity for LAPTOP-042, stopping lateral movement attempts.",
     },
     {
       id: "act-disable-alex",
@@ -500,7 +536,8 @@ export function getStandardResponseActions(
       targetId: "alex.m",
       targetType: "USER",
       label: "Option B — Disable User Account (alex.m)",
-      description: "Revoke all Kerberos tickets, tokens, and active directory session rights for compromised user alex.m.",
+      description:
+        "Revoke all Kerberos tickets, tokens, and active directory session rights for compromised user alex.m.",
     },
     {
       id: "act-block-lateral",
@@ -510,7 +547,8 @@ export function getStandardResponseActions(
       targetId: "LAPTOP-042->SERVER-03",
       targetType: "CONNECTION",
       label: "Option C — Block Lateral Connection (LAPTOP-042 → SERVER-03)",
-      description: "Enforce network firewall policy on port 445/5985 to drop all administrative traffic between workstation and server tiers.",
+      description:
+        "Enforce network firewall policy on port 445/5985 to drop all administrative traffic between workstation and server tiers.",
     },
   ];
 }

@@ -15,7 +15,9 @@ function LearningRouteComponent() {
     }
   }, [currentReport, generateReport]);
 
-  const report = currentReport || incidentReportService.generateIncidentReport("INC-2048", { minute: currentMinute });
+  const report =
+    currentReport ||
+    incidentReportService.generateIncidentReport("INC-2048", { minute: currentMinute });
 
   return (
     <div className="mx-auto max-w-7xl pb-16">
@@ -24,7 +26,8 @@ function LearningRouteComponent() {
           Post-Incident Learning Dashboard
         </h1>
         <p className="text-sm text-muted-foreground">
-          Systemic learnings, counterfactual damage prevention analysis, and strategic posture changes.
+          Systemic learnings, counterfactual damage prevention analysis, and strategic posture
+          changes.
         </p>
       </div>
       <LearningDashboard report={report} />
@@ -36,7 +39,10 @@ export const Route = createFileRoute("/learning")({
   head: () => ({
     meta: [
       { title: "Post-Incident Learning — Incident Time Machine" },
-      { name: "description", content: "Post-incident learning metrics, root cause, and damage prevention analysis." },
+      {
+        name: "description",
+        content: "Post-incident learning metrics, root cause, and damage prevention analysis.",
+      },
     ],
   }),
   component: LearningRouteComponent,

@@ -12,7 +12,10 @@ import {
   ExternalLink,
 } from "lucide-react";
 import type { AttackGraphEdge, AttackGraphNode, AttackGraphState } from "@/types/attackGraph";
-import { getDownstreamReachableNodes, generatePathExplanation } from "@/services/attackGraphService";
+import {
+  getDownstreamReachableNodes,
+  generatePathExplanation,
+} from "@/services/attackGraphService";
 
 interface AttackGraphInspectorProps {
   graph: AttackGraphState;
@@ -150,10 +153,10 @@ export function AttackGraphInspector({
               selectedNode.status === "COMPROMISED"
                 ? "bg-threat/20 text-threat"
                 : selectedNode.status === "AFFECTED"
-                ? "bg-amber-500/20 text-amber-300"
-                : selectedNode.status === "SUSPICIOUS"
-                ? "bg-amber-400/20 text-amber-400"
-                : "bg-emerald-500/20 text-emerald-400"
+                  ? "bg-amber-500/20 text-amber-300"
+                  : selectedNode.status === "SUSPICIOUS"
+                    ? "bg-amber-400/20 text-amber-400"
+                    : "bg-emerald-500/20 text-emerald-400"
             }`}
           >
             {selectedNode.status}

@@ -75,7 +75,7 @@ export type ElevenLabsApiRequester = (
     baseUrl: string;
     modelId?: string;
     timeoutMs: number;
-  }
+  },
 ) => Promise<string>;
 
 /**
@@ -83,19 +83,11 @@ export type ElevenLabsApiRequester = (
  */
 function getRuntimeConfig(key: string): string {
   // Vite env
-  if (
-    typeof import.meta !== "undefined" &&
-    import.meta.env &&
-    import.meta.env[key]
-  ) {
+  if (typeof import.meta !== "undefined" && import.meta.env && import.meta.env[key]) {
     return String(import.meta.env[key]).trim();
   }
   // Node / test process.env
-  if (
-    typeof process !== "undefined" &&
-    process.env &&
-    process.env[key]
-  ) {
+  if (typeof process !== "undefined" && process.env && process.env[key]) {
     return String(process.env[key]).trim();
   }
   // Client localStorage fallback
@@ -130,24 +122,20 @@ export class ElevenLabsIrisProvider implements IrisProvider {
   private requester?: ElevenLabsApiRequester;
 
   constructor(options?: ElevenLabsProviderOptions) {
-    this.deterministic =
-      options?.deterministicProvider ?? new DeterministicIrisProvider();
+    this.deterministic = options?.deterministicProvider ?? new DeterministicIrisProvider();
     this.apiKey = options?.apiKey ?? "";
     this.agentId =
-      options?.agentId ??
-      (getRuntimeConfig("VITE_ELEVENLABS_AGENT_ID") || ELEVENLABS_AGENT_ID);
+      options?.agentId ?? (getRuntimeConfig("VITE_ELEVENLABS_AGENT_ID") || ELEVENLABS_AGENT_ID);
     this.baseUrl =
       options?.baseUrl ??
-      (getRuntimeConfig("VITE_ELEVENLABS_BASE_URL") ||
-        "https://api.elevenlabs.io");
-    this.modelId =
-      options?.modelId ?? getRuntimeConfig("VITE_ELEVENLABS_MODEL_ID");
+      (getRuntimeConfig("VITE_ELEVENLABS_BASE_URL") || "https://api.elevenlabs.io");
+    this.modelId = options?.modelId ?? getRuntimeConfig("VITE_ELEVENLABS_MODEL_ID");
     this.timeoutMs = options?.timeoutMs ?? 8000;
     this.requester = options?.requester;
   }
 
   /**
-  * Returns true only when an API key and explicit requester are both supplied.
+   * Returns true only when an API key and explicit requester are both supplied.
    */
   isConfigured(): boolean {
     return Boolean(this.apiKey && this.apiKey.trim().length > 0 && this.requester);
@@ -174,7 +162,7 @@ export class ElevenLabsIrisProvider implements IrisProvider {
   buildGroundedPrompt(
     question: string,
     deterministic: IrisResponse,
-    context: IrisContext
+    context: IrisContext,
   ): GroundedPromptPayload {
     const structuredFacts = {
       incidentId: context.incident.id,
@@ -226,10 +214,7 @@ export class ElevenLabsIrisProvider implements IrisProvider {
       `VERIFIED ENGINE FINDINGS (${structuredFacts.findingsCount}):`,
       structuredFacts.findings.length > 0
         ? structuredFacts.findings
-            .map(
-              (f) =>
-                `• [${f.confidence} CONFIDENCE - ${f.type}] ${f.title}: ${f.summary}`
-            )
+            .map((f) => `• [${f.confidence} CONFIDENCE - ${f.type}] ${f.title}: ${f.summary}`)
             .join("\n")
         : "• (No individual findings flagged)",
       "",
@@ -237,10 +222,7 @@ export class ElevenLabsIrisProvider implements IrisProvider {
       structuredFacts.citations.length > 0
         ? structuredFacts.citations
             .map(
-              (c) =>
-                `• [${c.type}] ${c.label}${
-                  c.timestamp ? ` (Timestamp: ${c.timestamp})` : ""
-                }`
+              (c) => `• [${c.type}] ${c.label}${c.timestamp ? ` (Timestamp: ${c.timestamp})` : ""}`,
             )
             .join("\n")
         : "• (No specific citations)",
@@ -269,10 +251,7 @@ export class ElevenLabsIrisProvider implements IrisProvider {
    */
   async answer(question: string, context: IrisContext): Promise<IrisResponse> {
     // 1. Call DeterministicIrisProvider FIRST as the sole source of truth
-    const deterministicResponse = await this.deterministic.answer(
-      question,
-      context
-    );
+    const deterministicResponse = await this.deterministic.answer(question, context);
 
     // 2. If ElevenLabs is not configured (no API key), return deterministic response unchanged
     if (!this.isConfigured() || !this.requester) {
@@ -280,11 +259,7 @@ export class ElevenLabsIrisProvider implements IrisProvider {
     }
 
     // 3. Build strictly bounded grounding payload
-    const groundedPayload = this.buildGroundedPrompt(
-      question,
-      deterministicResponse,
-      context
-    );
+    const groundedPayload = this.buildGroundedPrompt(question, deterministicResponse, context);
 
     // Sync verified ground truth to active ElevenLabs voice agent session
     if (typeof window !== "undefined") {
@@ -320,7 +295,7 @@ export class ElevenLabsIrisProvider implements IrisProvider {
       // Graceful fallback to verified deterministic response if ElevenLabs fails
       console.warn(
         "[ElevenLabsIrisProvider] Conversational synthesis failed or timed out. Falling back to deterministic engine response.",
-        err instanceof Error ? err.message : err
+        err instanceof Error ? err.message : err,
       );
       return deterministicResponse;
     }

@@ -53,14 +53,14 @@ export function ScenarioComparison({
                   key={branch.branchId}
                   onClick={() => onSelectBranch(branch.branchId)}
                   className={`cursor-pointer transition-colors ${
-                    isActive
-                      ? "bg-cyan-signal/10"
-                      : "hover:bg-secondary/30"
+                    isActive ? "bg-cyan-signal/10" : "hover:bg-secondary/30"
                   }`}
                 >
                   <td className="p-3 font-semibold text-foreground">
                     <div className="flex items-center gap-2">
-                      <GitBranch className={`size-3.5 ${isActive ? "text-cyan-signal" : "text-muted-foreground"}`} />
+                      <GitBranch
+                        className={`size-3.5 ${isActive ? "text-cyan-signal" : "text-muted-foreground"}`}
+                      />
                       <span>{branch.name}</span>
                       {isActive && (
                         <span className="rounded bg-cyan-signal/20 px-1.5 py-0.2 font-mono text-[9px] text-cyan-signal">
@@ -85,13 +85,17 @@ export function ScenarioComparison({
                   </td>
 
                   <td className="p-3 font-mono">
-                    <span className={`font-bold ${comp.counterfactualCriticalAssets.length === 0 ? "text-emerald-400" : "text-threat"}`}>
+                    <span
+                      className={`font-bold ${comp.counterfactualCriticalAssets.length === 0 ? "text-emerald-400" : "text-threat"}`}
+                    >
                       {comp.counterfactualCriticalAssets.length}
                     </span>
                   </td>
 
                   <td className="p-3 font-mono">
-                    <span className={`font-bold ${comp.counterfactualDataResourcesAtRisk === 0 ? "text-emerald-400" : "text-threat"}`}>
+                    <span
+                      className={`font-bold ${comp.counterfactualDataResourcesAtRisk === 0 ? "text-emerald-400" : "text-threat"}`}
+                    >
                       {comp.counterfactualDataResourcesAtRisk}
                     </span>
                   </td>
@@ -102,8 +106,8 @@ export function ScenarioComparison({
                         comp.counterfactualFinalRisk === "CRITICAL"
                           ? "bg-threat/20 text-threat"
                           : comp.counterfactualFinalRisk === "HIGH"
-                          ? "bg-amber-500/20 text-amber-300"
-                          : "bg-emerald-500/20 text-emerald-400"
+                            ? "bg-amber-500/20 text-amber-300"
+                            : "bg-emerald-500/20 text-emerald-400"
                       }`}
                     >
                       {comp.counterfactualFinalRisk}

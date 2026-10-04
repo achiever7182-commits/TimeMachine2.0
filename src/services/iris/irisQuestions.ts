@@ -130,7 +130,12 @@ export function classifyIrisIntent(question: string): IrisIntentCategory {
     return "COUNTERFACTUAL";
   }
 
-  if (q.includes("compare") || q.includes("difference") || q.includes("versus") || q.includes("vs")) {
+  if (
+    q.includes("compare") ||
+    q.includes("difference") ||
+    q.includes("versus") ||
+    q.includes("vs")
+  ) {
     return "SCENARIO_COMPARISON";
   }
 
@@ -146,7 +151,12 @@ export function classifyIrisIntent(question: string): IrisIntentCategory {
   }
 
   // Risk & Blast Radius
-  if (q.includes("risk") || q.includes("stage") || q.includes("blast radius") || q.includes("severity")) {
+  if (
+    q.includes("risk") ||
+    q.includes("stage") ||
+    q.includes("blast radius") ||
+    q.includes("severity")
+  ) {
     return "CURRENT_RISK";
   }
 
@@ -181,7 +191,12 @@ export function classifyIrisIntent(question: string): IrisIntentCategory {
   }
 
   // Evidence
-  if (q.includes("evidence") || q.includes("proof") || q.includes("logs") || q.includes("telemetry")) {
+  if (
+    q.includes("evidence") ||
+    q.includes("proof") ||
+    q.includes("logs") ||
+    q.includes("telemetry")
+  ) {
     return "EVIDENCE";
   }
 

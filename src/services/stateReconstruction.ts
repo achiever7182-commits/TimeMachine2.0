@@ -79,7 +79,7 @@ export function minuteToTimestamp(minute: number): string {
  */
 export function getIncidentStateAtTime(
   timestampOrMinute: string | number,
-  options?: { isInitialReset?: boolean; isContained?: boolean; isResolved?: boolean }
+  options?: { isInitialReset?: boolean; isContained?: boolean; isResolved?: boolean },
 ): ReconstructedIncidentState {
   const minute =
     typeof timestampOrMinute === "number"
@@ -171,9 +171,7 @@ export function getIncidentStateAtTime(
   }
 
   const activeEvent =
-    activeEvents[0] ??
-    completedEvents[completedEvents.length - 1] ??
-    demoTimelineEvents[0];
+    activeEvents[0] ?? completedEvents[completedEvents.length - 1] ?? demoTimelineEvents[0];
 
   // Derive affected and compromised assets at this minute (Requirement 14)
   const compromisedAssetIds: string[] = [];

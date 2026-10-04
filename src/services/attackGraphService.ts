@@ -1,10 +1,5 @@
-import {
-  getActualDigitalTwinState,
-} from "./digitalTwinService";
-import {
-  minuteToTimestamp,
-  timestampToMinute,
-} from "./stateReconstruction";
+import { getActualDigitalTwinState } from "./digitalTwinService";
+import { minuteToTimestamp, timestampToMinute } from "./stateReconstruction";
 import type {
   AttackGraphEdge,
   AttackGraphFilter,
@@ -203,7 +198,8 @@ const MASTER_EDGES: AttackGraphEdge[] = [
     evidenceIds: ["ev-5"],
     confidence: 0.96,
     techniqueCategory: "T1505 Server Software Component / Database Query",
-    description: "Privileged query connection executed from SERVER-03 to production customer database.",
+    description:
+      "Privileged query connection executed from SERVER-03 to production customer database.",
   },
   {
     id: "edge-server-files",
@@ -217,7 +213,8 @@ const MASTER_EDGES: AttackGraphEdge[] = [
     evidenceIds: ["ev-6"],
     confidence: 0.89,
     techniqueCategory: "T1005 Data from Network Shared Drive",
-    description: "Attempted enumeration and bulk staging of 37 confidential files from FILE-SRV-01.",
+    description:
+      "Attempted enumeration and bulk staging of 37 confidential files from FILE-SRV-01.",
   },
 ];
 
@@ -227,7 +224,7 @@ const MASTER_EDGES: AttackGraphEdge[] = [
  */
 export function getAttackGraphAtTime(
   incidentId = "INC-2048",
-  timestampOrMinute: string | number
+  timestampOrMinute: string | number,
 ): AttackGraphState {
   const minute =
     typeof timestampOrMinute === "number"
@@ -301,10 +298,12 @@ export function getAttackGraphAtTime(
   // 3. Classify Nodes
   const entryPoint = nodes.find((n) => n.id === "ATTACKER") ?? nodes[0];
   const compromisedNodes = nodes.filter((n) => n.status === "COMPROMISED");
-  const suspiciousNodes = nodes.filter((n) => n.status === "SUSPICIOUS" || n.status === "MONITORED");
+  const suspiciousNodes = nodes.filter(
+    (n) => n.status === "SUSPICIOUS" || n.status === "MONITORED",
+  );
   const affectedNodes = nodes.filter((n) => n.status === "COMPROMISED" || n.status === "AFFECTED");
   const criticalNodes = nodes.filter(
-    (n) => (n.status === "COMPROMISED" || n.status === "AFFECTED") && n.criticality === "CRITICAL"
+    (n) => (n.status === "COMPROMISED" || n.status === "AFFECTED") && n.criticality === "CRITICAL",
   );
 
   // 4. Determine Active Attack Path (Requirement 15 & 18)
@@ -343,12 +342,12 @@ export function getAttackGraphAtTime(
       minute >= 36
         ? "Attacker leveraged compromised credentials through finance workstation to access internal app server, query customer DB, and stage confidential files."
         : minute >= 30
-        ? "Attacker reached customer database DB-PROD-01 via application server SERVER-03."
-        : minute >= 25
-        ? "Lateral traversal from LAPTOP-042 to SERVER-03 observed."
-        : minute >= 18
-        ? "Workstation LAPTOP-042 compromised via alex.m identity."
-        : "Initial authentication anomaly targeting employee credentials.",
+          ? "Attacker reached customer database DB-PROD-01 via application server SERVER-03."
+          : minute >= 25
+            ? "Lateral traversal from LAPTOP-042 to SERVER-03 observed."
+            : minute >= 18
+              ? "Workstation LAPTOP-042 compromised via alex.m identity."
+              : "Initial authentication anomaly targeting employee credentials.",
   };
 
   return {
@@ -376,7 +375,7 @@ export function getAttackGraphAtTime(
 export function findPath(
   sourceNodeId: string,
   targetNodeId: string,
-  graph: AttackGraphState
+  graph: AttackGraphState,
 ): string[] {
   if (sourceNodeId === targetNodeId) return [sourceNodeId];
 
@@ -416,7 +415,7 @@ export function findPath(
  */
 export function getDownstreamReachableNodes(
   graph: AttackGraphState,
-  nodeId: string
+  nodeId: string,
 ): AttackGraphNode[] {
   const reachableIds = new Set<string>();
   const queue: string[] = [nodeId];
@@ -438,10 +437,7 @@ export function getDownstreamReachableNodes(
 /**
  * Generates human-readable path explanation from structured data (Requirement 26).
  */
-export function generatePathExplanation(
-  graph: AttackGraphState,
-  targetNodeId: string
-): string[] {
+export function generatePathExplanation(graph: AttackGraphState, targetNodeId: string): string[] {
   const entryId = graph.entryPoint?.id ?? "ATTACKER";
   const path = findPath(entryId, targetNodeId, graph);
 
@@ -458,7 +454,7 @@ export function generatePathExplanation(
 
     if (edge) {
       explanations.push(
-        `${i + 1}. [${edge.firstSeen}] ${edge.source} ${edge.relationshipType.replace(/_/g, " ").toLowerCase()} ${edge.target} (${edge.techniqueCategory})`
+        `${i + 1}. [${edge.firstSeen}] ${edge.source} ${edge.relationshipType.replace(/_/g, " ").toLowerCase()} ${edge.target} (${edge.techniqueCategory})`,
       );
     } else {
       explanations.push(`${i + 1}. Attacker traversed from ${srcId} to ${dstId}`);
@@ -473,7 +469,7 @@ export function generatePathExplanation(
  */
 export function filterAttackGraph(
   graph: AttackGraphState,
-  filters: AttackGraphFilter
+  filters: AttackGraphFilter,
 ): { nodes: AttackGraphNode[]; edges: AttackGraphEdge[] } {
   let filteredNodes = graph.nodes;
 
@@ -491,14 +487,14 @@ export function filterAttackGraph(
       (n) =>
         n.id.toLowerCase().includes(q) ||
         n.label.toLowerCase().includes(q) ||
-        n.owner.toLowerCase().includes(q)
+        n.owner.toLowerCase().includes(q),
     );
   }
 
   const visibleNodeIds = new Set(filteredNodes.map((n) => n.id));
 
   let filteredEdges = graph.edges.filter(
-    (e) => visibleNodeIds.has(e.source) && visibleNodeIds.has(e.target)
+    (e) => visibleNodeIds.has(e.source) && visibleNodeIds.has(e.target),
   );
 
   if (filters.relationship !== "ALL") {

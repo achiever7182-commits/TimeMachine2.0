@@ -51,7 +51,9 @@ export function ResponseIntelligencePanel() {
         <div className="flex items-center gap-2">
           <AlertTriangle className="size-4 shrink-0 text-amber-400" />
           <span>
-            <strong>SIMULATION ONLY SANDBOX:</strong> All response actions are evaluated exclusively inside the synthetic ACME incident engine. No real endpoints, EDRs, firewalls, or credentials will be contacted or modified.
+            <strong>SIMULATION ONLY SANDBOX:</strong> All response actions are evaluated exclusively
+            inside the synthetic ACME incident engine. No real endpoints, EDRs, firewalls, or
+            credentials will be contacted or modified.
           </span>
         </div>
         <span className="font-mono text-[9px] font-bold uppercase tracking-wider rounded bg-amber-500/20 px-2 py-0.5 border border-amber-500/30">
@@ -75,7 +77,9 @@ export function ResponseIntelligencePanel() {
               </span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Autonomous simulated evaluation & human-in-the-loop decision optimization at <strong className="text-foreground font-mono">{currentTime}</strong> (T+{currentMinute}m).
+              Autonomous simulated evaluation & human-in-the-loop decision optimization at{" "}
+              <strong className="text-foreground font-mono">{currentTime}</strong> (T+
+              {currentMinute}m).
             </p>
           </div>
         </div>
@@ -153,11 +157,10 @@ export function ResponseIntelligencePanel() {
             </div>
 
             <div>
-              <h3 className="text-lg font-bold text-foreground">
-                {rec.recommendedAction.label}
-              </h3>
+              <h3 className="text-lg font-bold text-foreground">{rec.recommendedAction.label}</h3>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Target Entity: <strong className="text-foreground font-mono">{rec.target}</strong> · Scope: Endpoint Network Interface Severance
+                Target Entity: <strong className="text-foreground font-mono">{rec.target}</strong> ·
+                Scope: Endpoint Network Interface Severance
               </p>
             </div>
 
@@ -240,7 +243,8 @@ export function ResponseIntelligencePanel() {
                 Autonomous Decision Pipeline & Counterfactual Execution
               </h3>
               <p className="text-xs text-muted-foreground">
-                IRIS autonomously selects the highest-scoring response and executes an isolated counterfactual branch without human intervention.
+                IRIS autonomously selects the highest-scoring response and executes an isolated
+                counterfactual branch without human intervention.
               </p>
             </div>
 
@@ -264,10 +268,18 @@ export function ResponseIntelligencePanel() {
                 <span className="text-muted-foreground">{responseDecision.executedAt}</span>
               </div>
               <p className="text-foreground">
-                Action: <strong className="text-cyan-signal">{responseDecision.selectedAction.label}</strong> on target <strong className="font-mono text-purple-300">{responseDecision.target}</strong>.
+                Action:{" "}
+                <strong className="text-cyan-signal">
+                  {responseDecision.selectedAction.label}
+                </strong>{" "}
+                on target{" "}
+                <strong className="font-mono text-purple-300">{responseDecision.target}</strong>.
               </p>
               <p className="text-muted-foreground text-[11px]">
-                Simulated Branch ID: <code className="text-foreground font-mono">{responseDecision.branchId}</code>. Downstream lateral pivots to SERVER-03 and DB-PROD-01 were autonomously averted in the synthetic model.
+                Simulated Branch ID:{" "}
+                <code className="text-foreground font-mono">{responseDecision.branchId}</code>.
+                Downstream lateral pivots to SERVER-03 and DB-PROD-01 were autonomously averted in
+                the synthetic model.
               </p>
             </div>
           )}
@@ -278,7 +290,8 @@ export function ResponseIntelligencePanel() {
       {responseMode === "MANUAL" && (
         <div className="rounded-xl border border-border bg-secondary/20 p-4 text-xs">
           <p className="text-foreground font-medium">
-            Manual Response Mode: You can select any response candidate from the comparison matrix below and simulate it directly to explore alternate futures.
+            Manual Response Mode: You can select any response candidate from the comparison matrix
+            below and simulate it directly to explore alternate futures.
           </p>
         </div>
       )}
@@ -312,7 +325,8 @@ export function ResponseIntelligencePanel() {
             </thead>
             <tbody className="divide-y divide-border/50 text-[11.5px]">
               {responseCandidates.map((c) => {
-                const isRecommended = rec?.candidateId === c.id || c.action.type === rec?.recommendedAction.type;
+                const isRecommended =
+                  rec?.candidateId === c.id || c.action.type === rec?.recommendedAction.type;
 
                 return (
                   <tr
@@ -338,8 +352,8 @@ export function ResponseIntelligencePanel() {
                           c.simulatedRisk === "CRITICAL"
                             ? "bg-threat/20 text-threat"
                             : c.simulatedRisk === "HIGH"
-                            ? "bg-warning/20 text-warning"
-                            : "bg-emerald-500/20 text-emerald-400"
+                              ? "bg-warning/20 text-warning"
+                              : "bg-emerald-500/20 text-emerald-400"
                         }`}
                       >
                         {c.simulatedRisk}
@@ -356,9 +370,7 @@ export function ResponseIntelligencePanel() {
                     <td className="p-2.5 font-mono text-foreground">
                       {c.preventedDataExposure} stores
                     </td>
-                    <td className="p-2.5 font-mono font-bold text-cyan-signal">
-                      {c.score}
-                    </td>
+                    <td className="p-2.5 font-mono font-bold text-cyan-signal">{c.score}</td>
                     <td className="p-2.5">
                       <span className="font-mono text-[10px] text-muted-foreground">
                         {c.confidence}
@@ -398,11 +410,13 @@ export function ResponseIntelligencePanel() {
             </div>
 
             <p className="text-xs text-muted-foreground leading-relaxed">
-              IRIS will automatically select and simulate the highest-scoring response action (<strong>{rec?.recommendedAction.label}</strong>) using the synthetic incident model.
+              IRIS will automatically select and simulate the highest-scoring response action (
+              <strong>{rec?.recommendedAction.label}</strong>) using the synthetic incident model.
             </p>
 
             <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-xs text-amber-300">
-              <strong>STRICT SAFETY GUARANTEE:</strong> This is a simulation only. No real infrastructure, endpoints, or cloud policies will be modified.
+              <strong>STRICT SAFETY GUARANTEE:</strong> This is a simulation only. No real
+              infrastructure, endpoints, or cloud policies will be modified.
             </div>
 
             <div className="flex items-center justify-end gap-2.5 pt-2">

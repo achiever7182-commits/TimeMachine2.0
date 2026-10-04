@@ -12,12 +12,7 @@ export type ReportConfidence = IrisConfidence; // "HIGH" | "MEDIUM" | "LOW"
 export type ReportCitation = IrisCitation;
 
 export type RecommendationCategory =
-  | "DETECTION"
-  | "ENDPOINT"
-  | "IDENTITY"
-  | "NETWORK"
-  | "DATA_PROTECTION"
-  | "INCIDENT_RESPONSE";
+  "DETECTION" | "ENDPOINT" | "IDENTITY" | "NETWORK" | "DATA_PROTECTION" | "INCIDENT_RESPONSE";
 
 export type RecommendationPriority = "HIGH" | "MEDIUM" | "LOW";
 
@@ -94,7 +89,8 @@ export interface AffectedAssetSummary {
   name: string;
   type: string;
   owner: string;
-  status: "HEALTHY" | "MONITORED" | "SUSPICIOUS" | "COMPROMISED" | "ISOLATED" | "RECOVERED" | "CONTAINED";
+  status:
+    "HEALTHY" | "MONITORED" | "SUSPICIOUS" | "COMPROMISED" | "ISOLATED" | "RECOVERED" | "CONTAINED";
   firstAffectedAt?: string;
   compromiseTimestamp?: string;
   roleInAttack: string;
@@ -307,7 +303,16 @@ export interface ReportWhatWeMissed {
 export interface LessonLearned {
   id: string;
   lessonId: string;
-  category: "Detection" | "Endpoint" | "Lateral Movement" | "Response" | "Identity" | "Data" | "Network Monitoring" | "Data Protection" | "Investigation";
+  category:
+    | "Detection"
+    | "Endpoint"
+    | "Lateral Movement"
+    | "Response"
+    | "Identity"
+    | "Data"
+    | "Network Monitoring"
+    | "Data Protection"
+    | "Investigation";
   title: string;
   lesson: string;
   description: string;

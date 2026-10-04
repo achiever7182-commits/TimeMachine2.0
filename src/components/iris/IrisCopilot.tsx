@@ -107,7 +107,7 @@ export function IrisCopilot() {
         if (elevenLabsAgentService.getState().voiceEnabled) {
           const presentedByAgent = elevenLabsAgentService.presentVerifiedResponse(
             resp.answer,
-            irisMsg.id
+            irisMsg.id,
           );
           if (!presentedByAgent) {
             elevenLabsAgentService.speak(resp.answer, irisMsg.id);
@@ -127,7 +127,7 @@ export function IrisCopilot() {
         setIsAnswering(false);
       }
     },
-    [inputQuery, isAnswering, currentTime, irisContext]
+    [inputQuery, isAnswering, currentTime, irisContext],
   );
 
   const handleToggleMic = useCallback(() => {
@@ -199,22 +199,24 @@ export function IrisCopilot() {
                     voiceState.isSpeaking
                       ? "bg-cyan-signal animate-ping"
                       : voiceState.status === "connected"
-                      ? "bg-emerald-400"
-                      : "bg-cyan-signal"
+                        ? "bg-emerald-400"
+                        : "bg-cyan-signal"
                   }`}
                 />
                 <span>
                   {voiceState.isSpeaking
                     ? "ELEVENLABS SPEAKING"
                     : voiceState.status === "connected"
-                    ? "ELEVENLABS AGENT"
-                    : "ELEVENLABS VOICE"}
+                      ? "ELEVENLABS AGENT"
+                      : "ELEVENLABS VOICE"}
                 </span>
               </span>
             </div>
             <p className="text-[11px] text-muted-foreground flex items-center gap-1">
               <span>Intelligent Response & Investigation System · Grounded in INC-2048</span>
-              <span className="opacity-60 hidden md:inline">· Agent: {ELEVENLABS_AGENT_ID.slice(0, 14)}...</span>
+              <span className="opacity-60 hidden md:inline">
+                · Agent: {ELEVENLABS_AGENT_ID.slice(0, 14)}...
+              </span>
             </p>
           </div>
         </div>
@@ -274,12 +276,16 @@ export function IrisCopilot() {
 
           <div className="flex items-center gap-1.5 rounded-lg border border-border/70 bg-background/60 px-2.5 py-1 text-[11px]">
             <Clock className="size-3 text-cyan-signal" />
-            <span>Time: <strong>{currentTime}</strong></span>
+            <span>
+              Time: <strong>{currentTime}</strong>
+            </span>
           </div>
 
           <div className="flex items-center gap-1.5 rounded-lg border border-border/70 bg-background/60 px-2.5 py-1 text-[11px]">
             <Shield className="size-3 text-threat" />
-            <span>Risk: <strong className="text-threat">{currentRisk}</strong></span>
+            <span>
+              Risk: <strong className="text-threat">{currentRisk}</strong>
+            </span>
           </div>
 
           <button

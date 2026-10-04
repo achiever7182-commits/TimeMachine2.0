@@ -34,7 +34,10 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
         <div className="flex items-center gap-2">
           <AlertTriangle className="size-4 shrink-0 text-amber-400 print:text-black" />
           <span>
-            <strong>SYNTHETIC INCIDENT RESOLUTION REPORT:</strong> All findings, forensics, timelines, and response simulations were evaluated within the synthetic ACME incident environment (INC-2048). No real enterprise production systems, endpoints, or users were modified.
+            <strong>SYNTHETIC INCIDENT RESOLUTION REPORT:</strong> All findings, forensics,
+            timelines, and response simulations were evaluated within the synthetic ACME incident
+            environment (INC-2048). No real enterprise production systems, endpoints, or users were
+            modified.
           </span>
         </div>
         <span className="font-mono text-[10px] font-bold uppercase tracking-wider rounded bg-amber-500/20 px-2 py-0.5 border border-amber-500/30 print:hidden">
@@ -43,7 +46,10 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
       </div>
 
       {/* 1. Header & Executive Summary */}
-      <section id="executive-summary" className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0">
+      <section
+        id="executive-summary"
+        className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0"
+      >
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/70 pb-4 mb-4">
           <div>
             <div className="flex items-center gap-2">
@@ -64,13 +70,16 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
               {report.title}
             </h1>
             <p className="text-xs text-muted-foreground font-mono mt-0.5">
-              Incident ID: <strong className="text-foreground">{report.incidentId}</strong> · Generated: {new Date(report.generatedAt).toLocaleString()}
+              Incident ID: <strong className="text-foreground">{report.incidentId}</strong> ·
+              Generated: {new Date(report.generatedAt).toLocaleString()}
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             <div className="rounded-xl border border-threat/40 bg-threat/10 px-4 py-2 text-right">
-              <div className="text-[10px] uppercase font-mono text-muted-foreground">Severity Level</div>
+              <div className="text-[10px] uppercase font-mono text-muted-foreground">
+                Severity Level
+              </div>
               <div className="text-xl font-bold text-threat tracking-tight flex items-center gap-1.5 justify-end">
                 <ShieldAlert className="size-5" />
                 {report.severity}
@@ -82,20 +91,36 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
         {/* High-Level Attack Metrics Strip */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 mb-5 font-mono text-xs">
           <div className="rounded-lg border border-border/70 bg-background/50 p-3">
-            <span className="text-[10px] text-muted-foreground uppercase block">Incident Window</span>
-            <span className="font-bold text-foreground">{report.incidentStart} → {report.formalDetection}</span>
+            <span className="text-[10px] text-muted-foreground uppercase block">
+              Incident Window
+            </span>
+            <span className="font-bold text-foreground">
+              {report.incidentStart} → {report.formalDetection}
+            </span>
           </div>
           <div className="rounded-lg border border-border/70 bg-background/50 p-3">
-            <span className="text-[10px] text-muted-foreground uppercase block">First Opportunity</span>
-            <span className="font-bold text-cyan-signal">{report.firstDetectableOpportunity} (T+5m)</span>
+            <span className="text-[10px] text-muted-foreground uppercase block">
+              First Opportunity
+            </span>
+            <span className="font-bold text-cyan-signal">
+              {report.firstDetectableOpportunity} (T+5m)
+            </span>
           </div>
           <div className="rounded-lg border border-border/70 bg-background/50 p-3">
-            <span className="text-[10px] text-muted-foreground uppercase block">Detection Delay</span>
-            <span className="font-bold text-amber-400">{report.detectionGap.delayMinutes} Minutes</span>
+            <span className="text-[10px] text-muted-foreground uppercase block">
+              Detection Delay
+            </span>
+            <span className="font-bold text-amber-400">
+              {report.detectionGap.delayMinutes} Minutes
+            </span>
           </div>
           <div className="rounded-lg border border-border/70 bg-background/50 p-3">
-            <span className="text-[10px] text-muted-foreground uppercase block">Compromised Assets</span>
-            <span className="font-bold text-threat">{report.actualImpact.compromisedAssetsCount} Hosts</span>
+            <span className="text-[10px] text-muted-foreground uppercase block">
+              Compromised Assets
+            </span>
+            <span className="font-bold text-threat">
+              {report.actualImpact.compromisedAssetsCount} Hosts
+            </span>
           </div>
         </div>
 
@@ -110,7 +135,10 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
       </section>
 
       {/* 2. Incident Classification */}
-      <section id="classification" className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0">
+      <section
+        id="classification"
+        className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0"
+      >
         <h2 className="text-base font-bold text-foreground mb-3 flex items-center gap-2">
           <FileText className="size-4 text-cyan-signal" />
           Incident Classification & Attack Profile
@@ -120,45 +148,64 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
           <div className="space-y-2 rounded-lg border border-border/70 bg-background/40 p-4">
             <div className="flex justify-between border-b border-border/40 pb-1.5">
               <span className="text-muted-foreground">Incident Classification:</span>
-              <span className="font-semibold text-foreground">{report.incidentClassification.incidentType}</span>
+              <span className="font-semibold text-foreground">
+                {report.incidentClassification.incidentType}
+              </span>
             </div>
             <div className="flex justify-between border-b border-border/40 pb-1.5">
               <span className="text-muted-foreground">Initial Access Vector:</span>
-              <span className="font-semibold text-foreground">{report.incidentClassification.initialAccessVector}</span>
+              <span className="font-semibold text-foreground">
+                {report.incidentClassification.initialAccessVector}
+              </span>
             </div>
             <div className="flex justify-between border-b border-border/40 pb-1.5">
               <span className="text-muted-foreground">Compromised User Identity:</span>
-              <span className="font-mono font-bold text-cyan-signal">{report.incidentClassification.primaryCompromisedIdentity}</span>
+              <span className="font-mono font-bold text-cyan-signal">
+                {report.incidentClassification.primaryCompromisedIdentity}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Beachhead Workstation:</span>
-              <span className="font-mono font-bold text-foreground">{report.incidentClassification.initialCompromisedEndpoint}</span>
+              <span className="font-mono font-bold text-foreground">
+                {report.incidentClassification.initialCompromisedEndpoint}
+              </span>
             </div>
           </div>
 
           <div className="space-y-2 rounded-lg border border-border/70 bg-background/40 p-4">
             <div className="flex justify-between border-b border-border/40 pb-1.5">
               <span className="text-muted-foreground">Lateral Movement Technique:</span>
-              <span className="font-semibold text-foreground">{report.incidentClassification.lateralMovement}</span>
+              <span className="font-semibold text-foreground">
+                {report.incidentClassification.lateralMovement}
+              </span>
             </div>
             <div className="flex justify-between border-b border-border/40 pb-1.5">
               <span className="text-muted-foreground">Data Tier Access:</span>
-              <span className="font-semibold text-foreground">{report.incidentClassification.dataAccess}</span>
+              <span className="font-semibold text-foreground">
+                {report.incidentClassification.dataAccess}
+              </span>
             </div>
             <div className="flex justify-between border-b border-border/40 pb-1.5">
               <span className="text-muted-foreground">Detection Mechanism:</span>
-              <span className="font-semibold text-foreground">{report.incidentClassification.detectionMethod}</span>
+              <span className="font-semibold text-foreground">
+                {report.incidentClassification.detectionMethod}
+              </span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Assessed Final Severity:</span>
-              <span className="font-mono font-bold text-threat">{report.incidentClassification.finalSeverity}</span>
+              <span className="font-mono font-bold text-threat">
+                {report.incidentClassification.finalSeverity}
+              </span>
             </div>
           </div>
         </div>
       </section>
 
       {/* 3. Forensic Timeline */}
-      <section id="timeline" className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0">
+      <section
+        id="timeline"
+        className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0"
+      >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-base font-bold text-foreground flex items-center gap-2">
             <Clock className="size-4 text-cyan-signal" />
@@ -204,9 +251,7 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
                   <td className="p-2.5 font-mono text-muted-foreground">
                     {e.affectedAssetId || e.affectedUserId || "—"}
                   </td>
-                  <td className="p-2.5 text-muted-foreground leading-relaxed">
-                    {e.significance}
-                  </td>
+                  <td className="p-2.5 text-muted-foreground leading-relaxed">{e.significance}</td>
                 </tr>
               ))}
             </tbody>
@@ -215,7 +260,10 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
       </section>
 
       {/* 4. Detection Gap Analysis (What We Missed) */}
-      <section id="detection-gap" className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0">
+      <section
+        id="detection-gap"
+        className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0"
+      >
         <h2 className="text-base font-bold text-foreground mb-3 flex items-center gap-2">
           <AlertTriangle className="size-4 text-amber-400" />
           Detection Gap Analysis ("What We Missed")
@@ -291,7 +339,10 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
       </section>
 
       {/* 5. Attack Path & Graph Traversal */}
-      <section id="attack-path" className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0">
+      <section
+        id="attack-path"
+        className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0"
+      >
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base font-bold text-foreground flex items-center gap-2">
             <GitBranch className="size-4 text-cyan-signal" />
@@ -315,8 +366,8 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
                   node === "DB-PROD-01"
                     ? "bg-threat/20 text-threat border border-threat/40"
                     : node === "SERVER-03" || node === "LAPTOP-042"
-                    ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
-                    : "bg-secondary text-foreground border border-border"
+                      ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                      : "bg-secondary text-foreground border border-border"
                 }`}
               >
                 {node}
@@ -334,7 +385,10 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
       </section>
 
       {/* 6. Affected Assets & Users */}
-      <section id="assets-and-users" className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0">
+      <section
+        id="assets-and-users"
+        className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0"
+      >
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base font-bold text-foreground flex items-center gap-2">
             <Server className="size-4 text-cyan-signal" />
@@ -386,7 +440,10 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
       </section>
 
       {/* 7. Actual Impact vs Counterfactual Response Analysis */}
-      <section id="counterfactual" className="rounded-xl border border-cyan-signal/50 bg-cyan-signal/5 p-6 backdrop-blur-md print:border-none print:p-0">
+      <section
+        id="counterfactual"
+        className="rounded-xl border border-cyan-signal/50 bg-cyan-signal/5 p-6 backdrop-blur-md print:border-none print:p-0"
+      >
         <div className="flex items-center justify-between mb-4">
           <div>
             <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-cyan-signal">
@@ -410,27 +467,60 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
           <div className="rounded-xl border border-threat/40 bg-threat/5 p-4 space-y-2.5">
             <div className="flex items-center justify-between font-mono text-xs">
               <span className="font-bold text-threat">ACTUAL HISTORICAL REALITY</span>
-              <span className="rounded bg-threat/20 px-2 py-0.5 text-threat font-bold">CRITICAL RISK</span>
+              <span className="rounded bg-threat/20 px-2 py-0.5 text-threat font-bold">
+                CRITICAL RISK
+              </span>
             </div>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>• Formal Detection: <strong className="text-foreground">10:24</strong> (37 min delay)</li>
-              <li>• Compromised Assets: <strong className="text-threat">4 hosts</strong> (LAPTOP-042, SERVER-03, DB-PROD-01, FILE-SRV-01)</li>
-              <li>• Database Access: <strong className="text-threat">CONFIRMED</strong> (50,000 customer records accessed)</li>
-              <li>• File Access: <strong className="text-threat">CONFIRMED</strong> (37 strategic files staged)</li>
+              <li>
+                • Formal Detection: <strong className="text-foreground">10:24</strong> (37 min
+                delay)
+              </li>
+              <li>
+                • Compromised Assets: <strong className="text-threat">4 hosts</strong> (LAPTOP-042,
+                SERVER-03, DB-PROD-01, FILE-SRV-01)
+              </li>
+              <li>
+                • Database Access: <strong className="text-threat">CONFIRMED</strong> (50,000
+                customer records accessed)
+              </li>
+              <li>
+                • File Access: <strong className="text-threat">CONFIRMED</strong> (37 strategic
+                files staged)
+              </li>
             </ul>
           </div>
 
           {/* Recommended Counterfactual Future */}
           <div className="rounded-xl border border-emerald-500/40 bg-emerald-500/5 p-4 space-y-2.5">
             <div className="flex items-center justify-between font-mono text-xs">
-              <span className="font-bold text-emerald-400">COUNTERFACTUAL: {report.counterfactualAnalysis.recommendedAction.label}</span>
-              <span className="rounded bg-emerald-500/20 px-2 py-0.5 text-emerald-400 font-bold">MEDIUM RISK</span>
+              <span className="font-bold text-emerald-400">
+                COUNTERFACTUAL: {report.counterfactualAnalysis.recommendedAction.label}
+              </span>
+              <span className="rounded bg-emerald-500/20 px-2 py-0.5 text-emerald-400 font-bold">
+                MEDIUM RISK
+              </span>
             </div>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>• Intervention Point: <strong className="text-foreground">10:04</strong> (Workstation isolation)</li>
-              <li>• Prevented Attack Stages: <strong className="text-emerald-400">{report.counterfactualAnalysis.preventedEvents.length} stages</strong> (evt-1007, evt-1012, evt-1018)</li>
-              <li>• Protected Infrastructure: <strong className="text-emerald-400">SERVER-03, DB-PROD-01, FILE-SRV-01</strong></li>
-              <li>• Database Access: <strong className="text-emerald-400">ZERO DATA LEAKED</strong> (Vault preserved)</li>
+              <li>
+                • Intervention Point: <strong className="text-foreground">10:04</strong>{" "}
+                (Workstation isolation)
+              </li>
+              <li>
+                • Prevented Attack Stages:{" "}
+                <strong className="text-emerald-400">
+                  {report.counterfactualAnalysis.preventedEvents.length} stages
+                </strong>{" "}
+                (evt-1007, evt-1012, evt-1018)
+              </li>
+              <li>
+                • Protected Infrastructure:{" "}
+                <strong className="text-emerald-400">SERVER-03, DB-PROD-01, FILE-SRV-01</strong>
+              </li>
+              <li>
+                • Database Access: <strong className="text-emerald-400">ZERO DATA LEAKED</strong>{" "}
+                (Vault preserved)
+              </li>
             </ul>
           </div>
         </div>
@@ -441,7 +531,10 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
       </section>
 
       {/* 8. Multi-Action Response Matrix */}
-      <section id="response-comparison" className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0">
+      <section
+        id="response-comparison"
+        className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0"
+      >
         <h2 className="text-base font-bold text-foreground mb-3 flex items-center gap-2">
           <Layers className="size-4 text-cyan-signal" />
           Evaluated Response Comparison Matrix
@@ -497,9 +590,7 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
                       ? c.preventedCompromises.join(", ")
                       : "None (Full Compromise)"}
                   </td>
-                  <td className="p-2.5 text-muted-foreground leading-relaxed">
-                    {c.rationale}
-                  </td>
+                  <td className="p-2.5 text-muted-foreground leading-relaxed">{c.rationale}</td>
                 </tr>
               ))}
             </tbody>
@@ -508,7 +599,10 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
       </section>
 
       {/* 9. Root Cause Analysis */}
-      <section id="root-cause" className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0">
+      <section
+        id="root-cause"
+        className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0"
+      >
         <h2 className="text-base font-bold text-foreground mb-3 flex items-center gap-2">
           <ShieldAlert className="size-4 text-cyan-signal" />
           Root Cause Analysis
@@ -536,18 +630,25 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2 border-t border-border/50 pt-2">
             <div>
               <span className="font-bold text-foreground block text-[11px]">Detection Gap:</span>
-              <p className="text-muted-foreground text-[11px]">{report.rootCause.detectionGapSummary}</p>
+              <p className="text-muted-foreground text-[11px]">
+                {report.rootCause.detectionGapSummary}
+              </p>
             </div>
             <div>
               <span className="font-bold text-foreground block text-[11px]">Response Gap:</span>
-              <p className="text-muted-foreground text-[11px]">{report.rootCause.responseGapSummary}</p>
+              <p className="text-muted-foreground text-[11px]">
+                {report.rootCause.responseGapSummary}
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* 10. Lessons Learned */}
-      <section id="lessons-learned" className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0">
+      <section
+        id="lessons-learned"
+        className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0"
+      >
         <h2 className="text-base font-bold text-foreground mb-3 flex items-center gap-2">
           <Zap className="size-4 text-cyan-signal" />
           Post-Incident Lessons Learned
@@ -578,7 +679,10 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
       </section>
 
       {/* 11. Recommendations & Action Items */}
-      <section id="recommendations" className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0">
+      <section
+        id="recommendations"
+        className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0"
+      >
         <h2 className="text-base font-bold text-foreground mb-3 flex items-center gap-2">
           <CheckCircle2 className="size-4 text-emerald-400" />
           Recommendations & Corrective Action Items
@@ -649,7 +753,10 @@ export function IncidentReportDoc({ report }: IncidentReportDocProps) {
       </section>
 
       {/* 12. Evidence Ledger & Citations Appendix */}
-      <section id="evidence-ledger" className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0">
+      <section
+        id="evidence-ledger"
+        className="rounded-xl border border-border/80 bg-card/60 p-6 backdrop-blur-md print:border-none print:p-0"
+      >
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base font-bold text-foreground flex items-center gap-2">
             <FileText className="size-4 text-cyan-signal" />

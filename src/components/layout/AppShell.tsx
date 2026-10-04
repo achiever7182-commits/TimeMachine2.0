@@ -20,7 +20,14 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useDemo } from "@/context/DemoContext";
 import { cn } from "@/lib/utils";
@@ -59,7 +66,12 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
                 : "border-transparent text-muted-foreground hover:border-border hover:bg-secondary/70 hover:text-foreground",
             )}
           >
-            <Icon className={cn("size-4", active ? "text-cyan-signal" : "text-muted-foreground group-hover:text-cyan-signal")} />
+            <Icon
+              className={cn(
+                "size-4",
+                active ? "text-cyan-signal" : "text-muted-foreground group-hover:text-cyan-signal",
+              )}
+            />
             <span>{item.label}</span>
           </Link>
         );
@@ -90,7 +102,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             <ShieldCheck className="size-5 text-cyan-signal" />
           </span>
           <span>
-            <span className="block text-sm font-semibold uppercase tracking-[0.22em] text-muted-foreground">Incident</span>
+            <span className="block text-sm font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+              Incident
+            </span>
             <span className="block text-lg font-semibold">Time Machine</span>
           </span>
         </Link>
@@ -102,7 +116,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             </span>
             <span className="font-mono text-muted-foreground">{currentTime}</span>
           </div>
-          <p className="mt-2 text-xs text-muted-foreground">Synthetic telemetry only. No real infrastructure actions are connected.</p>
+          <p className="mt-2 text-xs text-muted-foreground">
+            Synthetic telemetry only. No real infrastructure actions are connected.
+          </p>
           {!isAttackRunning && !isPaused ? (
             <Button className="mt-4 w-full" onClick={startAttackSimulation}>
               <Radar className="size-4" /> Start Attack Simulation
@@ -134,11 +150,19 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="flex min-h-16 items-center gap-3 px-4 sm:px-6 lg:px-8">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="lg:hidden" aria-label="Open navigation">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="lg:hidden"
+                  aria-label="Open navigation"
+                >
                   <Menu className="size-4" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-80 border-border bg-sidebar/95 p-5 backdrop-blur-xl">
+              <SheetContent
+                side="left"
+                className="w-80 border-border bg-sidebar/95 p-5 backdrop-blur-xl"
+              >
                 <SheetHeader className="mb-5 text-left">
                   <SheetTitle>Incident Time Machine</SheetTitle>
                   <SheetDescription>Demo security center navigation.</SheetDescription>
@@ -148,24 +172,34 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Sheet>
             <div className="hidden min-w-0 flex-1 items-center rounded-lg border border-border bg-input/30 px-3 py-2 sm:flex">
               <Search className="mr-2 size-4 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">Search incidents, hosts, hashes, evidence</span>
+              <span className="text-sm text-muted-foreground">
+                Search incidents, hosts, hashes, evidence
+              </span>
             </div>
             <div className="ml-auto flex items-center gap-2">
               <span className="hidden items-center gap-2 rounded-full border border-green-signal/30 bg-green-signal/10 px-3 py-1.5 text-xs font-semibold text-green-signal sm:inline-flex">
                 <CircleDot className="size-3" /> Systems nominal
               </span>
-              <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-cyan-signal">DEMO MODE</span>
+              <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-cyan-signal">
+                DEMO MODE
+              </span>
               <Button variant="outline" size="icon" aria-label="Notifications">
                 <Bell className="size-4" />
               </Button>
-              <div className="grid size-9 place-items-center rounded-lg border border-border bg-card font-semibold">SK</div>
+              <div className="grid size-9 place-items-center rounded-lg border border-border bg-card font-semibold">
+                SK
+              </div>
             </div>
           </div>
         </header>
         <main className="px-4 py-6 sm:px-6 lg:px-8">{children}</main>
       </div>
       <IrisCopilot />
-      <Button asChild className="fixed bottom-4 left-4 z-30 hidden shadow-glow lg:inline-flex" variant="secondary">
+      <Button
+        asChild
+        className="fixed bottom-4 left-4 z-30 hidden shadow-glow lg:inline-flex"
+        variant="secondary"
+      >
         <Link to="/time-machine">
           <PanelRightOpen className="size-4" /> Resume demo flow
         </Link>

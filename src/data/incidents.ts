@@ -31,7 +31,8 @@ export const incidents = [
     stage: "ACCOUNT_COMPROMISED" as const,
     detectedAgo: "31 minutes ago",
     affectedAssets: 1,
-    summary: "Endpoint automation executed an unusual encoded PowerShell command on a finance workstation.",
+    summary:
+      "Endpoint automation executed an unusual encoded PowerShell command on a finance workstation.",
   },
   {
     id: "INC-2046",

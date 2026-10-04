@@ -26,7 +26,7 @@ export class IrisService {
     currentMinute: number,
     counterfactualBranch?: CounterfactualBranch | null,
     scenarioHistory?: CounterfactualBranch[],
-    incidentId = "INC-2048"
+    incidentId = "INC-2048",
   ): IrisContext {
     return buildIrisContext({
       incidentId,
@@ -43,7 +43,8 @@ export class IrisService {
     if (!question || !question.trim()) {
       return {
         id: `iris-err-${Date.now()}`,
-        answer: "Please enter an investigation question about the incident, attack path, or counterfactual response.",
+        answer:
+          "Please enter an investigation question about the incident, attack path, or counterfactual response.",
         findings: [],
         citations: [],
         suggestedQuestions: [

@@ -3,17 +3,14 @@ import type { DigitalTwinSnapshot } from "./digitalTwin";
 import type { AttackGraphState } from "./attackGraph";
 
 export type CounterfactualActionType =
-  | "DO_NOTHING"
-  | "DISABLE_USER"
-  | "ISOLATE_ENDPOINT"
-  | "BLOCK_LATERAL_CONNECTION";
+  "DO_NOTHING" | "DISABLE_USER" | "ISOLATE_ENDPOINT" | "BLOCK_LATERAL_CONNECTION";
 
 export interface CounterfactualAction {
   id: string;
   type: CounterfactualActionType;
   timestamp: string; // e.g. "10:04"
-  minute: number;    // e.g. 22
-  targetId: string;  // e.g. "LAPTOP-042", "alex.m", "LAPTOP-042->SERVER-03", "NONE"
+  minute: number; // e.g. 22
+  targetId: string; // e.g. "LAPTOP-042", "alex.m", "LAPTOP-042->SERVER-03", "NONE"
   targetType: "USER" | "ENDPOINT" | "CONNECTION" | "NONE";
   label: string;
   description: string;
@@ -48,7 +45,7 @@ export interface CounterfactualComparison {
   baselineFinalRisk: Severity;
   counterfactualFinalRisk: Severity;
   riskChange: "REDUCED" | "UNCHANGED" | "INCREASED";
-  
+
   baselineCompromisedAssets: string[];
   counterfactualCompromisedAssets: string[];
   preventedCompromises: string[];

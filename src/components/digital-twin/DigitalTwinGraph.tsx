@@ -28,33 +28,82 @@ interface NodePosition {
 
 // Topology coordinate layout
 const NODE_POSITIONS: NodePosition[] = [
-  { id: "usr-alex-m", x: 140, y: 70, label: "alex.m", sublabel: "Financial Analyst", type: "USER", icon: UserRound },
-  { id: "VPN-GW-01", x: 380, y: 70, label: "VPN-GW-01", sublabel: "Edge Perimeter Gateway", type: "NETWORK", icon: Network },
-  { id: "CLOUD-STORAGE-01", x: 680, y: 70, label: "CLOUD-STORAGE-01", sublabel: "Enterprise S3 Bucket", type: "CLOUD_RESOURCE", icon: Cloud },
-  { id: "LAPTOP-042", x: 380, y: 220, label: "LAPTOP-042", sublabel: "Finance Workstation", type: "ENDPOINT", icon: Laptop },
-  { id: "SERVER-03", x: 380, y: 370, label: "SERVER-03", sublabel: "Internal App Server", type: "SERVER", icon: Server },
-  { id: "DB-PROD-01", x: 200, y: 520, label: "DB-PROD-01", sublabel: "Customer Postgres DB", type: "DATABASE", icon: Database },
-  { id: "FILE-SRV-01", x: 560, y: 520, label: "FILE-SRV-01", sublabel: "Confidential Storage", type: "FILE_STORE", icon: FileText },
+  {
+    id: "usr-alex-m",
+    x: 140,
+    y: 70,
+    label: "alex.m",
+    sublabel: "Financial Analyst",
+    type: "USER",
+    icon: UserRound,
+  },
+  {
+    id: "VPN-GW-01",
+    x: 380,
+    y: 70,
+    label: "VPN-GW-01",
+    sublabel: "Edge Perimeter Gateway",
+    type: "NETWORK",
+    icon: Network,
+  },
+  {
+    id: "CLOUD-STORAGE-01",
+    x: 680,
+    y: 70,
+    label: "CLOUD-STORAGE-01",
+    sublabel: "Enterprise S3 Bucket",
+    type: "CLOUD_RESOURCE",
+    icon: Cloud,
+  },
+  {
+    id: "LAPTOP-042",
+    x: 380,
+    y: 220,
+    label: "LAPTOP-042",
+    sublabel: "Finance Workstation",
+    type: "ENDPOINT",
+    icon: Laptop,
+  },
+  {
+    id: "SERVER-03",
+    x: 380,
+    y: 370,
+    label: "SERVER-03",
+    sublabel: "Internal App Server",
+    type: "SERVER",
+    icon: Server,
+  },
+  {
+    id: "DB-PROD-01",
+    x: 200,
+    y: 520,
+    label: "DB-PROD-01",
+    sublabel: "Customer Postgres DB",
+    type: "DATABASE",
+    icon: Database,
+  },
+  {
+    id: "FILE-SRV-01",
+    x: 560,
+    y: 520,
+    label: "FILE-SRV-01",
+    sublabel: "Confidential Storage",
+    type: "FILE_STORE",
+    icon: FileText,
+  },
 ];
 
 export function DigitalTwinGraph({ viewMode = "ACTUAL" }: { viewMode?: "ACTUAL" | "KNOWN" }) {
-  const {
-    digitalTwin,
-    knownSecurityState,
-    selectedEntityId,
-    setSelectedEntityId,
-  } = useDemo();
+  const { digitalTwin, knownSecurityState, selectedEntityId, setSelectedEntityId } = useDemo();
 
   const currentSnapshot = viewMode === "KNOWN" ? knownSecurityState : digitalTwin;
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
 
   // Asset & User lookups
   const assetMap = new Map<string, AssetTemporalState>(
-    currentSnapshot.assets.map((a) => [a.id, a])
+    currentSnapshot.assets.map((a) => [a.id, a]),
   );
-  const userMap = new Map<string, UserTemporalState>(
-    currentSnapshot.users.map((u) => [u.id, u])
-  );
+  const userMap = new Map<string, UserTemporalState>(currentSnapshot.users.map((u) => [u.id, u]));
 
   // Connection lookups
   const activeConnections = currentSnapshot.networkConnections;
@@ -166,10 +215,10 @@ export function DigitalTwinGraph({ viewMode = "ACTUAL" }: { viewMode?: "ACTUAL" 
                 isSelected
                   ? "border-cyan-glow ring-2 ring-cyan-signal/40 bg-secondary/80 shadow-glow scale-[1.03] z-20"
                   : isCompromised
-                  ? "border-threat/50 bg-threat/10 hover:border-threat shadow-threat hover:scale-[1.02] z-10"
-                  : isSuspicious
-                  ? "border-amber-400/50 bg-amber-400/10 hover:border-amber-400 hover:scale-[1.02]"
-                  : "border-border/80 bg-card/85 hover:border-cyan-signal/50 hover:scale-[1.02]"
+                    ? "border-threat/50 bg-threat/10 hover:border-threat shadow-threat hover:scale-[1.02] z-10"
+                    : isSuspicious
+                      ? "border-amber-400/50 bg-amber-400/10 hover:border-amber-400 hover:scale-[1.02]"
+                      : "border-border/80 bg-card/85 hover:border-cyan-signal/50 hover:scale-[1.02]",
               )}
             >
               {/* Header: Icon + Badge */}
@@ -180,8 +229,8 @@ export function DigitalTwinGraph({ viewMode = "ACTUAL" }: { viewMode?: "ACTUAL" 
                     isCompromised
                       ? "border-threat/40 bg-threat/20 text-threat shadow-threat animate-pulse"
                       : isSuspicious
-                      ? "border-amber-400/40 bg-amber-400/20 text-amber-400"
-                      : "border-cyan-signal/30 bg-primary/10 text-cyan-signal"
+                        ? "border-amber-400/40 bg-amber-400/20 text-amber-400"
+                        : "border-cyan-signal/30 bg-primary/10 text-cyan-signal",
                   )}
                 >
                   <Icon className="size-4" />
@@ -194,14 +243,18 @@ export function DigitalTwinGraph({ viewMode = "ACTUAL" }: { viewMode?: "ACTUAL" 
                       userState.status === "COMPROMISED"
                         ? "border-threat/40 bg-threat/10 text-threat"
                         : userState.status === "SUSPICIOUS"
-                        ? "border-amber-400/40 bg-amber-400/10 text-amber-400"
-                        : "border-green-signal/30 bg-green-signal/10 text-green-signal"
+                          ? "border-amber-400/40 bg-amber-400/10 text-amber-400"
+                          : "border-green-signal/30 bg-green-signal/10 text-green-signal",
                     )}
                   >
                     {userState.status}
                   </span>
                 ) : assetState ? (
-                  <AssetStateBadge status={assetState.status} showIcon={false} className="text-[10px] px-2 py-0.5" />
+                  <AssetStateBadge
+                    status={assetState.status}
+                    showIcon={false}
+                    className="text-[10px] px-2 py-0.5"
+                  />
                 ) : null}
               </div>
 

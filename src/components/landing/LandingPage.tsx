@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Play, ShieldCheck, Sparkles, SlidersHorizontal, ChevronRight } from "lucide-react";
+import {
+  ArrowRight,
+  Play,
+  ShieldCheck,
+  Sparkles,
+  SlidersHorizontal,
+  ChevronRight,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import IncidentTimeMachine3D from "@/components/ui/incident-time-machine-3d";
 import AirlockHero from "@/components/ui/airlock-spaceship-hero";
@@ -28,7 +35,9 @@ export function LandingPage() {
               <ShieldCheck className="size-5 text-cyan-signal" />
             </span>
             <div>
-              <span className="block font-semibold tracking-wide text-sm sm:text-base">INCIDENT TIME MACHINE</span>
+              <span className="block font-semibold tracking-wide text-sm sm:text-base">
+                INCIDENT TIME MACHINE
+              </span>
               <span className="block text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
                 RECONSTRUCT • REWIND • SIMULATE • RESPOND
               </span>
@@ -79,33 +88,48 @@ export function LandingPage() {
                 </p>
 
                 <p className="mt-4 text-base sm:text-lg text-slate-300 leading-relaxed">
-                  Don’t just respond to an attack. <span className="text-white font-semibold">Rewind it. Understand it. Simulate it. Stop it.</span>
+                  Don’t just respond to an attack.{" "}
+                  <span className="text-white font-semibold">
+                    Rewind it. Understand it. Simulate it. Stop it.
+                  </span>
                 </p>
 
                 <p className="mt-2 text-xs sm:text-sm text-slate-400 leading-normal">
-                  Reconstruct historical timelines, inspect critical decision points, and simulate counterfactual response actions before executing mitigation.
+                  Reconstruct historical timelines, inspect critical decision points, and simulate
+                  counterfactual response actions before executing mitigation.
                 </p>
 
                 {/* 5-Stage Execution Pipeline Badges */}
                 <div className="mt-6 flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-                  {["01 ATTACK", "02 RECONSTRUCT", "03 REWIND", "04 SIMULATE", "05 RESPOND"].map((stage, idx) => (
-                    <span key={stage} className="flex items-center gap-1.5 text-slate-300">
-                      <span className="rounded bg-white/10 px-2 py-0.5 border border-white/15 hover:border-amber-400/50 transition-colors">
-                        {stage}
+                  {["01 ATTACK", "02 RECONSTRUCT", "03 REWIND", "04 SIMULATE", "05 RESPOND"].map(
+                    (stage, idx) => (
+                      <span key={stage} className="flex items-center gap-1.5 text-slate-300">
+                        <span className="rounded bg-white/10 px-2 py-0.5 border border-white/15 hover:border-amber-400/50 transition-colors">
+                          {stage}
+                        </span>
+                        {idx < 4 && <ChevronRight className="size-3 text-amber-500/70" />}
                       </span>
-                      {idx < 4 && <ChevronRight className="size-3 text-amber-500/70" />}
-                    </span>
-                  ))}
+                    ),
+                  )}
                 </div>
 
                 {/* CTAs */}
                 <div className="mt-8 flex flex-wrap gap-4">
-                  <Button asChild size="lg" className="bg-amber-500 hover:bg-amber-600 text-black font-semibold shadow-lg shadow-amber-500/20">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="bg-amber-500 hover:bg-amber-600 text-black font-semibold shadow-lg shadow-amber-500/20"
+                  >
                     <Link to="/dashboard">
                       Enter Security Center <ArrowRight className="ml-2 size-4" />
                     </Link>
                   </Button>
-                  <Button asChild size="lg" variant="outline" className="border-white/20 bg-black/40 hover:bg-white/10">
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="border-white/20 bg-black/40 hover:bg-white/10"
+                  >
                     <Link to="/time-machine">
                       <Play className="mr-2 size-4 text-cyan-signal" /> Watch Live Incident Demo
                     </Link>
@@ -123,21 +147,24 @@ export function LandingPage() {
               <div className="font-mono text-xs text-amber-400">01 — RECONSTRUCT</div>
               <h3 className="mt-2 text-lg font-semibold">Graph & Security State</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Automatically builds identity graph, compromised assets, lateral movement paths, and evidence state surrounding the incident.
+                Automatically builds identity graph, compromised assets, lateral movement paths, and
+                evidence state surrounding the incident.
               </p>
             </div>
             <div className="rounded-xl border border-white/10 bg-card/40 p-6 backdrop-blur-md">
               <div className="font-mono text-xs text-amber-400">02 — REWIND</div>
               <h3 className="mt-2 text-lg font-semibold">Earliest Opportunity</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Scrub backward in time to inspect what defenders knew at the exact moment of initial access and initial authentication anomaly.
+                Scrub backward in time to inspect what defenders knew at the exact moment of initial
+                access and initial authentication anomaly.
               </p>
             </div>
             <div className="rounded-xl border border-white/10 bg-card/40 p-6 backdrop-blur-md">
               <div className="font-mono text-xs text-amber-400">03 — SIMULATE & RESPOND</div>
               <h3 className="mt-2 text-lg font-semibold">Counterfactual Branching</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Simulate host isolation, credential suspension, and firewall block scenarios to verify risk reduction before live execution.
+                Simulate host isolation, credential suspension, and firewall block scenarios to
+                verify risk reduction before live execution.
               </p>
             </div>
           </div>

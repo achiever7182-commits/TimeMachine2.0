@@ -30,7 +30,6 @@ export type IrisCitationType =
   | "RISK_STATE"
   | "DETECTION_OPPORTUNITY";
 
-
 export interface IrisCitation {
   id: string;
   type: IrisCitationType;

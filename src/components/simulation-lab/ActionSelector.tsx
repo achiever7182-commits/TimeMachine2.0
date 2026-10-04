@@ -77,7 +77,9 @@ export function ActionSelector({
 
               <div className="mt-3 border-t border-border/50 pt-2 flex items-center justify-between font-mono text-[10px]">
                 <span className="text-muted-foreground">Target:</span>
-                <span className={`font-semibold ${isSelected ? "text-cyan-signal" : "text-foreground"}`}>
+                <span
+                  className={`font-semibold ${isSelected ? "text-cyan-signal" : "text-foreground"}`}
+                >
                   {action.targetId}
                 </span>
               </div>

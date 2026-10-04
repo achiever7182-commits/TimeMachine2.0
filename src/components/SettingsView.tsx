@@ -31,7 +31,7 @@ const items = [
 
 export function SettingsView() {
   const [voiceEnabled, setVoiceEnabled] = useState(
-    () => elevenLabsAgentService.getState().voiceEnabled
+    () => elevenLabsAgentService.getState().voiceEnabled,
   );
 
   useEffect(() => {
@@ -70,7 +70,8 @@ export function SettingsView() {
                 </span>
               </div>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Deterministic IRIS engine provides ground truth; ElevenLabs provides natural conversational delivery and voice.
+                Deterministic IRIS engine provides ground truth; ElevenLabs provides natural
+                conversational delivery and voice.
               </p>
             </div>
           </div>
@@ -91,15 +92,11 @@ export function SettingsView() {
           </div>
           <div className="rounded-lg border border-border/70 bg-background/50 p-2.5">
             <p className="text-[10px] text-muted-foreground uppercase">Model</p>
-            <p className="font-bold text-cyan-signal truncate mt-0.5">
-              {ELEVENLABS_MODEL_ID}
-            </p>
+            <p className="font-bold text-cyan-signal truncate mt-0.5">{ELEVENLABS_MODEL_ID}</p>
           </div>
           <div className="rounded-lg border border-border/70 bg-background/50 p-2.5">
             <p className="text-[10px] text-muted-foreground uppercase">ASR / STT</p>
-            <p className="font-bold text-foreground truncate mt-0.5">
-              Scribe Realtime
-            </p>
+            <p className="font-bold text-foreground truncate mt-0.5">Scribe Realtime</p>
           </div>
         </div>
 
@@ -142,7 +139,8 @@ export function SettingsView() {
         <div>
           <p className="font-semibold text-foreground">Demo Mode & Safety Boundary</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            Strictly synthetic incident telemetry (INC-2048). No real-world endpoint or infrastructure mutations.
+            Strictly synthetic incident telemetry (INC-2048). No real-world endpoint or
+            infrastructure mutations.
           </p>
         </div>
         <Switch checked aria-label="Demo Mode enabled" />

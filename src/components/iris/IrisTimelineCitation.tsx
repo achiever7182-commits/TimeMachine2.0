@@ -1,13 +1,4 @@
-import {
-  Clock,
-  FileText,
-  Server,
-  User,
-  Share2,
-  GitBranch,
-  Shield,
-  Layers,
-} from "lucide-react";
+import { Clock, FileText, Server, User, Share2, GitBranch, Shield, Layers } from "lucide-react";
 import type { IrisCitation } from "@/types/iris";
 
 interface IrisTimelineCitationProps {
@@ -15,10 +6,7 @@ interface IrisTimelineCitationProps {
   onClick?: (citation: IrisCitation) => void;
 }
 
-export function IrisTimelineCitation({
-  citation,
-  onClick,
-}: IrisTimelineCitationProps) {
+export function IrisTimelineCitation({ citation, onClick }: IrisTimelineCitationProps) {
   const getIcon = () => {
     switch (citation.type) {
       case "TIMELINE_EVENT":

@@ -20,12 +20,7 @@ export const ELEVENLABS_VOICE_ID = "cjVigY5qzO86Huf0OWal";
 export const ELEVENLABS_MODEL_ID = "eleven_v3_conversational";
 
 export type AgentConnectionStatus =
-  | "disconnected"
-  | "connecting"
-  | "connected"
-  | "speaking"
-  | "listening"
-  | "error";
+  "disconnected" | "connecting" | "connected" | "speaking" | "listening" | "error";
 
 export interface AgentVoiceState {
   status: AgentConnectionStatus;
@@ -124,8 +119,7 @@ class ElevenLabsAgentService {
     if (!this.audioContext) {
       const AudioCtx =
         window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext })
-          .webkitAudioContext;
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioCtx) {
         this.audioContext = new AudioCtx();
       }
@@ -182,7 +176,7 @@ class ElevenLabsAgentService {
               v.name.includes("Samantha") ||
               v.name.includes("Google") ||
               v.name.includes("Victoria") ||
-              v.name.includes("Daniel"))
+              v.name.includes("Daniel")),
         ) || voices.find((v) => v.lang.startsWith("en"));
 
       if (preferredVoice) {
@@ -247,7 +241,7 @@ class ElevenLabsAgentService {
    */
   public startListening(
     onTranscript: (text: string) => void,
-    onError?: (err: string) => void
+    onError?: (err: string) => void,
   ): boolean {
     if (typeof window === "undefined") return false;
 
@@ -362,9 +356,7 @@ class ElevenLabsAgentService {
    * Connects to the configured ElevenLabs Agent WebSocket session.
    * Public agent ID: agent_8601m3q0xaarfcb9kcf8683hrxxj.
    */
-  public async connectSession(
-    onServerTranscript?: (transcript: string) => void
-  ): Promise<boolean> {
+  public async connectSession(onServerTranscript?: (transcript: string) => void): Promise<boolean> {
     if (typeof window === "undefined" || typeof WebSocket === "undefined") {
       return false;
     }
@@ -436,7 +428,8 @@ class ElevenLabsAgentService {
       this.ws.onerror = () => {
         this.updateState({
           status: "error",
-          error: "Could not connect to ElevenLabs Agent WebSocket. Falling back to deterministic mode.",
+          error:
+            "Could not connect to ElevenLabs Agent WebSocket. Falling back to deterministic mode.",
         });
       };
 
@@ -488,10 +481,7 @@ class ElevenLabsAgentService {
     }
   }
 
-  public presentVerifiedResponse(
-    verifiedAnswer: string,
-    messageId?: string
-  ): boolean {
+  public presentVerifiedResponse(verifiedAnswer: string, messageId?: string): boolean {
     if (
       !this.state.voiceEnabled ||
       !this.ws ||

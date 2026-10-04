@@ -177,7 +177,8 @@ export const initialSyntheticProcesses: ProcessActivity[] = [
     userId: "usr-alex-m",
     timestamp: "10:12",
     status: "MALICIOUS",
-    commandSummary: "psql -h 10.0.20.10 -U postgres -d acme_prod -c 'SELECT * FROM customer_identities'",
+    commandSummary:
+      "psql -h 10.0.20.10 -U postgres -d acme_prod -c 'SELECT * FROM customer_identities'",
     evidenceIds: ["ev-5"],
   },
   {

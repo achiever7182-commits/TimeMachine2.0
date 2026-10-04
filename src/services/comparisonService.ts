@@ -7,7 +7,7 @@ import type { DigitalTwinSnapshot, SnapshotDiff } from "@/types/digitalTwin";
  */
 export function compareSnapshots(
   snapshotA: DigitalTwinSnapshot,
-  snapshotB: DigitalTwinSnapshot
+  snapshotB: DigitalTwinSnapshot,
 ): SnapshotDiff {
   // Stage change
   const stageChange =
@@ -23,14 +23,10 @@ export function compareSnapshots(
 
   // Asset compromises
   const compromisedA = new Set(
-    snapshotA.assets
-      .filter((a) => a.status === "COMPROMISED")
-      .map((a) => a.id)
+    snapshotA.assets.filter((a) => a.status === "COMPROMISED").map((a) => a.id),
   );
   const compromisedB = new Set(
-    snapshotB.assets
-      .filter((a) => a.status === "COMPROMISED")
-      .map((a) => a.id)
+    snapshotB.assets.filter((a) => a.status === "COMPROMISED").map((a) => a.id),
   );
 
   const newCompromisedAssets: string[] = [];
@@ -65,7 +61,7 @@ export function compareSnapshots(
 
   // Users diff
   const userCompA = new Set(
-    snapshotA.users.filter((u) => u.status === "COMPROMISED").map((u) => u.id)
+    snapshotA.users.filter((u) => u.status === "COMPROMISED").map((u) => u.id),
   );
   const newCompromisedUsers = snapshotB.users
     .filter((u) => u.status === "COMPROMISED" && !userCompA.has(u.id))

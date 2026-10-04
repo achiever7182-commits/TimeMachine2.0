@@ -50,20 +50,20 @@ export function TimeMachineView() {
     minute >= 42
       ? "Incident INC-2048 declared. Multiple suspicious activities correlated across identity, endpoint, server, and database tiers. Attacker accessed customer DB and staged sensitive files."
       : minute >= 36
-      ? "Attacker attempting mass file access targeting 37 confidential documents on FILE-SRV-01 after querying production database."
-      : minute >= 30
-      ? "Attacker has traversed to DB-PROD-01 and executed high-volume queries against customer identity tables."
-      : minute >= 25
-      ? "Lateral movement confirmed from LAPTOP-042 to internal application server SERVER-03 via administrative session."
-      : minute >= 22
-      ? "Suspicious encoded PowerShell process observed executing on LAPTOP-042 within user session."
-      : minute >= 18
-      ? "Employee identity alex.m confirmed compromised. Interactive session active on workstation LAPTOP-042."
-      : minute >= 5
-      ? "Earliest detectable opportunity: Unfamiliar foreign IP and multiple authentication failures observed. Response at this stage would have prevented endpoint compromise."
-      : minute >= 2
-      ? "Repeated authentication failures observed from anomalous IP address targeting employee credentials."
-      : "Initial authentication anomaly recorded from unfamiliar IP location. Environment systems nominal.";
+        ? "Attacker attempting mass file access targeting 37 confidential documents on FILE-SRV-01 after querying production database."
+        : minute >= 30
+          ? "Attacker has traversed to DB-PROD-01 and executed high-volume queries against customer identity tables."
+          : minute >= 25
+            ? "Lateral movement confirmed from LAPTOP-042 to internal application server SERVER-03 via administrative session."
+            : minute >= 22
+              ? "Suspicious encoded PowerShell process observed executing on LAPTOP-042 within user session."
+              : minute >= 18
+                ? "Employee identity alex.m confirmed compromised. Interactive session active on workstation LAPTOP-042."
+                : minute >= 5
+                  ? "Earliest detectable opportunity: Unfamiliar foreign IP and multiple authentication failures observed. Response at this stage would have prevented endpoint compromise."
+                  : minute >= 2
+                    ? "Repeated authentication failures observed from anomalous IP address targeting employee credentials."
+                    : "Initial authentication anomaly recorded from unfamiliar IP location. Environment systems nominal.";
 
   return (
     <div className="mx-auto max-w-7xl animate-fade-in">
@@ -79,8 +79,8 @@ export function TimeMachineView() {
                 currentRisk === "CRITICAL" || currentRisk === "Critical"
                   ? "border-threat/40 bg-threat/10 text-threat"
                   : currentRisk === "HIGH" || currentRisk === "High"
-                  ? "border-warning/40 bg-warning/10 text-warning"
-                  : "border-cyan-glow bg-primary/10 text-cyan-signal"
+                    ? "border-warning/40 bg-warning/10 text-warning"
+                    : "border-cyan-glow bg-primary/10 text-cyan-signal",
               )}
             >
               <ShieldAlert className="mr-2 size-4" />
@@ -116,9 +116,7 @@ export function TimeMachineView() {
               <p className="font-mono text-xs text-muted-foreground">State at {currentTime}</p>
             </div>
           </div>
-          <p className="mt-5 text-sm leading-7 text-foreground typewriter-reveal">
-            {summaryText}
-          </p>
+          <p className="mt-5 text-sm leading-7 text-foreground typewriter-reveal">{summaryText}</p>
           <div className="mt-5 border-t border-border pt-3">
             <p className="font-mono text-xs text-muted-foreground">
               Simulated Stage: <span className="text-cyan-signal">{incidentState.stage}</span>
@@ -133,7 +131,9 @@ export function TimeMachineView() {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-signal">
               Potential blast radius
             </p>
-            <h2 className="mt-1 text-xl font-semibold">Confirmed movement vs. potential exposure</h2>
+            <h2 className="mt-1 text-xl font-semibold">
+              Confirmed movement vs. potential exposure
+            </h2>
           </div>
           <div className="flex gap-4 text-sm">
             <span>
@@ -153,8 +153,8 @@ export function TimeMachineView() {
                   node.count !== "0" && node.impact === "confirmed"
                     ? "border-threat/35 bg-threat/8"
                     : node.count !== "0"
-                    ? "border-warning/35 bg-warning/8"
-                    : "border-border bg-secondary/20 opacity-50"
+                      ? "border-warning/35 bg-warning/8"
+                      : "border-border bg-secondary/20 opacity-50",
                 )}
               >
                 <span
@@ -163,8 +163,8 @@ export function TimeMachineView() {
                     node.count !== "0" && node.impact === "confirmed"
                       ? "text-threat"
                       : node.count !== "0"
-                      ? "text-warning"
-                      : "text-muted-foreground"
+                        ? "text-warning"
+                        : "text-muted-foreground",
                   )}
                 >
                   {node.count}

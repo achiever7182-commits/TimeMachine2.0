@@ -82,7 +82,9 @@ export function ForensicTimeline() {
   // FORENSIC: all 9 events + sub-telemetry markers
   const visibleEvents =
     timelineZoom === "OVERVIEW"
-      ? demoTimelineEvents.filter((e) => ["evt-0942", "evt-1000", "evt-1007", "evt-1012", "evt-1024"].includes(e.id))
+      ? demoTimelineEvents.filter((e) =>
+          ["evt-0942", "evt-1000", "evt-1007", "evt-1012", "evt-1024"].includes(e.id),
+        )
       : demoTimelineEvents;
 
   const handleCreateBookmark = (e: React.FormEvent) => {
@@ -110,8 +112,8 @@ export function ForensicTimeline() {
                   currentRisk === "CRITICAL"
                     ? "border-threat/40 bg-threat/10 text-threat"
                     : currentRisk === "HIGH"
-                    ? "border-warning/40 bg-warning/10 text-warning"
-                    : "border-cyan-glow bg-primary/10 text-cyan-signal"
+                      ? "border-warning/40 bg-warning/10 text-warning"
+                      : "border-cyan-glow bg-primary/10 text-cyan-signal",
                 )}
               >
                 {currentRisk}
@@ -120,7 +122,9 @@ export function ForensicTimeline() {
                 [{incidentStage}]
               </span>
             </div>
-            <p className="text-xs text-muted-foreground">Forensic Time Controller & Virtual Twin Synchronizer</p>
+            <p className="text-xs text-muted-foreground">
+              Forensic Time Controller & Virtual Twin Synchronizer
+            </p>
           </div>
         </div>
 
@@ -162,7 +166,12 @@ export function ForensicTimeline() {
               <Play className="size-3.5" /> Play
             </Button>
           ) : isAttackRunning ? (
-            <Button size="sm" variant="secondary" onClick={pauseSimulation} className="gap-1.5 px-3 text-xs">
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={pauseSimulation}
+              className="gap-1.5 px-3 text-xs"
+            >
               <Pause className="size-3.5" /> Pause
             </Button>
           ) : (
@@ -214,7 +223,7 @@ export function ForensicTimeline() {
                   "rounded px-2 py-0.5 text-[10px] transition-colors",
                   timelineZoom === zm
                     ? "bg-primary/20 text-cyan-signal font-semibold"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 {zm}
@@ -252,7 +261,7 @@ export function ForensicTimeline() {
                   "inline-flex items-center gap-1.5 rounded-md border px-2 py-1 font-mono text-[11px] transition-colors",
                   isAtTime
                     ? "border-cyan-glow bg-primary/20 text-cyan-signal font-semibold shadow-glow"
-                    : "border-border bg-secondary/30 text-muted-foreground hover:text-foreground hover:border-cyan-signal/40"
+                    : "border-border bg-secondary/30 text-muted-foreground hover:text-foreground hover:border-cyan-signal/40",
                 )}
               >
                 <BookmarkCheck className="size-3 text-cyan-signal" />
@@ -296,7 +305,7 @@ export function ForensicTimeline() {
                   }}
                   className={cn(
                     "group relative cursor-pointer text-center transition-transform hover:-translate-y-0.5",
-                    isSelected && "scale-105"
+                    isSelected && "scale-105",
                   )}
                 >
                   {/* Pin Dot */}
@@ -306,8 +315,8 @@ export function ForensicTimeline() {
                       isExact
                         ? "border-cyan-signal bg-cyan-signal ring-4 ring-cyan-signal/25 shadow-glow"
                         : happened
-                        ? "border-cyan-signal bg-cyan-signal/80"
-                        : "border-border bg-card"
+                          ? "border-cyan-signal bg-cyan-signal/80"
+                          : "border-border bg-card",
                     )}
                   />
 
@@ -315,7 +324,7 @@ export function ForensicTimeline() {
                   <p
                     className={cn(
                       "mt-3 font-mono text-xs font-semibold",
-                      happened ? "text-foreground" : "text-muted-foreground"
+                      happened ? "text-foreground" : "text-muted-foreground",
                     )}
                   >
                     {event.time ?? event.timestamp}
@@ -325,7 +334,7 @@ export function ForensicTimeline() {
                   <p
                     className={cn(
                       "mt-1 text-[11px] leading-tight line-clamp-2 px-1",
-                      happened ? "text-cyan-signal font-medium" : "text-muted-foreground"
+                      happened ? "text-cyan-signal font-medium" : "text-muted-foreground",
                     )}
                   >
                     {event.title}
@@ -432,7 +441,9 @@ export function ForensicTimeline() {
           <div className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-2xl">
             <h3 className="text-lg font-bold text-foreground">Add Forensic Bookmark</h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              Save current simulation time <strong className="font-mono text-cyan-signal">{currentTime}</strong> as an investigation marker.
+              Save current simulation time{" "}
+              <strong className="font-mono text-cyan-signal">{currentTime}</strong> as an
+              investigation marker.
             </p>
 
             <form onSubmit={handleCreateBookmark} className="mt-4 space-y-4">

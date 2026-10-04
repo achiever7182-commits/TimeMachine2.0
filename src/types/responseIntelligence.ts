@@ -10,12 +10,7 @@ import type { IrisCitation, IrisConfidence } from "./iris";
 export type ResponseMode = "MANUAL" | "IRIS_RECOMMEND" | "AUTO_SIMULATE";
 
 export type ResponseDecisionStatus =
-  | "PROPOSED"
-  | "APPROVED"
-  | "REJECTED"
-  | "SIMULATING"
-  | "COMPLETED"
-  | "FAILED";
+  "PROPOSED" | "APPROVED" | "REJECTED" | "SIMULATING" | "COMPLETED" | "FAILED";
 
 export interface ResponseCandidate {
   id: string;

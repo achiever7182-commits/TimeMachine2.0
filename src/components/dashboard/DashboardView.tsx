@@ -44,18 +44,18 @@ export function DashboardView() {
   const meterRotation = isCritical
     ? "rotate-[135deg]"
     : isHigh
-    ? "rotate-[90deg]"
-    : isMedium
-    ? "rotate-[45deg]"
-    : "rotate-[5deg]";
+      ? "rotate-[90deg]"
+      : isMedium
+        ? "rotate-[45deg]"
+        : "rotate-[5deg]";
 
   const riskColor = isCritical
     ? "text-threat"
     : isHigh
-    ? "text-threat"
-    : isMedium
-    ? "text-amber-400"
-    : "text-cyan-signal";
+      ? "text-threat"
+      : isMedium
+        ? "text-amber-400"
+        : "text-cyan-signal";
 
   return (
     <AppPage>
@@ -77,7 +77,7 @@ export function DashboardView() {
                     "rounded px-2 py-1 font-mono transition-colors",
                     simulationSpeed === spd
                       ? "bg-primary/20 text-cyan-signal font-semibold"
-                      : "text-muted-foreground hover:text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   {spd}x
@@ -143,7 +143,9 @@ export function DashboardView() {
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 Current Organizational Risk
               </p>
-              <p className={cn("mt-3 text-6xl font-semibold uppercase transition-colors", riskColor)}>
+              <p
+                className={cn("mt-3 text-6xl font-semibold uppercase transition-colors", riskColor)}
+              >
                 {String(currentRisk).toUpperCase()}
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
@@ -164,11 +166,11 @@ export function DashboardView() {
                   isCritical
                     ? "border-t-threat border-r-threat"
                     : isHigh
-                    ? "border-t-threat border-r-threat"
-                    : isMedium
-                    ? "border-t-amber-400 border-r-amber-400"
-                    : "border-t-cyan-signal border-r-cyan-signal",
-                  meterRotation
+                      ? "border-t-threat border-r-threat"
+                      : isMedium
+                        ? "border-t-amber-400 border-r-amber-400"
+                        : "border-t-cyan-signal border-r-cyan-signal",
+                  meterRotation,
                 )}
               />
               <div className="absolute inset-0 grid place-items-center text-center">
@@ -189,7 +191,15 @@ export function DashboardView() {
                 <div
                   className={cn(
                     "h-2 rounded-full transition-colors",
-                    active ? (isCritical ? "bg-threat" : isHigh ? "bg-amber-500" : isMedium ? "bg-amber-400" : "bg-cyan-signal") : "bg-muted"
+                    active
+                      ? isCritical
+                        ? "bg-threat"
+                        : isHigh
+                          ? "bg-amber-500"
+                          : isMedium
+                            ? "bg-amber-400"
+                            : "bg-cyan-signal"
+                      : "bg-muted",
                   )}
                 />
                 <p className="mt-2 truncate text-xs text-muted-foreground">{label}</p>
@@ -246,8 +256,8 @@ export function DashboardView() {
                         displayIncident.severity === "CRITICAL"
                           ? "border-threat/40 bg-threat/10 text-threat"
                           : displayIncident.severity === "HIGH"
-                          ? "border-warning/40 bg-warning/10 text-warning"
-                          : "border-cyan-glow bg-primary/10 text-cyan-signal"
+                            ? "border-warning/40 bg-warning/10 text-warning"
+                            : "border-cyan-glow bg-primary/10 text-cyan-signal",
                       )}
                     >
                       {displayIncident.severity}

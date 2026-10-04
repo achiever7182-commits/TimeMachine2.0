@@ -74,7 +74,7 @@ export function DigitalTwinView() {
                   "rounded px-2.5 py-1 transition-colors",
                   viewPerspective === "ACTUAL"
                     ? "bg-primary/20 text-cyan-signal font-semibold"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 Actual Environment
@@ -86,7 +86,7 @@ export function DigitalTwinView() {
                   "rounded px-2.5 py-1 transition-colors",
                   viewPerspective === "KNOWN"
                     ? "bg-primary/20 text-cyan-signal font-semibold"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 SOC Known State
@@ -100,7 +100,7 @@ export function DigitalTwinView() {
               onClick={toggleInvestigationMode}
               className={cn(
                 "gap-1.5 font-mono text-xs",
-                investigationMode && "border-cyan-glow shadow-glow text-foreground"
+                investigationMode && "border-cyan-glow shadow-glow text-foreground",
               )}
             >
               <Compass className="size-3.5" />
@@ -134,7 +134,8 @@ export function DigitalTwinView() {
                   Simulated Blast Radius
                 </p>
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  Temporal impact calculated at <span className="font-mono text-foreground">{currentTime}</span>
+                  Temporal impact calculated at{" "}
+                  <span className="font-mono text-foreground">{currentTime}</span>
                 </p>
               </div>
 

@@ -38,14 +38,14 @@ async function runIrisVerificationSuite() {
   const ctx1004 = irisService.createContext(22);
   assert(
     ctx1004.incident.id === "INC-2048" &&
-    ctx1004.incident.currentMinute === 22 &&
-    ctx1004.actualState.assets.length > 0 &&
-    ctx1004.knownSecurityState.assets.length > 0 &&
-    ctx1004.timeline.length > 0 &&
-    ctx1004.attackGraph.nodes.length > 0 &&
-    ctx1004.evidence.length > 0,
+      ctx1004.incident.currentMinute === 22 &&
+      ctx1004.actualState.assets.length > 0 &&
+      ctx1004.knownSecurityState.assets.length > 0 &&
+      ctx1004.timeline.length > 0 &&
+      ctx1004.attackGraph.nodes.length > 0 &&
+      ctx1004.evidence.length > 0,
     "TEST A — CONTEXT BUILDING",
-    `Context for ${ctx1004.incident.id} at minute ${ctx1004.incident.currentMinute} constructed with ${ctx1004.timeline.length} timeline events.`
+    `Context for ${ctx1004.incident.id} at minute ${ctx1004.incident.currentMinute} constructed with ${ctx1004.timeline.length} timeline events.`,
   );
 
   // TEST B — WHAT HAPPENED
@@ -53,11 +53,11 @@ async function runIrisVerificationSuite() {
   const respWhatHappened = await irisService.ask("What happened?", ctx1004);
   assert(
     respWhatHappened.answer.includes("INC-2048") &&
-    respWhatHappened.citations.length > 0 &&
-    respWhatHappened.findings.length > 0 &&
-    respWhatHappened.worldPerspective === "ACTUAL",
+      respWhatHappened.citations.length > 0 &&
+      respWhatHappened.findings.length > 0 &&
+      respWhatHappened.worldPerspective === "ACTUAL",
     "TEST B — WHAT HAPPENED",
-    `Grounded timeline answer with ${respWhatHappened.citations.length} citations and perspective ${respWhatHappened.worldPerspective}.`
+    `Grounded timeline answer with ${respWhatHappened.citations.length} citations and perspective ${respWhatHappened.worldPerspective}.`,
   );
 
   // TEST C — KNOWN VS ACTUAL
@@ -66,11 +66,11 @@ async function runIrisVerificationSuite() {
   const mentionsServer03AsKnown = respKnown.answer.toLowerCase().includes("known: server-03");
   assert(
     respKnown.worldPerspective === "KNOWN_AT_TIME" &&
-    respKnown.answer.includes("KNOWN AT 10:04") &&
-    respKnown.answer.includes("LAPTOP-042") &&
-    !mentionsServer03AsKnown,
+      respKnown.answer.includes("KNOWN AT 10:04") &&
+      respKnown.answer.includes("LAPTOP-042") &&
+      !mentionsServer03AsKnown,
     "TEST C — KNOWN VS ACTUAL",
-    `10:04 known state clearly isolates what defenders knew without leaking future SERVER-03 compromises.`
+    `10:04 known state clearly isolates what defenders knew without leaking future SERVER-03 compromises.`,
   );
 
   // TEST D — ATTACK PATH
@@ -79,11 +79,11 @@ async function runIrisVerificationSuite() {
   const respAttackPath = await irisService.ask("How did the attacker reach the database?", ctx1024);
   assert(
     respAttackPath.intentCategory === "ATTACK_PATH" &&
-    respAttackPath.findings[0]?.type === "ATTACK_PATH" &&
-    respAttackPath.answer.includes("ATTACKER") &&
-    respAttackPath.citations.some((c) => c.type === "ATTACK_EDGE"),
+      respAttackPath.findings[0]?.type === "ATTACK_PATH" &&
+      respAttackPath.answer.includes("ATTACKER") &&
+      respAttackPath.citations.some((c) => c.type === "ATTACK_EDGE"),
     "TEST D — ATTACK PATH",
-    `Attack path grounded in Attack Graph edges: ${respAttackPath.citations.length} edge citations found.`
+    `Attack path grounded in Attack Graph edges: ${respAttackPath.citations.length} edge citations found.`,
   );
 
   // TEST E — COMPROMISED ASSETS
@@ -94,9 +94,9 @@ async function runIrisVerificationSuite() {
     .map((a) => a.id);
   assert(
     respAssets.intentCategory === "COMPROMISED_ASSETS" &&
-    actualCompromisedIds.every((id) => respAssets.answer.includes(id)),
+      actualCompromisedIds.every((id) => respAssets.answer.includes(id)),
     "TEST E — COMPROMISED ASSETS",
-    `Reported assets match Digital Twin compromised assets: [${actualCompromisedIds.join(", ")}].`
+    `Reported assets match Digital Twin compromised assets: [${actualCompromisedIds.join(", ")}].`,
   );
 
   // TEST F — DETECTION GAP
@@ -105,12 +105,12 @@ async function runIrisVerificationSuite() {
   const respGap = await irisService.ask("What did we miss?", ctx1004);
   assert(
     gapFinding.earliestOpportunityMinute === 5 &&
-    gapFinding.timestamp === "09:47" &&
-    gapFinding.detectionDelayMinutes === 37 &&
-    respGap.answer.includes("09:47") &&
-    respGap.answer.includes("37 minutes"),
+      gapFinding.timestamp === "09:47" &&
+      gapFinding.detectionDelayMinutes === 37 &&
+      respGap.answer.includes("09:47") &&
+      respGap.answer.includes("37 minutes"),
     "TEST F — DETECTION GAP",
-    `Earliest opportunity ${gapFinding.timestamp} with detection delay of ${gapFinding.detectionDelayMinutes} minutes.`
+    `Earliest opportunity ${gapFinding.timestamp} with detection delay of ${gapFinding.detectionDelayMinutes} minutes.`,
   );
 
   // TEST G — CURRENT RISK
@@ -118,10 +118,10 @@ async function runIrisVerificationSuite() {
   const respRisk = await irisService.ask("What is the current risk?", ctx1004);
   assert(
     respRisk.intentCategory === "CURRENT_RISK" &&
-    respRisk.findings[0]?.type === "RISK" &&
-    respRisk.answer.includes(ctx1004.incident.currentRisk),
+      respRisk.findings[0]?.type === "RISK" &&
+      respRisk.answer.includes(ctx1004.incident.currentRisk),
     "TEST G — CURRENT RISK",
-    `Risk level: ${ctx1004.incident.currentRisk} correctly reported from deterministic engine.`
+    `Risk level: ${ctx1004.incident.currentRisk} correctly reported from deterministic engine.`,
   );
 
   // TEST H — COUNTERFACTUAL
@@ -140,10 +140,10 @@ async function runIrisVerificationSuite() {
   const respCf = await irisService.ask("What if we isolate LAPTOP-042 at 10:04?", ctxWithCf);
   assert(
     respCf.worldPerspective === "COUNTERFACTUAL" &&
-    respCf.answer.includes("COUNTERFACTUAL SIMULATION") &&
-    respCf.citations.some((c) => c.type === "COUNTERFACTUAL_EVENT"),
+      respCf.answer.includes("COUNTERFACTUAL SIMULATION") &&
+      respCf.citations.some((c) => c.type === "COUNTERFACTUAL_EVENT"),
     "TEST H — COUNTERFACTUAL",
-    `Phase 4 counterfactual simulation integrated: ${cfBranch.comparison.preventedCount} events prevented.`
+    `Phase 4 counterfactual simulation integrated: ${cfBranch.comparison.preventedCount} events prevented.`,
   );
 
   // TEST I — PREVENTED EVENT
@@ -151,10 +151,9 @@ async function runIrisVerificationSuite() {
   const whyServer03 = explainWhyAssetProtected("SERVER-03", cfBranch.comparison);
   const { causalChain } = explainCounterfactualPrevention(cfBranch.comparison);
   assert(
-    whyServer03.includes("protected") &&
-    causalChain.some((c) => c.includes("evt-1007")),
+    whyServer03.includes("protected") && causalChain.some((c) => c.includes("evt-1007")),
     "TEST I — PREVENTED EVENT",
-    `Causal explanation confirms evt-1007 was prevented: "${whyServer03}"`
+    `Causal explanation confirms evt-1007 was prevented: "${whyServer03}"`,
   );
 
   // TEST J — COMPARISON
@@ -162,11 +161,11 @@ async function runIrisVerificationSuite() {
   const respComp = await irisService.ask("Compare this with what actually happened.", ctxWithCf);
   assert(
     respComp.worldPerspective === "COUNTERFACTUAL" &&
-    respComp.answer.includes("MEASURABLE IMPACT COMPARISON") &&
-    respComp.answer.includes("ACTUAL") &&
-    respComp.answer.includes("COUNTERFACTUAL"),
+      respComp.answer.includes("MEASURABLE IMPACT COMPARISON") &&
+      respComp.answer.includes("ACTUAL") &&
+      respComp.answer.includes("COUNTERFACTUAL"),
     "TEST J — COMPARISON",
-    `Actual vs Counterfactual comparison explicitly rendered with baseline and branch deltas.`
+    `Actual vs Counterfactual comparison explicitly rendered with baseline and branch deltas.`,
   );
 
   // TEST K — TIME SYNCHRONIZATION
@@ -174,12 +173,12 @@ async function runIrisVerificationSuite() {
   const ctx1012 = irisService.createContext(30);
   assert(
     ctx1004.incident.currentMinute === 22 &&
-    ctx1012.incident.currentMinute === 30 &&
-    ctx1012.incident.currentTime === "10:12" &&
-    ctx1012.actualState.assets.filter((a) => a.status === "COMPROMISED").length >=
-      ctx1004.actualState.assets.filter((a) => a.status === "COMPROMISED").length,
+      ctx1012.incident.currentMinute === 30 &&
+      ctx1012.incident.currentTime === "10:12" &&
+      ctx1012.actualState.assets.filter((a) => a.status === "COMPROMISED").length >=
+        ctx1004.actualState.assets.filter((a) => a.status === "COMPROMISED").length,
     "TEST K — TIME SYNCHRONIZATION",
-    `Time advancement 10:04 -> 10:12 successfully updates context telemetry without side effects.`
+    `Time advancement 10:04 -> 10:12 successfully updates context telemetry without side effects.`,
   );
 
   // TEST L — IMMUTABILITY
@@ -193,30 +192,37 @@ async function runIrisVerificationSuite() {
   const digitalTwinCheck = getActualDigitalTwinState(22);
   assert(
     ctx1004.timeline.length === initialTimelineLength &&
-    baselineStateCheck.timestamp === "10:04" &&
-    digitalTwinCheck.assets[0]!.id === "LAPTOP-042" &&
-    digitalTwinCheck.assets.length === 6,
+      baselineStateCheck.timestamp === "10:04" &&
+      digitalTwinCheck.assets[0]!.id === "LAPTOP-042" &&
+      digitalTwinCheck.assets.length === 6,
     "TEST L — IMMUTABILITY",
-    `Zero mutation of baseline incident, clock, timeline, or digital twin state across multiple IRIS queries.`
+    `Zero mutation of baseline incident, clock, timeline, or digital twin state across multiple IRIS queries.`,
   );
 
   // TEST M — UNKNOWN QUESTION
   // Ask for information not contained in the synthetic data. IRIS must NOT hallucinate.
-  const respUnknown = await irisService.ask("What was the Russian APT group named who attacked Microsoft?", ctx1004);
+  const respUnknown = await irisService.ask(
+    "What was the Russian APT group named who attacked Microsoft?",
+    ctx1004,
+  );
   assert(
     respUnknown.intentCategory === "UNKNOWN" &&
-    respUnknown.answer.includes("I don't have enough structured evidence in the current incident dataset"),
+      respUnknown.answer.includes(
+        "I don't have enough structured evidence in the current incident dataset",
+      ),
     "TEST M — UNKNOWN QUESTION",
-    `Refused to hallucinate external actors/entities: correctly returned grounded fallback.`
+    `Refused to hallucinate external actors/entities: correctly returned grounded fallback.`,
   );
 
   // TEST N — CITATIONS
   // Every major factual response has valid citation IDs.
-  const validCitations = respWhatHappened.citations.every((c) => Boolean(c.id && c.type && c.label));
+  const validCitations = respWhatHappened.citations.every((c) =>
+    Boolean(c.id && c.type && c.label),
+  );
   assert(
     validCitations && respWhatHappened.citations.length >= 3,
     "TEST N — CITATIONS",
-    `All ${respWhatHappened.citations.length} citations are strongly typed and reference real artifacts.`
+    `All ${respWhatHappened.citations.length} citations are strongly typed and reference real artifacts.`,
   );
 
   // TEST O — DETERMINISM
@@ -225,20 +231,20 @@ async function runIrisVerificationSuite() {
   const run2 = await irisService.ask("What happened?", ctx1004);
   assert(
     run1.answer === run2.answer &&
-    run1.citations.length === run2.citations.length &&
-    run1.intentCategory === run2.intentCategory,
+      run1.citations.length === run2.citations.length &&
+      run1.intentCategory === run2.intentCategory,
     "TEST O — DETERMINISM",
-    `Identical queries on identical context produce identical, byte-for-byte deterministic output.`
+    `Identical queries on identical context produce identical, byte-for-byte deterministic output.`,
   );
 
   // TEST P — ACTUAL/KNOWN/COUNTERFACTUAL SEPARATION
   // Verify each perspective remains separate.
   assert(
     respWhatHappened.worldPerspective === "ACTUAL" &&
-    respKnown.worldPerspective === "KNOWN_AT_TIME" &&
-    respCf.worldPerspective === "COUNTERFACTUAL",
+      respKnown.worldPerspective === "KNOWN_AT_TIME" &&
+      respCf.worldPerspective === "COUNTERFACTUAL",
     "TEST P — ACTUAL/KNOWN/COUNTERFACTUAL SEPARATION",
-    `Strict segregation verified: ACTUAL vs KNOWN_AT_TIME vs COUNTERFACTUAL worlds.`
+    `Strict segregation verified: ACTUAL vs KNOWN_AT_TIME vs COUNTERFACTUAL worlds.`,
   );
 
   // TEST Q — MULTIPLE QUESTIONS
@@ -259,7 +265,7 @@ async function runIrisVerificationSuite() {
   assert(
     successCount === qList.length,
     "TEST Q — MULTIPLE QUESTIONS",
-    `Successfully handled ${successCount}/${qList.length} sequential investigation inquiries.`
+    `Successfully handled ${successCount}/${qList.length} sequential investigation inquiries.`,
   );
 
   // TEST R — REGRESSION
@@ -278,15 +284,15 @@ async function runIrisVerificationSuite() {
   });
 
   assert(
-    twin.timestamp === "10:04" &&
-    graph.nodes.length > 0 &&
-    cf.comparison.preventedCount > 0,
+    twin.timestamp === "10:04" && graph.nodes.length > 0 && cf.comparison.preventedCount > 0,
     "TEST R — REGRESSION",
-    `Phase 1-4 engines continue to operate with 100% fidelity alongside IRIS.`
+    `Phase 1-4 engines continue to operate with 100% fidelity alongside IRIS.`,
   );
 
   console.log("\n-------------------------------------------------------");
-  console.log(`TOTAL TESTS: ${totalTests} | PASSED: ${passedTests} | FAILED: ${totalTests - passedTests}`);
+  console.log(
+    `TOTAL TESTS: ${totalTests} | PASSED: ${passedTests} | FAILED: ${totalTests - passedTests}`,
+  );
   console.log("-------------------------------------------------------\n");
 
   if (passedTests === totalTests) {

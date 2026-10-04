@@ -40,9 +40,7 @@ export function getActiveIncident(): Incident {
  */
 export function getDashboardSnapshot(minuteOrState: number | ReconstructedIncidentState) {
   const state: ReconstructedIncidentState =
-    typeof minuteOrState === "number"
-      ? getIncidentStateAtTime(minuteOrState)
-      : minuteOrState;
+    typeof minuteOrState === "number" ? getIncidentStateAtTime(minuteOrState) : minuteOrState;
 
   const isCritical = state.risk === "CRITICAL";
   const isElevated = state.risk === "HIGH" || state.risk === "MEDIUM";
@@ -79,7 +77,11 @@ export function getDashboardSnapshot(minuteOrState: number | ReconstructedIncide
       {
         label: "Critical Incidents",
         value: isCritical ? "1" : "0",
-        trend: isCritical ? "Escalated to Critical" : isElevated ? "Elevated / Monitoring" : "Nominal",
+        trend: isCritical
+          ? "Escalated to Critical"
+          : isElevated
+            ? "Elevated / Monitoring"
+            : "Nominal",
         description: "Requires containment approval",
       },
       {

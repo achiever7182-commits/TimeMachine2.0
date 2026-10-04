@@ -9,38 +9,17 @@ import type {
 } from "./incident";
 
 export type AssetState =
-  | "HEALTHY"
-  | "MONITORED"
-  | "SUSPICIOUS"
-  | "COMPROMISED"
-  | "ISOLATED"
-  | "RECOVERED";
+  "HEALTHY" | "MONITORED" | "SUSPICIOUS" | "COMPROMISED" | "ISOLATED" | "RECOVERED";
 
-export type UserStatus =
-  | "ACTIVE"
-  | "INACTIVE"
-  | "SUSPICIOUS"
-  | "COMPROMISED"
-  | "DISABLED";
+export type UserStatus = "ACTIVE" | "INACTIVE" | "SUSPICIOUS" | "COMPROMISED" | "DISABLED";
 
 export type DataClassification =
-  | "PUBLIC"
-  | "INTERNAL"
-  | "CONFIDENTIAL"
-  | "RESTRICTED"
-  | "HIGHLY_SENSITIVE";
+  "PUBLIC" | "INTERNAL" | "CONFIDENTIAL" | "RESTRICTED" | "HIGHLY_SENSITIVE";
 
 export type TimelineZoom = "OVERVIEW" | "INCIDENT" | "FORENSIC";
 
 export type TimelineCategory =
-  | "AUTHENTICATION"
-  | "ENDPOINT"
-  | "NETWORK"
-  | "PROCESS"
-  | "DATABASE"
-  | "FILE"
-  | "CLOUD"
-  | "ALERT";
+  "AUTHENTICATION" | "ENDPOINT" | "NETWORK" | "PROCESS" | "DATABASE" | "FILE" | "CLOUD" | "ALERT";
 
 export interface UserTemporalState {
   id: string;

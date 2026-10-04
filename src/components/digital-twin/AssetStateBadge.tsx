@@ -53,7 +53,7 @@ export function AssetStateBadge({ status, className, showIcon = true }: AssetSta
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider",
         config.color,
-        className
+        className,
       )}
     >
       {showIcon ? <Icon className="size-3.5" /> : null}

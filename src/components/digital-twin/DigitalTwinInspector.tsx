@@ -23,13 +23,8 @@ import { AssetStateBadge } from "./AssetStateBadge";
 import { cn } from "@/lib/utils";
 
 export function DigitalTwinInspector() {
-  const {
-    digitalTwin,
-    selectedEntityId,
-    setSelectedEntityId,
-    currentTime,
-    setCurrentMinute,
-  } = useDemo();
+  const { digitalTwin, selectedEntityId, setSelectedEntityId, currentTime, setCurrentMinute } =
+    useDemo();
 
   const selectedAsset = digitalTwin.assets.find((a) => a.id === selectedEntityId);
   const selectedUser = !selectedAsset
@@ -41,27 +36,23 @@ export function DigitalTwinInspector() {
 
   // Connected network links
   const relatedConnections = digitalTwin.networkConnections.filter(
-    (c) => c.sourceId === activeAsset.id || c.destinationId === activeAsset.id
+    (c) => c.sourceId === activeAsset.id || c.destinationId === activeAsset.id,
   );
 
   // Active processes on this asset
-  const relatedProcesses = digitalTwin.processes.filter(
-    (p) => p.assetId === activeAsset.id
-  );
+  const relatedProcesses = digitalTwin.processes.filter((p) => p.assetId === activeAsset.id);
 
   // Active sessions on this asset
   const relatedSessions = digitalTwin.activeSessions.filter(
-    (s) => s.sourceAssetId === activeAsset.id || s.destinationAssetId === activeAsset.id
+    (s) => s.sourceAssetId === activeAsset.id || s.destinationAssetId === activeAsset.id,
   );
 
   // Associated evidence
-  const relatedEvidence = digitalTwin.evidence.filter(
-    (e) => e.assetId === activeAsset.id
-  );
+  const relatedEvidence = digitalTwin.evidence.filter((e) => e.assetId === activeAsset.id);
 
   // Sensitive data resources hosted on this asset
   const relatedDataResources = digitalTwin.dataResources.filter(
-    (d) => d.assetId === activeAsset.id
+    (d) => d.assetId === activeAsset.id,
   );
 
   const isCompromised = activeAsset.status === "COMPROMISED";
@@ -94,7 +85,11 @@ export function DigitalTwinInspector() {
           <AttributeItem label="IP Address" value={activeAsset.ipAddress} mono />
           <AttributeItem label="Owner" value={activeAsset.owner} />
           <AttributeItem label="Criticality" value={activeAsset.criticality} />
-          <AttributeItem label="Calculated Risk" value={activeAsset.risk} highlight={isCompromised} />
+          <AttributeItem
+            label="Calculated Risk"
+            value={activeAsset.risk}
+            highlight={isCompromised}
+          />
           <AttributeItem label="Compromise Time" value={activeAsset.compromiseTime ?? "N/A"} mono />
         </div>
 
@@ -110,14 +105,16 @@ export function DigitalTwinInspector() {
                   "rounded px-1.5 py-0.2 font-mono text-[10px] font-semibold uppercase",
                   selectedUser.status === "COMPROMISED"
                     ? "bg-threat/20 text-threat"
-                    : "bg-primary/20 text-cyan-signal"
+                    : "bg-primary/20 text-cyan-signal",
                 )}
               >
                 {selectedUser.status}
               </span>
             </div>
             <div className="mt-2 flex items-center justify-between font-mono text-xs text-muted-foreground">
-              <span>{selectedUser.username} ({selectedUser.displayName})</span>
+              <span>
+                {selectedUser.username} ({selectedUser.displayName})
+              </span>
               <span>{selectedUser.department}</span>
             </div>
           </div>
@@ -127,7 +124,8 @@ export function DigitalTwinInspector() {
         <div>
           <div className="flex items-center justify-between mb-2">
             <p className="flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              <Cpu className="size-3.5 text-cyan-signal" /> Running Processes ({relatedProcesses.length})
+              <Cpu className="size-3.5 text-cyan-signal" /> Running Processes (
+              {relatedProcesses.length})
             </p>
           </div>
           {relatedProcesses.length > 0 ? (
@@ -140,13 +138,15 @@ export function DigitalTwinInspector() {
                     proc.status === "MALICIOUS"
                       ? "border-threat/40 bg-threat/10 text-threat"
                       : proc.status === "SUSPICIOUS"
-                      ? "border-amber-400/40 bg-amber-400/10 text-amber-400"
-                      : "border-border bg-secondary/30 text-foreground"
+                        ? "border-amber-400/40 bg-amber-400/10 text-amber-400"
+                        : "border-border bg-secondary/30 text-foreground",
                   )}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-semibold">{proc.name}</span>
-                    <span className="text-[10px] opacity-80">PID: {proc.pid} · {proc.timestamp}</span>
+                    <span className="text-[10px] opacity-80">
+                      PID: {proc.pid} · {proc.timestamp}
+                    </span>
                   </div>
                   <p className="mt-1 text-[11px] truncate opacity-90">{proc.commandSummary}</p>
                 </div>
@@ -162,12 +162,14 @@ export function DigitalTwinInspector() {
         {/* Active Network Connections */}
         <div>
           <p className="flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
-            <Network className="size-3.5 text-cyan-signal" /> Network Connections ({relatedConnections.length})
+            <Network className="size-3.5 text-cyan-signal" /> Network Connections (
+            {relatedConnections.length})
           </p>
           {relatedConnections.length > 0 ? (
             <div className="space-y-1.5">
               {relatedConnections.map((conn) => {
-                const peerId = conn.sourceId === activeAsset.id ? conn.destinationId : conn.sourceId;
+                const peerId =
+                  conn.sourceId === activeAsset.id ? conn.destinationId : conn.sourceId;
                 const isLateral = conn.relationshipType === "LATERAL_MOVEMENT";
 
                 return (
@@ -176,7 +178,7 @@ export function DigitalTwinInspector() {
                     onClick={() => setSelectedEntityId(peerId)}
                     className={cn(
                       "cursor-pointer rounded-lg border p-2 text-xs font-mono transition-colors hover:border-cyan-glow",
-                      isLateral ? "border-threat/35 bg-threat/10" : "border-border bg-secondary/25"
+                      isLateral ? "border-threat/35 bg-threat/10" : "border-border bg-secondary/25",
                     )}
                   >
                     <div className="flex items-center justify-between">
@@ -187,7 +189,9 @@ export function DigitalTwinInspector() {
                     </div>
                     <div className="mt-1 flex items-center justify-between text-[10px] text-muted-foreground">
                       <span>{conn.relationshipType}</span>
-                      <span>Port {conn.port} ({conn.protocol})</span>
+                      <span>
+                        Port {conn.port} ({conn.protocol})
+                      </span>
                     </div>
                   </div>
                 );
@@ -204,7 +208,8 @@ export function DigitalTwinInspector() {
         {relatedDataResources.length > 0 ? (
           <div>
             <p className="flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">
-              <Database className="size-3.5 text-cyan-signal" /> Data Resources ({relatedDataResources.length})
+              <Database className="size-3.5 text-cyan-signal" /> Data Resources (
+              {relatedDataResources.length})
             </p>
             <div className="space-y-1.5">
               {relatedDataResources.map((res) => (
@@ -214,7 +219,7 @@ export function DigitalTwinInspector() {
                     "rounded-lg border p-2 text-xs font-mono",
                     res.isExposed
                       ? "border-threat/40 bg-threat/10 text-threat"
-                      : "border-border bg-secondary/30 text-foreground"
+                      : "border-border bg-secondary/30 text-foreground",
                   )}
                 >
                   <div className="flex items-center justify-between">
@@ -248,7 +253,7 @@ export function DigitalTwinInspector() {
                 const parts = activeAsset.compromiseTime.split(":");
                 const h = Number(parts[0] ?? 9);
                 const m = Number(parts[1] ?? 42);
-                const min = (h * 60 + m) - (9 * 60 + 42);
+                const min = h * 60 + m - (9 * 60 + 42);
                 setCurrentMinute(min);
               }
             }}
@@ -286,7 +291,7 @@ function AttributeItem({
         className={cn(
           "mt-0.5 font-semibold truncate",
           mono && "font-mono",
-          highlight ? "text-threat" : "text-foreground"
+          highlight ? "text-threat" : "text-foreground",
         )}
       >
         {value}

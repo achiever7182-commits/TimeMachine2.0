@@ -18,12 +18,7 @@ export function IrisInvestigationPanel({
   title = "IRIS Quick Investigation",
   compact = false,
 }: IrisInvestigationPanelProps) {
-  const {
-    currentTime,
-    currentMinute,
-    counterfactualBranch,
-    scenarioHistory,
-  } = useDemo();
+  const { currentTime, currentMinute, counterfactualBranch, scenarioHistory } = useDemo();
 
   const [inputQuery, setInputQuery] = useState(defaultPrompt || "");
   const [messages, setMessages] = useState<IrisMessageType[]>([]);
@@ -105,10 +100,7 @@ export function IrisInvestigationPanel({
           </div>
         </div>
 
-        <button
-          type="button"
-          className="text-muted-foreground hover:text-foreground"
-        >
+        <button type="button" className="text-muted-foreground hover:text-foreground">
           {isCollapsed ? <ChevronDown className="size-4" /> : <ChevronUp className="size-4" />}
         </button>
       </div>

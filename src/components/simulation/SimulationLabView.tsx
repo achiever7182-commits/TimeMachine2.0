@@ -53,7 +53,9 @@ export function SimulationLabView() {
   } = useDemo();
 
   // Tab mode: "SIDE_BY_SIDE" | "PREVENTED" | "TIMELINE"
-  const [activeTab, setActiveTab] = useState<"SIDE_BY_SIDE" | "PREVENTED" | "HISTORY">("SIDE_BY_SIDE");
+  const [activeTab, setActiveTab] = useState<"SIDE_BY_SIDE" | "PREVENTED" | "HISTORY">(
+    "SIDE_BY_SIDE",
+  );
 
   const handleSimulate = useCallback(() => {
     simulateAction(activeAction);
@@ -83,7 +85,8 @@ export function SimulationLabView() {
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
               Simulate alternate realities forked from historical baseline at{" "}
-              <strong className="text-foreground font-mono">{currentTime}</strong> (T+{currentMinute}m).
+              <strong className="text-foreground font-mono">{currentTime}</strong> (T+
+              {currentMinute}m).
             </p>
           </div>
         </div>
@@ -126,8 +129,9 @@ export function SimulationLabView() {
         {/* Simulate Action Button Bar */}
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-border/60 pt-4">
           <div className="text-xs text-muted-foreground">
-            Targeting: <strong className="text-cyan-signal font-mono">{activeAction.targetId}</strong>{" "}
-            via synthetic response engine. Real organization is untouched.
+            Targeting:{" "}
+            <strong className="text-cyan-signal font-mono">{activeAction.targetId}</strong> via
+            synthetic response engine. Real organization is untouched.
           </div>
 
           <div className="flex items-center gap-2.5">
@@ -285,11 +289,13 @@ export function SimulationLabView() {
               <p className="font-medium text-foreground mt-0.5">
                 {approvedBranchId === counterfactualBranch.branchId ? (
                   <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-                    <CheckCircle2 className="size-4" /> RESPONSE PLAN SELECTED & APPROVED FOR PLAYBOOK
+                    <CheckCircle2 className="size-4" /> RESPONSE PLAN SELECTED & APPROVED FOR
+                    PLAYBOOK
                   </span>
                 ) : (
                   <span>
-                    Select this simulated counterfactual response to validate the remediation trajectory.
+                    Select this simulated counterfactual response to validate the remediation
+                    trajectory.
                   </span>
                 )}
               </p>
