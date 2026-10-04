@@ -11,17 +11,19 @@ import {
 import { Button } from "@/components/ui/button";
 import IncidentTimeMachine3D from "@/components/ui/incident-time-machine-3d";
 import AirlockHero from "@/components/ui/airlock-spaceship-hero";
+import ScrollTriggeredVideoHero from "@/components/ui/scroll-triggered-video-hero";
 
 export function LandingPage() {
   const [interactiveMode, setInteractiveMode] = useState(false);
 
   return (
-    <main className="relative min-h-screen w-full bg-black text-foreground overflow-x-hidden">
-      {/* Scroll-locked scrub-driven video hero sequence */}
+    <main className="relative min-h-screen w-full bg-black text-foreground overflow-x-clip">
+      {/* Keep the original scroll-locked room intro before the cyber incident chapters. */}
       <AirlockHero
         title="THE TIME MACHINE OPENS"
         tagline="WHAT IF YOU COULD REWIND THE ATTACK — AND CHANGE WHAT HAPPENS NEXT?"
       />
+      <ScrollTriggeredVideoHero />
 
       {/* Main Landing Page Content */}
       <div className="relative w-full">

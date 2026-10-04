@@ -1,16 +1,19 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, BrainCircuit, ShieldAlert } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AttackGraph } from "@/components/attack-graph/AttackGraph";
 import { GlassPanel, PageHeader } from "@/components/layout/PageHeader";
 import { IncidentTimeline } from "@/components/timeline/IncidentTimeline";
 import { IrisInvestigationPanel } from "@/components/iris/IrisInvestigationPanel";
 import IncidentTimeMachine3D from "@/components/ui/incident-time-machine-3d";
+import { TemporalCoreCube } from "@/components/ui/3d-animation";
 import { useDemo } from "@/context/DemoContext";
 import { cn } from "@/lib/utils";
 
 export function TimeMachineView() {
   const { incident, incidentState, currentTime, currentRisk } = useDemo();
+  const [viewMode, setViewMode] = useState<"cube" | "pipeline">("cube");
   const minute = incidentState.minute;
 
   // Dynamic blast radius calculation at this moment in time
@@ -95,9 +98,48 @@ export function TimeMachineView() {
         }
       />
 
-      {/* Interactive 3D Execution Pipeline Scene */}
-      <div className="my-6 h-[520px] w-full overflow-hidden rounded-2xl border border-cyan-glow/30 bg-card/40 shadow-glow">
-        <IncidentTimeMachine3D height="100%" />
+      {/* Interactive 3D Visualizer: Temporal Core Cube vs Pipeline */}
+      <div className="my-6 space-y-3">
+        <div className="flex items-center justify-between border-b border-border/40 pb-2">
+          <div className="flex items-center gap-2 font-mono text-xs text-muted-foreground uppercase tracking-wider">
+            <span className="size-2 rounded-full bg-cyan-signal animate-pulse" />
+            <span>Interactive 3D Visualizer</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant={viewMode === "cube" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setViewMode("cube")}
+              className="font-mono text-xs"
+            >
+              [ ◈ 3D TEMPORAL CORE CUBE ]
+            </Button>
+            <Button
+              variant={viewMode === "pipeline" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setViewMode("pipeline")}
+              className="font-mono text-xs"
+            >
+              [ ◈ 3D PIPELINE TOPOLOGY ]
+            </Button>
+          </div>
+        </div>
+
+        {viewMode === "cube" ? (
+          <TemporalCoreCube
+            incidentId={incident.id}
+            incidentTitle={incident.title}
+            minute={minute}
+            stage={incidentState.stage}
+            currentTime={currentTime}
+            currentRisk={currentRisk}
+            compromisedAssets={incidentState.compromisedAssetIds}
+          />
+        ) : (
+          <div className="h-[520px] w-full overflow-hidden rounded-2xl border border-cyan-glow/30 bg-card/40 shadow-glow">
+            <IncidentTimeMachine3D height="100%" />
+          </div>
+        )}
       </div>
 
       <IncidentTimeline />

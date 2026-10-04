@@ -9,7 +9,7 @@
   --radius-md: 2px;
   --radius-lg: 4px;
   --radius-xl: 6px;
-  
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -31,7 +31,7 @@
   --color-ring: var(--ring);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
-  
+
   /* Cyber Security Palette */
   --color-cyan-signal: var(--cyan-signal);
   --color-green-signal: var(--green-signal);
@@ -54,52 +54,52 @@
 :root,
 .dark {
   --radius: 0.25rem;
-  
+
   /* Deep SOC Base Palette */
   --base-black: #020609;
-  --base-navy: #050B12;
+  --base-navy: #050b12;
   --base-panel: #071018;
-  --base-elevated: #0A141D;
-  
+  --base-elevated: #0a141d;
+
   /* Applying Base Palette */
   --background: var(--base-black);
-  --foreground: #D3E0EA; /* Light blue-white */
-  
+  --foreground: #d3e0ea; /* Light blue-white */
+
   --card: var(--base-panel);
-  --card-foreground: #D3E0EA;
-  
+  --card-foreground: #d3e0ea;
+
   --popover: var(--base-elevated);
-  --popover-foreground: #D3E0EA;
-  
+  --popover-foreground: #d3e0ea;
+
   /* Cyan as accent */
-  --primary: #00E5FF;
+  --primary: #00e5ff;
   --primary-foreground: #020609;
-  
+
   --secondary: var(--base-navy);
-  --secondary-foreground: #8B9BB4; /* muted blue-gray */
-  
+  --secondary-foreground: #8b9bb4; /* muted blue-gray */
+
   --muted: var(--base-navy);
-  --muted-foreground: #60738A;
-  
-  --accent: #0A141D;
-  --accent-foreground: #00E5FF;
-  
-  --destructive: #FF2A2A;
-  --destructive-foreground: #FFFFFF;
-  
+  --muted-foreground: #60738a;
+
+  --accent: #0a141d;
+  --accent-foreground: #00e5ff;
+
+  --destructive: #ff2a2a;
+  --destructive-foreground: #ffffff;
+
   --border: #142733;
-  --input: #050B12;
-  --ring: #00E5FF;
-  
+  --input: #050b12;
+  --ring: #00e5ff;
+
   --sidebar: var(--base-black);
-  --sidebar-foreground: #D3E0EA;
-  
+  --sidebar-foreground: #d3e0ea;
+
   /* Cyber Signals */
-  --cyan-signal: #00E5FF;
-  --green-signal: #00FF66;
-  --threat: #FF2A2A;
-  --warning: #FFA600;
-  
+  --cyan-signal: #00e5ff;
+  --green-signal: #00ff66;
+  --threat: #ff2a2a;
+  --warning: #ffa600;
+
   /* Glows */
   --cyan-glow: rgba(0, 229, 255, 0.25);
   --threat-glow: rgba(255, 42, 42, 0.25);
@@ -121,14 +121,20 @@
     font-family: var(--font-sans);
     letter-spacing: 0.01em; /* Slight tech tracking */
     /* Add subtle grid background everywhere */
-    background-image: 
-      radial-gradient(circle at 50% 0%, rgba(0,229,255,0.03) 0%, transparent 60%),
+    background-image:
+      radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.03) 0%, transparent 60%),
       linear-gradient(var(--border) 1px, transparent 1px),
       linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 100% 100%, 60px 60px, 60px 60px;
-    background-position: 0 0, 0 0, 0 0;
+    background-size:
+      100% 100%,
+      60px 60px,
+      60px 60px;
+    background-position:
+      0 0,
+      0 0,
+      0 0;
   }
-  
+
   /* Scanline effect */
   body::after {
     content: "";
@@ -137,11 +143,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: linear-gradient(
-      to bottom,
-      transparent 50%,
-      rgba(0, 0, 0, 0.15) 50%
-    );
+    background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.15) 50%);
     background-size: 100% 4px;
     pointer-events: none;
     z-index: 9999;
@@ -157,8 +159,13 @@
     background: color-mix(in oklab, var(--primary) 35%, transparent);
     color: white;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
@@ -203,21 +210,44 @@
 
 /* Base animations */
 @keyframes pulse-ring {
-  0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(0, 229, 255, 0); }
-  100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
+  0% {
+    transform: scale(0.8);
+    box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(0, 229, 255, 0);
+  }
+  100% {
+    transform: scale(0.8);
+    box-shadow: 0 0 0 0 rgba(0, 229, 255, 0);
+  }
 }
 
 @keyframes threat-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(255, 42, 42, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(255, 42, 42, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 42, 42, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 42, 42, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 42, 42, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 42, 42, 0);
+  }
 }
 
 @keyframes cyber-scan {
-  0% { transform: translateY(-100%); opacity: 0; }
-  50% { opacity: 0.5; }
-  100% { transform: translateY(100%); opacity: 0; }
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
 }
 
 @utility animate-pulse-ring {
@@ -225,6 +255,85 @@
 }
 @utility animate-threat-pulse {
   animation: threat-pulse 2s infinite;
+}
+
+/* 3D Cube & Temporal Core Animations */
+@keyframes left {
+  100% {
+    margin-left: -54000px;
+  }
+}
+
+@keyframes back {
+  100% {
+    margin-left: -54870px;
+  }
+}
+
+@keyframes right {
+  100% {
+    margin-left: -55740px;
+  }
+}
+
+@keyframes filter-animation {
+  0%,
+  100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(100deg);
+  }
+}
+
+@keyframes zoom-in {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(2.5);
+  }
+}
+
+@keyframes blur {
+  0% {
+    filter: blur(0px);
+  }
+  100% {
+    filter: blur(3px);
+  }
+}
+
+@keyframes brightness {
+  0% {
+    filter: brightness(1) contrast(1);
+  }
+  100% {
+    filter: brightness(0.8) contrast(1.3);
+  }
+}
+
+@keyframes text-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  }
+}
+
+@keyframes temporal-cube-orbit {
+  0% {
+    transform: rotateX(-18deg) rotateY(0deg);
+  }
+  100% {
+    transform: rotateX(-18deg) rotateY(360deg);
+  }
+}
+
+@utility animate-cube-orbit {
+  animation: temporal-cube-orbit 32s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
