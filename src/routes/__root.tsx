@@ -124,20 +124,20 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AuthGuard>
-          <TelemetryProvider>
-            <DemoProvider>
-              {pathname === "/" ? (
-                <Outlet />
-              ) : (
+        <TelemetryProvider>
+          <DemoProvider>
+            {pathname === "/" ? (
+              <Outlet />
+            ) : (
+              <AuthGuard>
                 <AppShell>
                   <Outlet />
                 </AppShell>
-              )}
-              <IrisVoiceLauncher />
-            </DemoProvider>
-          </TelemetryProvider>
-        </AuthGuard>
+              </AuthGuard>
+            )}
+            <IrisVoiceLauncher />
+          </DemoProvider>
+        </TelemetryProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

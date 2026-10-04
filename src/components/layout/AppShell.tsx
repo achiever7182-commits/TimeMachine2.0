@@ -30,8 +30,17 @@ import {
 } from "@/components/ui/sheet";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useDemo } from "@/context/DemoContext";
+import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import { IrisCopilot } from "@/components/ai-copilot/IrisCopilot";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navItems = [
   { label: "Dashboard", to: "/dashboard", icon: Home },
@@ -81,6 +90,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
+  const { user, profile, signOut } = useAuth();
   const {
     demoStage,
     isAttackRunning,
@@ -186,9 +196,28 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Button variant="outline" size="icon" aria-label="Notifications">
                 <Bell className="size-4" />
               </Button>
-              <div className="grid size-9 place-items-center rounded-lg border border-border bg-card font-semibold">
-                SK
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="size-9 rounded-lg border border-border bg-card font-semibold hover:bg-secondary">
+                    {profile?.display_name?.substring(0, 2).toUpperCase() || user?.email?.substring(0, 2).toUpperCase() || "SK"}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{profile?.display_name || "User"}</p>
+                      <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/settings">Profile & Settings</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => signOut()}>
+                    Log out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </header>

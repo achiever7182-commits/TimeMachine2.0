@@ -315,6 +315,10 @@ export default function AirlockHero({
     video.addEventListener("loadeddata", onLoadedData);
     video.addEventListener("seeked", onSeeked);
 
+    if (video.readyState >= 2) {
+      onLoadedData();
+    }
+
     if (!reduceMotion) {
       if (window.scrollY <= section.offsetTop + 1) engageLock();
 
