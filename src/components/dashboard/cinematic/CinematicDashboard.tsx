@@ -89,7 +89,7 @@ function SceneDispatcher({ current }: { current: ChapterId }) {
 }
 
 export function CinematicDashboard({ onExit, className }: CinematicDashboardProps) {
-  const trackRef = useRef<HTMLDivElement | null>(null);
+  const trackRef = useRef<HTMLDivElement>(null!);
   const breakpoint = useBreakpoint();
   const reduced = useReducedMotionGate();
   const cinematicData = useCinematicData();

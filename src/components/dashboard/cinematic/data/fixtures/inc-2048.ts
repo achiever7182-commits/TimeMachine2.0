@@ -8,7 +8,7 @@ import type {
   CinematicFixture,
   ResponseOption,
   VerificationCheck,
-} from "./types";
+} from "../types";
 import { redactCommand } from "../redact";
 
 /**

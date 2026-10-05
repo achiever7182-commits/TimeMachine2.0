@@ -37,7 +37,7 @@ export interface StoryContextValue {
   scrollToChapter: ScrollToChapter;
   skip: SkipCinematic;
   skipped: boolean;
-  trackRef: React.RefObject<HTMLDivElement | null> | null;
+  trackRef: React.RefObject<HTMLDivElement> | null;
 }
 
 const StoryContext = createContext<StoryContextValue | undefined>(undefined);

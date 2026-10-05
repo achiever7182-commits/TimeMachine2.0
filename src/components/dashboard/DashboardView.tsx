@@ -19,7 +19,7 @@ import { SIMULATION_SPEEDS } from "@/services/simulationService";
 import { cn } from "@/lib/utils";
 
 const CINEMATIC_FLAG =
-  (import.meta.env?.VITE_ENABLE_CINEMATIC_DASHBOARD as string | undefined) ?? "true";
+  (import.meta.env["VITE_ENABLE_CINEMATIC_DASHBOARD"] as string | undefined) ?? "true";
 
 const LazyCinematicDashboard = lazy(() =>
   import("./cinematic").then((m) => ({

@@ -104,8 +104,9 @@ export function useCinematicData(): CinematicData {
       asOf,
     );
 
-    const attackPathSteps: AttackStep[] = fixture.attackSteps.filter((s, i) => {
+    const attackPathSteps: AttackStep[] = fixture.attackSteps.filter((s: AttackStep, i: number) => {
       const active = Math.ceil(progress * fixture.attackSteps.length);
+      void s;
       return i < Math.max(1, active);
     });
     const attackPath: Provenanced<AttackStep[]> = provenanced(
@@ -169,7 +170,7 @@ export function useCinematicData(): CinematicData {
 
     const responseOptions: ResponseOption[] = [...fixture.responseOptions];
     const verification: Provenanced<VerificationCheck[]> = provenanced(
-      fixture.verification.map((c) => ({ ...c })),
+      fixture.verification.map((c: VerificationCheck) => ({ ...c })),
       "demo",
       "fixture:inc-2048:verification",
       asOf,

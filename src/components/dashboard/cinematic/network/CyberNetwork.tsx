@@ -25,7 +25,7 @@ export function CyberNetwork({ frame, breakpoint, data }: CyberNetworkProps) {
     if (breakpoint === "mobile") return data.layouts.mobile;
     if (breakpoint === "tablet") return data.layouts.tablet;
     return data.layouts.desktop;
-  }, [breakpoint, data]);
+  }, [breakpoint, data.layouts.desktop, data.layouts.mobile, data.layouts.tablet]);
 
   const radius = breakpoint === "mobile" ? NODE_RADIUS_MOBILE : NODE_RADIUS_DESKTOP;
 
@@ -86,17 +86,17 @@ function PacketLayer({
   frame,
   theme,
 }: {
-  layout: ReturnType<CinematicData["layouts"][TmBreakpoint]["valueOf"]> extends infer T ? T : never;
+  layout: { nodes: { id: string; x: number; y: number }[]; edges: { id: string; from: string; to: string; kind: "normal" | "attack" | "blocked" }[] };
   frame: StoryFrame;
   theme: TmNetworkTheme;
 }) {
   void theme;
   const packets = useMemo(() => {
-    const attackEdges = layout.edges.filter((e) => e.kind !== "blocked").slice(0, 24);
+    const attackEdges = layout.edges.filter((e: { kind: "normal" | "attack" | "blocked" }) => e.kind !== "blocked").slice(0, 24);
     return attackEdges
-      .map((e, i) => {
-        const a = layout.nodes.find((n) => n.id === e.from);
-        const b = layout.nodes.find((n) => n.id === e.to);
+      .map((e: { id: string; from: string; to: string; kind: "normal" | "attack" | "blocked" }, i: number) => {
+        const a = layout.nodes.find((n: { id: string; x: number; y: number }) => n.id === e.from);
+        const b = layout.nodes.find((n: { id: string; x: number; y: number }) => n.id === e.to);
         if (!a || !b) return null;
         const basePhase =
           (i / attackEdges.length + frame.globalProgress * (frame.timeDirection === -1 ? -1 : 1)) %

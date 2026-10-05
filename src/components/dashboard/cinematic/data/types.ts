@@ -1,7 +1,13 @@
-import type { AttackStageId } from "./fixtures/inc-2048";
 import type { DataProvenance, Provenanced } from "./provenance";
 
-export type { AttackStageId };
+export type AttackStageId =
+  | "initial_access"
+  | "credential_access"
+  | "execution"
+  | "privilege_escalation"
+  | "lateral_movement"
+  | "collection"
+  | "impact";
 
 export interface AttackStep {
   id: string;
