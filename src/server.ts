@@ -44,9 +44,14 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+import { handleMockSupabaseRequest } from "./server/mockAuthHandler";
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const mockResponse = await handleMockSupabaseRequest(request);
+      if (mockResponse) return mockResponse;
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
