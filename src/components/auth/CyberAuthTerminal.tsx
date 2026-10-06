@@ -497,6 +497,23 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                     )}
                   </span>
                 </button>
+
+                {/* Instant Demo Operator Access Button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEnteringApp(true);
+                    if (onSuccess) {
+                      setTimeout(() => {
+                        onSuccess();
+                      }, 300);
+                    }
+                  }}
+                  className="w-full rounded border border-cyan-500/30 bg-cyan-950/20 py-2.5 font-mono text-xs font-semibold tracking-wider text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 transition-all flex items-center justify-center gap-2"
+                >
+                  <Activity className="size-3.5 text-cyan-400 animate-pulse" />
+                  <span>[ LAUNCH INSTANT DEMO SESSION ]</span>
+                </button>
               </form>
 
               {/* Mode Toggle Secondary Actions */}

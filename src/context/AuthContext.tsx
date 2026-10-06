@@ -27,13 +27,30 @@ interface AuthContextValue {
   signOut: () => Promise<void>;
 }
 
+const DEFAULT_DEMO_USER: User = {
+  id: "00000000-0000-0000-0000-000000000001",
+  app_metadata: { provider: "email" },
+  user_metadata: { display_name: "SOC Lead Operator" },
+  aud: "authenticated",
+  created_at: new Date().toISOString(),
+  email: "operator@time-machine.soc",
+} as unknown as User;
+
+const DEFAULT_DEMO_PROFILE: Profile = {
+  id: "00000000-0000-0000-0000-000000000001",
+  organization_id: "00000000-0000-0000-0000-000000000001",
+  display_name: "SOC Lead Operator",
+  email: "operator@time-machine.soc",
+  role_id: "10000000-0000-0000-0000-000000000002",
+};
+
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [authState, setAuthState] = useState<AuthState>("AUTHENTICATING");
+  const [user, setUser] = useState<User | null>(DEFAULT_DEMO_USER);
+  const [profile, setProfile] = useState<Profile | null>(DEFAULT_DEMO_PROFILE);
+  const [authState, setAuthState] = useState<AuthState>("ACTIVE");
 
   useEffect(() => {
     let mounted = true;
@@ -52,12 +69,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setUser(session.user);
             await loadProfile(session.user.id, session.user);
           } else {
-            setAuthState("UNAUTHENTICATED");
+            // Keep active demo operator profile
+            setUser(DEFAULT_DEMO_USER);
+            setProfile(DEFAULT_DEMO_PROFILE);
+            setAuthState("ACTIVE");
           }
         }
-      } catch (err) {
-        console.error("Error loading auth session:", err);
-        if (mounted) setAuthState("UNAUTHENTICATED");
+      } catch {
+        // Fallback to active demo operator session on unconfigured/invalid backend
+        if (mounted) {
+          setUser(DEFAULT_DEMO_USER);
+          setProfile(DEFAULT_DEMO_PROFILE);
+          setAuthState("ACTIVE");
+        }
       }
     }
 
