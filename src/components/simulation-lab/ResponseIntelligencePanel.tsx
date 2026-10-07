@@ -104,7 +104,7 @@ export function ResponseIntelligencePanel() {
             onClick={() => setResponseMode("AUTO_SIMULATE")}
             className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-medium transition-all ${
               responseMode === "AUTO_SIMULATE"
-                ? "bg-purple-600 text-white font-bold shadow-sm"
+                ? "bg-blue-600 text-white font-bold shadow-sm shadow-blue-500/20"
                 : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -233,10 +233,10 @@ export function ResponseIntelligencePanel() {
 
       {/* Auto-Simulate Mode View */}
       {responseMode === "AUTO_SIMULATE" && (
-        <div className="rounded-xl border border-purple-500/40 bg-purple-500/5 p-4.5 space-y-4">
+        <div className="rounded-xl border border-blue-500/40 bg-blue-500/5 p-4.5 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <span className="flex items-center gap-1 rounded bg-purple-500/20 px-2 py-0.5 font-mono text-[10px] font-bold text-purple-300 border border-purple-500/40 w-fit">
+              <span className="flex items-center gap-1 rounded bg-blue-500/20 px-2 py-0.5 font-mono text-[10px] font-bold text-blue-300 border border-blue-500/40 w-fit">
                 <Zap className="size-3" /> AUTONOMOUS SIMULATED REMEDIATION
               </span>
               <h3 className="text-base font-bold text-foreground mt-1">
@@ -251,7 +251,7 @@ export function ResponseIntelligencePanel() {
             <button
               type="button"
               onClick={() => setShowAutoConfirmModal(true)}
-              className="flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 font-mono text-xs font-bold text-white hover:bg-purple-500 transition-colors shadow-glow"
+              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 font-mono text-xs font-bold text-white hover:bg-blue-500 transition-colors shadow-sm shadow-blue-500/20"
             >
               <Zap className="size-3.5" />
               <span>RUN AUTO-SIMULATE</span>
@@ -259,9 +259,9 @@ export function ResponseIntelligencePanel() {
           </div>
 
           {responseDecision?.mode === "AUTO_SIMULATE" && (
-            <div className="rounded-lg border border-purple-500/30 bg-background/60 p-3.5 space-y-2 text-xs">
+            <div className="rounded-lg border border-blue-500/30 bg-background/60 p-3.5 space-y-2 text-xs">
               <div className="flex items-center justify-between font-mono text-[11px]">
-                <span className="text-purple-300 font-bold flex items-center gap-1.5">
+                <span className="text-blue-300 font-bold flex items-center gap-1.5">
                   <CheckCircle2 className="size-3.5 text-emerald-400" />
                   AUTONOMOUS EXECUTION COMPLETED (SIMULATION ONLY)
                 </span>
@@ -273,7 +273,7 @@ export function ResponseIntelligencePanel() {
                   {responseDecision.selectedAction.label}
                 </strong>{" "}
                 on target{" "}
-                <strong className="font-mono text-purple-300">{responseDecision.target}</strong>.
+                <strong className="font-mono text-blue-300">{responseDecision.target}</strong>.
               </p>
               <p className="text-muted-foreground text-[11px]">
                 Simulated Branch ID:{" "}
@@ -401,8 +401,8 @@ export function ResponseIntelligencePanel() {
       {/* Confirmation Modal for Autonomous Simulation */}
       {showAutoConfirmModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-xl border border-purple-500/50 bg-card p-5 shadow-2xl space-y-4">
-            <div className="flex items-center gap-3 text-purple-400">
+          <div className="w-full max-w-md rounded-xl border border-blue-500/50 bg-card p-5 shadow-2xl space-y-4">
+            <div className="flex items-center gap-3 text-blue-400">
               <Zap className="size-6" />
               <h3 className="text-base font-bold text-foreground">
                 Confirm Autonomous Simulated Response
@@ -434,7 +434,7 @@ export function ResponseIntelligencePanel() {
                   setShowAutoConfirmModal(false);
                   autoSimulateResponse();
                 }}
-                className="rounded-lg bg-purple-600 px-4 py-1.5 font-mono text-xs font-bold text-white hover:bg-purple-500 shadow-glow"
+                className="rounded-lg bg-blue-600 px-4 py-1.5 font-mono text-xs font-bold text-white hover:bg-blue-500 shadow-sm shadow-blue-500/20"
               >
                 Confirm & Auto-Simulate
               </button>

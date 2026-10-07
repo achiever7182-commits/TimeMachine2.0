@@ -118,7 +118,7 @@ export function ReportView() {
                   reportStatus === "FINAL"
                     ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                     : reportStatus === "ARCHIVED"
-                      ? "bg-purple-500/20 text-purple-300 border border-purple-500/30"
+                      ? "bg-blue-500/20 text-blue-300 border border-blue-500/30"
                       : "bg-amber-500/20 text-amber-400 border border-amber-500/30"
                 }`}
               >
@@ -197,7 +197,7 @@ export function ReportView() {
                   variant="outline"
                   size="sm"
                   onClick={handleArchive}
-                  className="font-mono text-xs gap-1.5 border-purple-500/40 text-purple-300 hover:bg-purple-500/10"
+                  className="font-mono text-xs gap-1.5 border-blue-500/40 text-blue-300 hover:bg-blue-500/10"
                 >
                   <Archive className="size-3.5" />
                   Archive

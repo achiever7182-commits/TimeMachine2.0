@@ -983,10 +983,10 @@ export function SettingsView() {
               </Label>
               <div className="grid grid-cols-2 gap-2 font-mono text-xs">
                 {[
-                  { id: "cyan", name: "Cyan Signal", border: "border-cyan-400", color: "bg-cyan-400" },
-                  { id: "matrix", name: "Matrix Emerald", border: "border-emerald-400", color: "bg-emerald-400" },
+                  { id: "cyan", name: "Ice Cyan", border: "border-cyan-400", color: "bg-cyan-400" },
+                  { id: "blue", name: "Electric Blue", border: "border-blue-400", color: "bg-blue-400" },
+                  { id: "matrix", name: "Secure Emerald", border: "border-emerald-400", color: "bg-emerald-400" },
                   { id: "amber", name: "Tactical Amber", border: "border-amber-400", color: "bg-amber-400" },
-                  { id: "obsidian", name: "Void Obsidian", border: "border-purple-400", color: "bg-purple-400" },
                 ].map((t) => (
                   <button
                     key={t.id}

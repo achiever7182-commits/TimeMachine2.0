@@ -32,35 +32,35 @@ export function IncidentsView() {
     switch (severity?.toUpperCase()) {
       case "CRITICAL":
         return {
-          border: "border-[#FF2638]",
-          bg: "bg-[#FF2638]/15",
-          text: "text-[#FF2638]",
-          shadow: "shadow-[0_0_12px_rgba(255,38,56,0.25)]",
-          glow: "border-l-4 border-l-[#FF2638]",
+          border: "border-[#FF3045]",
+          bg: "bg-[#FF3045]/15",
+          text: "text-[#FF3045]",
+          shadow: "shadow-[0_0_12px_rgba(255,48,69,0.20)]",
+          glow: "border-l-4 border-l-[#FF3045]",
         };
       case "HIGH":
         return {
-          border: "border-[#FFB000]",
-          bg: "bg-[#FFB000]/15",
-          text: "text-[#FFB000]",
-          shadow: "shadow-[0_0_12px_rgba(255,176,0,0.2)]",
-          glow: "border-l-4 border-l-[#FFB000]",
+          border: "border-[#FFB020]",
+          bg: "bg-[#FFB020]/15",
+          text: "text-[#FFB020]",
+          shadow: "shadow-[0_0_12px_rgba(255,176,32,0.15)]",
+          glow: "border-l-4 border-l-[#FFB020]",
         };
       case "MEDIUM":
         return {
-          border: "border-[#1683FF]",
-          bg: "bg-[#1683FF]/15",
-          text: "text-[#1683FF]",
-          shadow: "shadow-[0_0_12px_rgba(22,131,255,0.2)]",
-          glow: "border-l-4 border-l-[#1683FF]",
+          border: "border-[#3B82F6]",
+          bg: "bg-[#3B82F6]/15",
+          text: "text-[#3B82F6]",
+          shadow: "shadow-[0_0_12px_rgba(59,130,246,0.15)]",
+          glow: "border-l-4 border-l-[#3B82F6]",
         };
       default:
         return {
-          border: "border-[#00FF88]",
-          bg: "bg-[#00FF88]/15",
-          text: "text-[#00FF88]",
-          shadow: "shadow-[0_0_12px_rgba(0,255,136,0.2)]",
-          glow: "border-l-4 border-l-[#00FF88]",
+          border: "border-[#20E3A2]",
+          bg: "bg-[#20E3A2]/15",
+          text: "text-[#20E3A2]",
+          shadow: "shadow-[0_0_12px_rgba(32,227,162,0.15)]",
+          glow: "border-l-4 border-l-[#20E3A2]",
         };
     }
   };
@@ -80,15 +80,15 @@ export function IncidentsView() {
     <div className="mx-auto max-w-7xl space-y-6 font-sans">
       
       {/* HEADER: MILITARY INCIDENT INTELLIGENCE CONSOLE */}
-      <div className="flex flex-col gap-4 border-b border-[#0D1B24] pb-5 md:flex-row md:items-end md:justify-between">
+      <div className="flex flex-col gap-4 border-b border-[#1A2730] pb-5 md:flex-row md:items-end md:justify-between">
         <div>
-          <div className="flex items-center gap-2 mb-1.5 font-mono text-[10px] text-[#00E5FF] tracking-[0.25em] uppercase">
-            <ShieldAlert className="size-3.5 text-[#FF2638] animate-pulse" />
+          <div className="flex items-center gap-2 mb-1.5 font-mono text-[10px] text-[#19E6FF] tracking-[0.2em] uppercase">
+            <ShieldAlert className="size-3.5 text-[#FF3045] animate-pulse" />
             <span>GLOBAL THREAT SURVEILLANCE // ACTIVE INCIDENT QUEUE</span>
           </div>
-          <h1 className="font-mono text-2xl font-black uppercase tracking-wider text-[#E8F7FF] flex items-center gap-3">
+          <h1 className="font-mono text-2xl font-black uppercase tracking-wider text-[#F2F7FA] flex items-center gap-3">
             INCIDENT COMMAND DOSSIERS
-            <span className="text-[11px] font-mono font-normal px-2 py-0.5 border border-[#FF2638]/40 bg-[#FF2638]/10 text-[#FF2638]">
+            <span className="text-[11px] font-mono font-normal px-2 py-0.5 border border-[#FF3045]/40 bg-[#FF3045]/10 text-[#FF3045] rounded-[2px]">
               01 CRITICAL ACTIVE
             </span>
           </h1>
@@ -96,21 +96,21 @@ export function IncidentsView() {
         
         {/* Metric Strips */}
         <div className="flex flex-wrap gap-2.5 font-mono text-[9.5px]">
-          <div className="border border-[#0D1B24] bg-[#071017] px-3.5 py-1.5 min-w-[90px]">
-            <span className="text-[#6F8A99] block text-[8px]">TOTAL QUEUE</span>
-            <span className="text-base font-bold text-[#E8F7FF]">{incidents.length.toString().padStart(2, "0")}</span>
+          <div className="border border-[#1A2730] bg-[#0B1117] px-3.5 py-1.5 min-w-[90px] rounded-[3px]">
+            <span className="text-[#6F9AAA] block text-[8px]">TOTAL QUEUE</span>
+            <span className="text-base font-bold text-[#F2F7FA]">{incidents.length.toString().padStart(2, "0")}</span>
           </div>
-          <div className="border border-[#FF2638]/50 bg-[#FF2638]/10 px-3.5 py-1.5 min-w-[90px] shadow-[0_0_12px_rgba(255,38,56,0.15)]">
-            <span className="text-[#FF2638] block text-[8px]">CRITICAL</span>
-            <span className="text-base font-bold text-[#FF2638]">01</span>
+          <div className="border border-[#FF3045]/50 bg-[#FF3045]/10 px-3.5 py-1.5 min-w-[90px] rounded-[3px] shadow-[0_0_12px_rgba(255,48,69,0.15)]">
+            <span className="text-[#FF3045] block text-[8px]">CRITICAL</span>
+            <span className="text-base font-bold text-[#FF3045]">01</span>
           </div>
-          <div className="border border-[#FFB000]/40 bg-[#FFB000]/10 px-3.5 py-1.5 min-w-[90px]">
-            <span className="text-[#FFB000] block text-[8px]">HIGH SEVERITY</span>
-            <span className="text-base font-bold text-[#FFB000]">02</span>
+          <div className="border border-[#FFB020]/40 bg-[#FFB020]/10 px-3.5 py-1.5 min-w-[90px] rounded-[3px]">
+            <span className="text-[#FFB020] block text-[8px]">HIGH SEVERITY</span>
+            <span className="text-base font-bold text-[#FFB020]">02</span>
           </div>
-          <div className="border border-[#00E5FF]/40 bg-[#00E5FF]/10 px-3.5 py-1.5 min-w-[90px]">
-            <span className="text-[#00E5FF] block text-[8px]">RECONSTRUCTED</span>
-            <span className="text-base font-bold text-[#00E5FF]">100%</span>
+          <div className="border border-[#19E6FF]/40 bg-[#19E6FF]/10 px-3.5 py-1.5 min-w-[90px] rounded-[3px]">
+            <span className="text-[#19E6FF] block text-[8px]">RECONSTRUCTED</span>
+            <span className="text-base font-bold text-[#19E6FF]">100%</span>
           </div>
         </div>
       </div>
@@ -123,15 +123,15 @@ export function IncidentsView() {
       >
         <div className="space-y-6">
           {/* Top Bar inside Dossier */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#0D1B24] pb-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#1A2730] pb-4">
             <div>
-              <div className="flex items-center gap-2 font-mono text-[10px] text-[#6F8A99] mb-1">
-                <span className="text-[#00E5FF]">&gt; ROOT ANOMALY CLASSIFICATION:</span>
-                <span className="text-[#E8F7FF] font-bold">{selectedIncident.id}</span>
+              <div className="flex items-center gap-2 font-mono text-[10px] text-[#6F9AAA] mb-1">
+                <span className="text-[#19E6FF]">&gt; ROOT ANOMALY CLASSIFICATION:</span>
+                <span className="text-[#F2F7FA] font-bold">{selectedIncident.id}</span>
                 <span>//</span>
-                <span className="text-[#FFB000]">CONFIDENCE: 94%</span>
+                <span className="text-[#FFB020]">CONFIDENCE: 94%</span>
               </div>
-              <h2 className="text-lg font-bold font-mono text-[#E8F7FF] uppercase tracking-wide">
+              <h2 className="text-lg font-bold font-mono text-[#F2F7FA] uppercase tracking-wide">
                 {selectedIncident.title}
               </h2>
             </div>
@@ -140,7 +140,7 @@ export function IncidentsView() {
               <Button
                 asChild
                 size="sm"
-                className="rounded-none bg-[#00E5FF] text-[#03070B] hover:bg-[#00E5FF]/90 font-bold text-[11px] h-8 cursor-pointer shadow-[0_0_12px_rgba(0,229,255,0.4)]"
+                className="rounded-[3px] bg-[#19E6FF]/10 text-[#19E6FF] border border-[#19E6FF]/40 hover:bg-[#19E6FF] hover:text-[#05080C] font-bold text-[11px] h-8 cursor-pointer shadow-[0_0_12px_rgba(25,230,255,0.15)]"
               >
                 <Link to="/time-machine">
                   ◀ RECONSTRUCT INCIDENT
@@ -150,7 +150,7 @@ export function IncidentsView() {
                 asChild
                 size="sm"
                 variant="outline"
-                className="rounded-none border-[#1683FF]/40 bg-[#071017] text-[#00E5FF] hover:bg-[#1683FF]/20 font-bold text-[11px] h-8 cursor-pointer"
+                className="rounded-[3px] border-[#3B82F6]/40 bg-[#0B1117] text-[#3B82F6] hover:bg-[#3B82F6]/20 font-bold text-[11px] h-8 cursor-pointer"
               >
                 <Link to="/simulation-lab">
                   ⚡ SIMULATE RESPONSE
@@ -160,7 +160,7 @@ export function IncidentsView() {
                 asChild
                 size="sm"
                 variant="outline"
-                className="rounded-none border-[#0D1B24] bg-transparent text-[#6F8A99] hover:text-[#E8F7FF] hover:border-[#00E5FF]/40 text-[11px] h-8 cursor-pointer"
+                className="rounded-[3px] border-[#1A2730] bg-transparent text-[#A6B6C2] hover:text-[#F2F7FA] hover:border-[#19E6FF]/40 text-[11px] h-8 cursor-pointer"
               >
                 <Link to="/attack-graph">
                   VIEW ATTACK GRAPH →
@@ -171,57 +171,57 @@ export function IncidentsView() {
 
           {/* Dossier Forensic Metrics Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 font-mono text-xs">
-            <div className="border border-[#0D1B24] bg-[#071017] p-3">
-              <span className="text-[9px] text-[#6F8A99] uppercase block mb-1">FIRST OBSERVED</span>
-              <div className="font-bold text-[#E8F7FF] flex items-center gap-2">
-                <Clock className="size-3.5 text-[#00E5FF]" />
+            <div className="border border-[#1A2730] bg-[#0B1117] p-3 rounded-[3px]">
+              <span className="text-[9px] text-[#6F9AAA] uppercase block mb-1">FIRST OBSERVED</span>
+              <div className="font-bold text-[#F2F7FA] flex items-center gap-2">
+                <Clock className="size-3.5 text-[#19E6FF]" />
                 {isTargetSelected ? currentTime : selectedIncident.detectedAt || "10:21:04 UTC"}
               </div>
             </div>
 
-            <div className="border border-[#0D1B24] bg-[#071017] p-3">
-              <span className="text-[9px] text-[#6F8A99] uppercase block mb-1">ATTACK VECTOR</span>
-              <div className="font-bold text-[#FFB000] truncate">
+            <div className="border border-[#1A2730] bg-[#0B1117] p-3 rounded-[3px]">
+              <span className="text-[9px] text-[#6F9AAA] uppercase block mb-1">ATTACK VECTOR</span>
+              <div className="font-bold text-[#FFB020] truncate">
                 {selectedMitre.vector}
               </div>
             </div>
 
-            <div className="border border-[#0D1B24] bg-[#071017] p-3">
-              <span className="text-[9px] text-[#6F8A99] uppercase block mb-1">MITRE ATT&CK ID</span>
-              <div className="font-bold text-[#00E5FF]">
+            <div className="border border-[#1A2730] bg-[#0B1117] p-3 rounded-[3px]">
+              <span className="text-[9px] text-[#6F9AAA] uppercase block mb-1">MITRE ATT&CK ID</span>
+              <div className="font-bold text-[#19E6FF]">
                 {selectedMitre.code}
               </div>
             </div>
 
-            <div className="border border-[#0D1B24] bg-[#071017] p-3">
-              <span className="text-[9px] text-[#6F8A99] uppercase block mb-1">AFFECTED ASSETS</span>
-              <div className="font-bold text-[#FF2638] flex items-center gap-2">
-                <Server className="size-3.5 text-[#FF2638]" />
+            <div className="border border-[#1A2730] bg-[#0B1117] p-3 rounded-[3px]">
+              <span className="text-[9px] text-[#6F9AAA] uppercase block mb-1">AFFECTED ASSETS</span>
+              <div className="font-bold text-[#FF3045] flex items-center gap-2">
+                <Server className="size-3.5 text-[#FF3045]" />
                 {isTargetSelected ? affectedAssets.length : (selectedIncident.affectedAssets || 4)} HOSTS COMPROMISED
               </div>
             </div>
           </div>
 
           {/* Attack Progression Kill-chain */}
-          <div className="border border-[#0D1B24] bg-[#03070B] p-4 font-mono">
+          <div className="border border-[#1A2730] bg-[#05080C] p-4 font-mono rounded-[3px]">
             <div className="flex items-center justify-between text-xs mb-2">
-              <span className="text-[#6F8A99] text-[10px] uppercase font-bold flex items-center gap-2">
-                <Activity className="size-3 text-[#FF2638] animate-pulse" />
+              <span className="text-[#6F9AAA] text-[10px] uppercase font-bold flex items-center gap-2">
+                <Activity className="size-3 text-[#FF3045] animate-pulse" />
                 ATTACK PROGRESSION MATRIX
               </span>
-              <span className="text-[#FF2638] font-bold">
+              <span className="text-[#FF3045] font-bold">
                 {isTargetSelected ? "87% KILL-CHAIN SATURATION" : "42% ISOLATED"}
               </span>
             </div>
             
             {/* Custom Cyber Progression Bar */}
-            <div className="relative h-4 bg-[#071017] border border-[#0D1B24] p-0.5 overflow-hidden">
+            <div className="relative h-4 bg-[#0B1117] border border-[#1A2730] p-0.5 overflow-hidden rounded-[2px]">
               <div
-                className="h-full bg-gradient-to-r from-[#FFB000] via-[#FF2638] to-[#FF2638] shadow-[0_0_12px_#FF2638] transition-all duration-500"
+                className="h-full bg-gradient-to-r from-[#FFB020] via-[#FF3045] to-[#FF3045] shadow-[0_0_12px_rgba(255,48,69,0.4)] transition-all duration-500"
                 style={{ width: isTargetSelected ? "87%" : "42%" }}
               />
             </div>
-            <div className="mt-2 text-[9px] text-[#6F8A99] flex justify-between">
+            <div className="mt-2 text-[9px] text-[#667783] flex justify-between">
               <span>INITIAL ACCESS (T1110)</span>
               <span>EXECUTION (T1059)</span>
               <span>LATERAL MOVEMENT (T1021)</span>
@@ -232,19 +232,19 @@ export function IncidentsView() {
           {/* Description & Asset Tags */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 font-mono text-xs">
             <div className="lg:col-span-2 space-y-2">
-              <div className="text-[10px] text-[#6F8A99] uppercase font-bold">&gt; FORENSIC EXECUTIVE SUMMARY:</div>
-              <p className="font-mono text-xs text-[#6F8A99] leading-relaxed bg-[#071017] p-3.5 border border-[#0D1B24]">
+              <div className="text-[10px] text-[#6F9AAA] uppercase font-bold">&gt; FORENSIC EXECUTIVE SUMMARY:</div>
+              <p className="font-mono text-xs text-[#A6B6C2] leading-relaxed bg-[#0B1117] p-3.5 border border-[#1A2730] rounded-[3px]">
                 {selectedIncident.description || selectedIncident.summary || "High-risk temporal threat event detected across primary subnet nodes. Attack pattern demonstrates automated credential stuffing followed by privilege escalation."}
               </p>
             </div>
 
             <div className="space-y-2">
-              <div className="text-[10px] text-[#6F8A99] uppercase font-bold">&gt; COMPROMISED IDENTIFIERS:</div>
+              <div className="text-[10px] text-[#6F9AAA] uppercase font-bold">&gt; COMPROMISED IDENTIFIERS:</div>
               <div className="flex flex-wrap gap-1.5">
                 {(isTargetSelected ? affectedAssets : ["HOST-ACME-WS01", "10.24.17.82", "analyst01", "PID:4812"]).map((tag) => (
                   <span
                     key={tag}
-                    className="border border-[#FF2638]/40 bg-[#FF2638]/10 text-[#FF2638] px-2 py-1 text-[10px] font-bold"
+                    className="border border-[#FF3045]/40 bg-[#FF3045]/10 text-[#FF3045] px-2 py-1 text-[10px] font-bold rounded-[2px]"
                   >
                     [{tag}]
                   </span>
@@ -256,19 +256,19 @@ export function IncidentsView() {
       </CyberPanel>
 
       {/* SEARCH & FILTER HUD */}
-      <div className="flex items-center justify-between gap-4 border border-[#0D1B24] bg-[#050A0F] p-2 font-mono">
+      <div className="flex items-center justify-between gap-4 border border-[#1A2730] bg-[#080D12] p-2 font-mono rounded-[3px]">
         <div className="flex flex-1 items-center gap-2">
-          <Search className="size-4 text-[#6F8A99]" />
+          <Search className="size-4 text-[#6F9AAA]" />
           <Input
             placeholder="FILTER BY INCIDENT ID, MITRE CODE (T1059), HOST OR HASH..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="border-0 bg-transparent shadow-none font-mono text-xs text-[#E8F7FF] placeholder:text-[#6F8A99]/40 focus-visible:ring-0 uppercase h-8"
+            className="border-0 bg-transparent shadow-none font-mono text-xs text-[#F2F7FA] placeholder:text-[#667783] focus-visible:ring-0 uppercase h-8"
           />
         </div>
-        <div className="hidden sm:flex items-center gap-2 text-[10px] text-[#6F8A99]">
+        <div className="hidden sm:flex items-center gap-2 text-[10px] text-[#6F9AAA]">
           <span>STATUS:</span>
-          <span className="text-[#00E5FF] font-bold">AUTO-SYNC ACTIVE</span>
+          <span className="text-[#19E6FF] font-bold">AUTO-SYNC ACTIVE</span>
         </div>
       </div>
 
@@ -286,33 +286,33 @@ export function IncidentsView() {
               key={display.id}
               onClick={() => setSelectedIncidentId(display.id)}
               className={cn(
-                "group relative border bg-[#050A0F] p-4 transition-all duration-150 cursor-pointer",
+                "group relative border bg-[#080D12] p-4 transition-all duration-150 cursor-pointer rounded-[3px]",
                 isSelected
-                  ? "border-[#00E5FF] bg-[#071017] shadow-[0_0_15px_rgba(0,229,255,0.1)] border-l-4 border-l-[#00E5FF]"
-                  : "border-[#0D1B24] hover:border-[#1683FF]/40 hover:bg-[#071017]/80",
+                  ? "border-[#19E6FF] bg-[#0B1117] shadow-[0_0_12px_rgba(25,230,255,0.12)] border-l-4 border-l-[#19E6FF]"
+                  : "border-[#1A2730] hover:border-[#3B82F6]/40 hover:bg-[#0B1117]/80",
               )}
             >
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 {/* Left Identity */}
                 <div className="flex items-start sm:items-center gap-3.5">
-                  <div className={cn("px-2.5 py-1 text-[11px] font-bold border", badgeStyle.border, badgeStyle.bg, badgeStyle.text)}>
+                  <div className={cn("px-2.5 py-1 text-[11px] font-bold border rounded-[2px]", badgeStyle.border, badgeStyle.bg, badgeStyle.text)}>
                     {display.id}
                   </div>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-bold text-sm text-[#E8F7FF] uppercase tracking-wide group-hover:text-[#00E5FF] transition-colors">
+                      <h3 className="font-bold text-sm text-[#F2F7FA] uppercase tracking-wide group-hover:text-[#19E6FF] transition-colors">
                         {display.title}
                       </h3>
-                      <span className={cn("text-[9px] px-1.5 py-0.2 border", badgeStyle.border, badgeStyle.text)}>
+                      <span className={cn("text-[9px] px-1.5 py-0.2 border rounded-[2px]", badgeStyle.border, badgeStyle.text)}>
                         {isTarget ? currentRisk : display.severity}
                       </span>
                     </div>
-                    <div className="mt-1 flex flex-wrap items-center gap-3 text-[10px] text-[#6F8A99]">
-                      <span>VECTOR: <span className="text-[#E8F7FF]">{mitre.vector}</span></span>
+                    <div className="mt-1 flex flex-wrap items-center gap-3 text-[10px] text-[#667783]">
+                      <span>VECTOR: <span className="text-[#F2F7FA]">{mitre.vector}</span></span>
                       <span>•</span>
-                      <span>MITRE: <span className="text-[#00E5FF]">{mitre.code}</span></span>
+                      <span>MITRE: <span className="text-[#19E6FF]">{mitre.code}</span></span>
                       <span>•</span>
-                      <span>DETECTED: <span className="text-[#E8F7FF]">{display.detectedAgo || "LIVE TELEMETRY"}</span></span>
+                      <span>DETECTED: <span className="text-[#F2F7FA]">{display.detectedAgo || "LIVE TELEMETRY"}</span></span>
                     </div>
                   </div>
                 </div>
@@ -320,13 +320,13 @@ export function IncidentsView() {
                 {/* Right Actions */}
                 <div className="flex items-center gap-3 self-end lg:self-auto">
                   <div className="text-right hidden sm:block">
-                    <span className="text-[9px] text-[#6F8A99] block">AFFECTED NODES</span>
-                    <span className="text-xs font-bold text-[#E8F7FF]">{display.affectedAssets || 1} HOSTS</span>
+                    <span className="text-[9px] text-[#6F9AAA] block">AFFECTED NODES</span>
+                    <span className="text-xs font-bold text-[#F2F7FA]">{display.affectedAssets || 1} HOSTS</span>
                   </div>
                   <Button
                     size="sm"
                     variant="outline"
-                    className="h-7 text-[10px] font-mono border-[#0D1B24] bg-[#03070B] text-[#00E5FF] hover:border-[#00E5FF]/40 hover:bg-[#00E5FF]/10 rounded-none cursor-pointer"
+                    className="h-7 text-[10px] font-mono border-[#1A2730] bg-[#05080C] text-[#19E6FF] hover:border-[#19E6FF]/40 hover:bg-[#19E6FF]/10 rounded-[3px] cursor-pointer"
                   >
                     INSPECT DOSSIER &gt;
                   </Button>

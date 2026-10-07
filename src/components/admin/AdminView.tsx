@@ -57,9 +57,9 @@ const ROLE_COLORS: Record<UserRole, { badge: string; text: string; border: strin
     border: "border-cyan-500/30",
   },
   "Forensics Analyst": {
-    badge: "bg-purple-500/10 text-purple-300 border-purple-500/30",
-    text: "text-purple-300",
-    border: "border-purple-500/30",
+    badge: "bg-blue-500/10 text-blue-300 border-blue-500/30",
+    text: "text-blue-300",
+    border: "border-blue-500/30",
   },
   "Incident Responder": {
     badge: "bg-amber-500/10 text-amber-300 border-amber-500/30",
@@ -805,7 +805,7 @@ export function AdminView() {
                               onClick={() => handleOpenResetKey(u)}
                               className="cursor-pointer"
                             >
-                              <KeyRound className="mr-2 size-3.5 text-purple-400" />
+                              <KeyRound className="mr-2 size-3.5 text-blue-400" />
                               <span>Reset Access Key</span>
                             </DropdownMenuItem>
 
@@ -1069,7 +1069,7 @@ export function AdminView() {
         <DialogContent className="border-border bg-sidebar font-mono text-xs sm:max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-sm font-bold uppercase text-foreground">
-              <KeyRound className="size-4 text-purple-400" />
+              <KeyRound className="size-4 text-blue-400" />
               RESET OPERATOR ACCESS KEY
             </DialogTitle>
             <DialogDescription className="text-xs text-muted-foreground">
@@ -1103,7 +1103,7 @@ export function AdminView() {
               </Button>
               <Button
                 type="submit"
-                className="bg-purple-500 text-white hover:bg-purple-400 font-bold rounded text-xs"
+                className="bg-blue-600 text-white hover:bg-blue-500 font-bold rounded text-xs"
               >
                 UPDATE KEY
               </Button>

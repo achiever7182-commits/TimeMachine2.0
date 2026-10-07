@@ -60,33 +60,33 @@ export function TemporalConsole() {
   const speeds = [1, 2, 5, 10];
 
   return (
-    <div className="relative rounded border border-cyan-500/40 bg-[#04080D] p-4 font-mono shadow-[0_0_30px_rgba(0,229,255,0.06)]">
+    <div className="relative rounded-[2px] border border-[#1A2730] bg-[#0B1117] p-4 font-mono shadow-[0_0_20px_rgba(25,230,255,0.05)]">
       {/* Corner crosshairs */}
-      <div className="absolute -left-[1px] -top-[1px] size-2 border-l border-t border-cyan-400" />
-      <div className="absolute -right-[1px] -top-[1px] size-2 border-r border-t border-cyan-400" />
-      <div className="absolute -bottom-[1px] -left-[1px] size-2 border-b border-l border-cyan-400" />
-      <div className="absolute -bottom-[1px] -right-[1px] size-2 border-b border-r border-cyan-400" />
+      <div className="absolute -left-[1px] -top-[1px] size-1.5 border-l border-t border-[#19E6FF]/70 pointer-events-none" />
+      <div className="absolute -right-[1px] -top-[1px] size-1.5 border-r border-t border-[#19E6FF]/70 pointer-events-none" />
+      <div className="absolute -bottom-[1px] -left-[1px] size-1.5 border-b border-l border-[#19E6FF]/70 pointer-events-none" />
+      <div className="absolute -bottom-[1px] -right-[1px] size-1.5 border-b border-r border-[#19E6FF]/70 pointer-events-none" />
 
       {/* Header Readout */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-border/70 pb-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#1A2730] pb-2.5">
         <div className="flex items-center gap-2">
-          <BrainCircuit className="size-4 text-cyan-400 animate-pulse" />
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-slate-100">
+          <BrainCircuit className="size-3.5 text-[#19E6FF] animate-pulse" />
+          <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#F2F7FA]">
             TEMPORAL INCIDENT RECONSTRUCTION ENGINE
           </span>
-          <span className="text-[10px] text-cyan-400 uppercase">// TIME SCRUBBER</span>
+          <span className="text-[9.5px] text-[#6F9AAA] uppercase tracking-[0.12em]">// TIME SCRUBBER</span>
         </div>
 
         {/* Current Reconstructed Timestamp readout */}
         <div className="flex items-center gap-3 text-xs">
-          <span className="flex items-center gap-1.5 rounded border border-cyan-500/30 bg-cyan-950/40 px-2.5 py-1 text-cyan-300 font-bold">
-            <Clock className="size-3.5 text-cyan-400" />
+          <span className="flex items-center gap-1.5 rounded-[2px] border border-[#19E6FF]/30 bg-[#08758A]/20 px-2.5 py-1 text-[#19E6FF] font-bold text-[11px]">
+            <Clock className="size-3 text-[#19E6FF]" />
             <span>TIME: {currentTime || "14:35:11 UTC"}</span>
-            <span className="text-slate-400 text-[10px]">[T+{scrubPosition}m]</span>
+            <span className="text-[#6F9AAA] text-[9.5px]">[T+{scrubPosition}m]</span>
           </span>
 
           {isRewinding && (
-            <span className="rounded bg-amber-950/60 px-2 py-1 text-[10px] font-bold text-amber-300 border border-amber-500/40 animate-pulse">
+            <span className="rounded-[2px] bg-[#B77900]/20 px-2 py-1 text-[9.5px] font-bold text-[#FFD166] border border-[#FFB020]/40 animate-pulse">
               ◀ REVERSING STATE TRACES...
             </span>
           )}
@@ -94,19 +94,19 @@ export function TemporalConsole() {
       </div>
 
       {/* Interactive Timeline Bar */}
-      <div className="my-4 space-y-3">
+      <div className="my-3 space-y-2.5">
         {/* Scrub Track */}
-        <div className="relative h-6 w-full rounded bg-black/80 p-1 border border-border/60">
+        <div className="relative h-5 w-full rounded-[2px] bg-[#05080C] p-0.5 border border-[#1A2730]">
           {/* Progress fill */}
           <div
             style={{ width: `${(scrubPosition / 45) * 100}%` }}
-            className="h-full rounded-sm bg-gradient-to-r from-cyan-500/30 via-sky-500/50 to-cyan-400 transition-all duration-200"
+            className="h-full rounded-[1px] bg-gradient-to-r from-[#08758A]/30 via-[#3B82F6]/40 to-[#19E6FF] transition-all duration-200"
           />
 
           {/* Interactive Scrub Handle */}
           <div
             style={{ left: `${(scrubPosition / 45) * 100}%` }}
-            className="absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-cyan-400 bg-black shadow-[0_0_12px_rgba(0,229,255,0.8)] cursor-pointer"
+            className="absolute top-1/2 size-3.5 -translate-x-1/2 -translate-y-1/2 rounded-[1px] border border-[#19E6FF] bg-[#05080C] shadow-[0_0_8px_rgba(25,230,255,0.6)] cursor-pointer"
           />
 
           {/* Markers */}
@@ -123,9 +123,9 @@ export function TemporalConsole() {
                 <div
                   className={cn(
                     "size-2 rounded-full border",
-                    marker.severity === "critical" && "bg-red-500 border-red-300",
-                    marker.severity === "high" && "bg-amber-400 border-amber-200",
-                    marker.severity === "mitigated" && "bg-emerald-400 border-emerald-200",
+                    marker.severity === "critical" && "bg-[#FF3045] border-[#FF5264]",
+                    marker.severity === "high" && "bg-[#FFB020] border-[#FFD166]",
+                    marker.severity === "mitigated" && "bg-[#20E3A2] border-[#5AF2C0]",
                   )}
                 />
               </div>
@@ -134,23 +134,21 @@ export function TemporalConsole() {
         </div>
 
         {/* Timeline Axis Labels */}
-        <div className="flex items-center justify-between text-[10px] text-muted-foreground uppercase">
-          <span className="flex items-center gap-1">
-            <span>PAST (PRE-BREACH)</span>
-          </span>
-          <span className="font-bold text-cyan-400">PATIENT ZERO INCIDENT HORIZON</span>
+        <div className="flex items-center justify-between text-[9px] text-[#6F9AAA] uppercase tracking-[0.12em]">
+          <span>PAST (PRE-BREACH)</span>
+          <span className="font-medium text-[#19E6FF]">PATIENT ZERO INCIDENT HORIZON</span>
           <span>FUTURE (COUNTERFACTUAL)</span>
         </div>
       </div>
 
       {/* Playback Controls & Speed Multipliers */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border/70 pt-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#1A2730] pt-2.5">
         <div className="flex items-center gap-2">
           <button
             onClick={handleRewindStep}
-            className="flex items-center gap-1.5 rounded border border-amber-500/40 bg-amber-950/20 px-3 py-1.5 text-xs font-bold text-amber-300 hover:bg-amber-500/20 transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 rounded-[2px] border border-[#FFB020]/40 bg-[#B77900]/10 px-3 py-1 text-[10.5px] font-mono font-bold text-[#FFD166] hover:bg-[#FFB020]/20 transition-colors cursor-pointer"
           >
-            <Rewind className="size-3.5" />
+            <Rewind className="size-3" />
             <span>[ ◀ REWIND 5m ]</span>
           </button>
 
@@ -160,21 +158,21 @@ export function TemporalConsole() {
               else if (isAttackRunning) pauseSimulation();
               else resumeSimulation();
             }}
-            className="flex items-center gap-1.5 rounded border border-cyan-500/40 bg-cyan-950/30 px-3.5 py-1.5 text-xs font-bold text-cyan-300 hover:bg-cyan-500/20 hover:text-white transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 rounded-[2px] border border-[#19E6FF]/40 bg-[#08758A]/20 px-3 py-1 text-[10.5px] font-mono font-bold text-[#19E6FF] hover:bg-[#19E6FF]/20 hover:text-white transition-colors cursor-pointer"
           >
             {!isAttackRunning && !isPaused ? (
               <>
-                <Play className="size-3.5 fill-cyan-400" />
+                <Play className="size-3 fill-[#19E6FF]" />
                 <span>PLAY RECONSTRUCTION</span>
               </>
             ) : isAttackRunning ? (
               <>
-                <Pause className="size-3.5" />
+                <Pause className="size-3" />
                 <span>PAUSE TIMELINE</span>
               </>
             ) : (
               <>
-                <Play className="size-3.5 fill-cyan-400" />
+                <Play className="size-3 fill-[#19E6FF]" />
                 <span>RESUME</span>
               </>
             )}
@@ -182,25 +180,25 @@ export function TemporalConsole() {
 
           <button
             onClick={handleForwardStep}
-            className="flex items-center gap-1.5 rounded border border-cyan-500/30 bg-black/40 px-3 py-1.5 text-xs text-slate-300 hover:text-white transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 rounded-[2px] border border-[#1A2730] bg-[#080D12] px-3 py-1 text-[10.5px] font-mono text-[#A6B6C2] hover:text-[#F2F7FA] hover:border-[#19E6FF]/40 transition-colors cursor-pointer"
           >
-            <FastForward className="size-3.5" />
+            <FastForward className="size-3" />
             <span>FORWARD 5m</span>
           </button>
         </div>
 
         {/* Speed Selector */}
         <div className="flex items-center gap-1 text-xs">
-          <span className="text-[10px] text-muted-foreground mr-1">SPEED:</span>
+          <span className="text-[9.5px] text-[#6F9AAA] mr-1">SPEED:</span>
           {speeds.map((s) => (
             <button
               key={s}
               onClick={() => setSimulationSpeed(s)}
               className={cn(
-                "rounded border px-2 py-0.5 text-[10px] font-bold transition-all cursor-pointer",
+                "rounded-[2px] border px-2 py-0.5 text-[9.5px] font-mono font-bold transition-all cursor-pointer",
                 simulationSpeed === s
-                  ? "border-cyan-400 bg-cyan-500/20 text-cyan-300 shadow-[0_0_10px_rgba(0,229,255,0.3)]"
-                  : "border-border/60 bg-black/40 text-slate-400 hover:text-white",
+                  ? "border-[#19E6FF] bg-[#08758A]/30 text-[#19E6FF] shadow-[0_0_8px_rgba(25,230,255,0.25)]"
+                  : "border-[#1A2730] bg-[#080D12] text-[#667783] hover:text-[#F2F7FA]",
               )}
             >
               {s}x
@@ -211,3 +209,4 @@ export function TemporalConsole() {
     </div>
   );
 }
+

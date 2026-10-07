@@ -17,57 +17,57 @@ export function SystemStatusBar() {
   const { isAttackRunning, currentRisk } = useDemo();
 
   return (
-    <div className="w-full border-b border-border/80 bg-[#020508]/90 px-4 py-2 font-mono text-xs backdrop-blur-xl">
-      <div className="flex flex-wrap items-center justify-between gap-3 text-[11px]">
+    <div className="w-full border-b border-[#1A2730] bg-[#05080C] px-4 py-2 font-mono text-xs backdrop-blur-xl">
+      <div className="flex flex-wrap items-center justify-between gap-3 text-[10.5px]">
         {/* Core Node & State */}
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
-            <Radio className="size-3.5 text-cyan-400 animate-pulse" />
-            <span className="font-bold text-slate-100">TM-CORE-01</span>
-            <span className="flex items-center gap-1 text-[10px] text-emerald-400">
-              <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <Radio className="size-3 text-[#19E6FF] animate-pulse" />
+            <span className="font-bold text-[#F2F7FA]">TM-CORE-01</span>
+            <span className="flex items-center gap-1 text-[9.5px] text-[#20E3A2]">
+              <span className="size-1.5 rounded-full bg-[#20E3A2] animate-pulse" />
               ONLINE
             </span>
           </div>
 
-          <div className="hidden md:flex items-center gap-4 border-l border-border/60 pl-4 text-muted-foreground">
+          <div className="hidden md:flex items-center gap-4 border-l border-[#1A2730] pl-4 text-[#667783]">
             <span className="flex items-center gap-1.5">
               <span>TELEMETRY:</span>
-              <strong className="text-cyan-300">12,482/s</strong>
+              <strong className="text-[#19E6FF]">12,482/s</strong>
             </span>
 
             <span className="flex items-center gap-1.5">
               <span>EVENTS:</span>
-              <strong className="text-slate-200">8,291,402</strong>
+              <strong className="text-[#F2F7FA]">8,291,402</strong>
             </span>
 
             <span className="flex items-center gap-1.5">
               <span>ACTIVE THREATS:</span>
-              <strong className="text-red-400">03</strong>
+              <strong className="text-[#FF3045]">03</strong>
             </span>
 
             <span className="flex items-center gap-1.5">
               <span>ENDPOINTS:</span>
-              <strong className="text-slate-200">248</strong>
+              <strong className="text-[#F2F7FA]">248</strong>
             </span>
           </div>
         </div>
 
         {/* Engine status pills */}
         <div className="flex items-center gap-2">
-          <span className="hidden lg:inline-flex items-center gap-1 rounded bg-black/60 px-2 py-0.5 text-[10px] text-slate-400 border border-border/60">
-            <Cpu className="size-3 text-cyan-400" />
-            <span>AI IRIS: <strong className="text-cyan-400">ACTIVE</strong></span>
+          <span className="hidden lg:inline-flex items-center gap-1 rounded-[2px] bg-[#080D12] px-2 py-0.5 text-[9.5px] text-[#6F9AAA] border border-[#1A2730]">
+            <Cpu className="size-3 text-[#19E6FF]" />
+            <span>AI IRIS: <strong className="text-[#19E6FF]">ACTIVE</strong></span>
           </span>
 
-          <span className="hidden lg:inline-flex items-center gap-1 rounded bg-black/60 px-2 py-0.5 text-[10px] text-slate-400 border border-border/60">
-            <Zap className="size-3 text-cyan-400" />
-            <span>TEMPORAL ENGINE: <strong className="text-emerald-400">READY</strong></span>
+          <span className="hidden lg:inline-flex items-center gap-1 rounded-[2px] bg-[#080D12] px-2 py-0.5 text-[9.5px] text-[#6F9AAA] border border-[#1A2730]">
+            <Zap className="size-3 text-[#19E6FF]" />
+            <span>TEMPORAL ENGINE: <strong className="text-[#20E3A2]">READY</strong></span>
           </span>
 
           {/* Environment Banner (Honest demo/live indicator) */}
-          <span className="flex items-center gap-1.5 rounded border border-warning/40 bg-warning/10 px-2.5 py-0.5 text-[10px] font-bold text-warning">
-            <CircleDot className="size-2 animate-pulse" />
+          <span className="flex items-center gap-1.5 rounded-[2px] border border-[#FFB020]/40 bg-[#B77900]/10 px-2.5 py-0.5 text-[9.5px] font-bold text-[#FFD166]">
+            <CircleDot className="size-1.5 animate-pulse text-[#FFB020]" />
             <span>DEMO ENVIRONMENT // SYNTHETIC DATA</span>
           </span>
         </div>
@@ -75,3 +75,4 @@ export function SystemStatusBar() {
     </div>
   );
 }
+

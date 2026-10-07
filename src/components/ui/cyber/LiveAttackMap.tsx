@@ -135,83 +135,83 @@ export function LiveAttackMap() {
   const getNodeIcon = (type: AttackNode["type"]) => {
     switch (type) {
       case "attacker":
-        return <Skull className="size-4 text-red-400 animate-pulse" />;
+        return <Skull className="size-3.5 text-[#FF3045] animate-pulse" />;
       case "gateway":
-        return <Globe className="size-4 text-amber-400" />;
+        return <Globe className="size-3.5 text-[#FFB020]" />;
       case "endpoint":
-        return <Laptop className="size-4 text-cyan-400" />;
+        return <Laptop className="size-3.5 text-[#19E6FF]" />;
       case "process":
-        return <Terminal className="size-4 text-red-400" />;
+        return <Terminal className="size-3.5 text-[#FF3045]" />;
       case "server":
-        return <Server className="size-4 text-purple-400" />;
+        return <Server className="size-3.5 text-[#3B82F6]" />;
       case "database":
-        return <Database className="size-4 text-red-400" />;
+        return <Database className="size-3.5 text-[#FF3045]" />;
     }
   };
 
   const getNodeStatusStyles = (status: AttackNode["status"]) => {
     switch (status) {
       case "compromised":
-        return "border-red-500 bg-red-950/60 shadow-[0_0_20px_rgba(255,38,56,0.5)] text-red-300";
+        return "border-[#FF3045] bg-[#0F171E] shadow-[0_0_14px_rgba(255,48,69,0.3)] text-[#FF5264]";
       case "threat":
-        return "border-amber-500 bg-amber-950/50 shadow-[0_0_15px_rgba(255,176,0,0.3)] text-amber-300";
+        return "border-[#FFB020] bg-[#0F171E] shadow-[0_0_10px_rgba(255,176,32,0.2)] text-[#FFD166]";
       case "target":
-        return "border-red-400 bg-red-950/40 shadow-[0_0_25px_rgba(255,38,56,0.6)] text-red-200 animate-pulse";
+        return "border-[#FF3045] bg-[#0F171E] shadow-[0_0_16px_rgba(255,48,69,0.4)] text-[#FF5264] animate-pulse";
       case "secured":
-        return "border-emerald-500 bg-emerald-950/40 text-emerald-300";
+        return "border-[#20E3A2] bg-[#0F171E] text-[#5AF2C0]";
       default:
-        return "border-cyan-500/40 bg-black/60 text-cyan-300";
+        return "border-[#19E6FF]/40 bg-[#0F171E] text-[#19E6FF]";
     }
   };
 
   return (
-    <div className="relative flex flex-col rounded border border-border/80 bg-[#03070B] p-4 font-mono">
+    <div className="relative flex flex-col rounded-[2px] border border-[#1A2730] bg-[#0B1117] p-4 font-mono">
       {/* Corner crosshairs */}
-      <div className="absolute -left-[1px] -top-[1px] size-2 border-l border-t border-cyan-400" />
-      <div className="absolute -right-[1px] -top-[1px] size-2 border-r border-t border-cyan-400" />
-      <div className="absolute -bottom-[1px] -left-[1px] size-2 border-b border-l border-cyan-400" />
-      <div className="absolute -bottom-[1px] -right-[1px] size-2 border-b border-r border-cyan-400" />
+      <div className="absolute -left-[1px] -top-[1px] size-1.5 border-l border-t border-[#19E6FF]/70 pointer-events-none" />
+      <div className="absolute -right-[1px] -top-[1px] size-1.5 border-r border-t border-[#19E6FF]/70 pointer-events-none" />
+      <div className="absolute -bottom-[1px] -left-[1px] size-1.5 border-b border-l border-[#19E6FF]/70 pointer-events-none" />
+      <div className="absolute -bottom-[1px] -right-[1px] size-1.5 border-b border-r border-[#19E6FF]/70 pointer-events-none" />
 
       {/* Top Map Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/70 pb-3">
-        <div className="flex items-center gap-2.5">
-          <span className="flex size-2 rounded-full bg-red-500 animate-ping" />
-          <span className="text-xs font-bold uppercase tracking-[0.2em] text-slate-100">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#1A2730] pb-2.5">
+        <div className="flex items-center gap-2">
+          <span className="flex size-1.5 rounded-full bg-[#FF3045] animate-ping" />
+          <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#F2F7FA]">
             LIVE ATTACK PROPAGATION TOPOLOGY
           </span>
-          <span className="text-[10px] text-muted-foreground uppercase">// DYNAMIC TRACE MATRIX</span>
+          <span className="text-[9.5px] text-[#6F9AAA] uppercase tracking-[0.12em]">// DYNAMIC TRACE MATRIX</span>
         </div>
 
-        <div className="flex items-center gap-2 text-[10px]">
-          <span className="flex items-center gap-1.5 rounded border border-red-500/40 bg-red-950/30 px-2 py-0.5 font-bold text-red-400">
-            <span className="size-1.5 rounded-full bg-red-400 animate-pulse" />
+        <div className="flex items-center gap-2 text-[9.5px]">
+          <span className="flex items-center gap-1.5 rounded-[2px] border border-[#FF3045]/40 bg-[#B91C2E]/20 px-2 py-0.5 font-bold text-[#FF5264]">
+            <span className="size-1.5 rounded-full bg-[#FF3045] animate-pulse" />
             THREAT LEVEL: {currentRisk?.toUpperCase() || "CRITICAL"}
           </span>
 
-          <span className="hidden sm:inline-flex items-center gap-1 rounded border border-cyan-500/30 bg-cyan-950/30 px-2 py-0.5 text-cyan-300">
-            <Activity className="size-3 text-cyan-400 animate-pulse" />
+          <span className="hidden sm:inline-flex items-center gap-1 rounded-[2px] border border-[#19E6FF]/30 bg-[#08758A]/20 px-2 py-0.5 text-[#19E6FF]">
+            <Activity className="size-3 text-[#19E6FF] animate-pulse" />
             LIVE TELEMETRY HOPS: 5
           </span>
         </div>
       </div>
 
       {/* Main Interactive Map Canvas */}
-      <div className="relative my-4 h-72 sm:h-80 w-full overflow-hidden rounded border border-border/40 bg-black/70">
+      <div className="relative my-3 h-72 sm:h-80 w-full overflow-hidden rounded-[2px] border border-[#142029] bg-[#05080C]">
         {/* Tech Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#142733_1px,transparent_1px),linear-gradient(to_bottom,#142733_1px,transparent_1px)] bg-[size:32px_32px] opacity-25 pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#142029_1px,transparent_1px),linear-gradient(to_bottom,#142029_1px,transparent_1px)] bg-[size:32px_32px] opacity-40 pointer-events-none" />
 
         {/* Pulsing Radar Ring Background in Center */}
-        <div className="absolute left-1/2 top-1/2 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-500/10 pointer-events-none" />
-        <div className="absolute left-1/2 top-1/2 size-48 -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-500/15 pointer-events-none" />
-        <div className="absolute left-1/2 top-1/2 size-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-red-500/20 pointer-events-none animate-ping" />
+        <div className="absolute left-1/2 top-1/2 size-72 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#19E6FF]/5 pointer-events-none" />
+        <div className="absolute left-1/2 top-1/2 size-48 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#19E6FF]/10 pointer-events-none" />
+        <div className="absolute left-1/2 top-1/2 size-24 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#FF3045]/15 pointer-events-none animate-ping" />
 
         {/* SVG Attack Vector Lines & Animated Packets */}
         <svg className="absolute inset-0 size-full pointer-events-none">
           <defs>
             <linearGradient id="attackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#ff2638" stopOpacity="0.8" />
-              <stop offset="50%" stopColor="#ffb000" stopOpacity="0.6" />
-              <stop offset="100%" stopColor="#00e5ff" stopOpacity="0.8" />
+              <stop offset="0%" stopColor="#FF3045" stopOpacity="0.8" />
+              <stop offset="50%" stopColor="#FFB020" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#19E6FF" stopOpacity="0.8" />
             </linearGradient>
           </defs>
 
@@ -231,8 +231,8 @@ export function LiveAttackMap() {
                   y1={`${fromNode.y}%`}
                   x2={`${toNode.x}%`}
                   y2={`${toNode.y}%`}
-                  stroke={isCurrentHop ? "#ff2638" : "#1e3a4f"}
-                  strokeWidth={isCurrentHop ? "2.5" : "1.5"}
+                  stroke={isCurrentHop ? "#FF3045" : "#1A2730"}
+                  strokeWidth={isCurrentHop ? "2" : "1"}
                   strokeDasharray={isCurrentHop ? "4 2" : "none"}
                   className="transition-all duration-300"
                 />
@@ -241,8 +241,8 @@ export function LiveAttackMap() {
                 <circle
                   cx={`${isCurrentHop ? toNode.x : fromNode.x}%`}
                   cy={`${isCurrentHop ? toNode.y : fromNode.y}%`}
-                  r="3.5"
-                  fill="#ff2638"
+                  r="3"
+                  fill="#FF3045"
                   className="transition-all duration-1000 ease-in-out"
                 />
               </g>
@@ -263,15 +263,15 @@ export function LiveAttackMap() {
                 transform: "translate(-50%, -50%)",
               }}
               className={cn(
-                "group absolute z-10 flex cursor-pointer flex-col items-center transition-all duration-200 hover:scale-110",
+                "group absolute z-10 flex cursor-pointer flex-col items-center transition-all duration-200 hover:scale-105",
               )}
             >
               {/* Node Card Element */}
               <div
                 className={cn(
-                  "flex items-center gap-1.5 rounded-sm border px-2.5 py-1.5 text-[11px] font-bold backdrop-blur-md transition-all",
+                  "flex items-center gap-1.5 rounded-[2px] border px-2.5 py-1 text-[10px] font-mono font-medium backdrop-blur-md transition-all",
                   getNodeStatusStyles(node.status),
-                  isSelected && "ring-2 ring-cyan-400 scale-105",
+                  isSelected && "ring-1 ring-[#19E6FF] scale-105",
                 )}
               >
                 {getNodeIcon(node.type)}
@@ -279,7 +279,7 @@ export function LiveAttackMap() {
               </div>
 
               {/* Sub-label IP / PID */}
-              <span className="mt-1 rounded bg-black/80 px-1.5 py-0.2 text-[9px] text-slate-400 border border-border/60">
+              <span className="mt-1 rounded-[2px] bg-[#080D12] px-1.5 py-0.2 text-[8.5px] font-mono text-[#6F9AAA] border border-[#1A2730]">
                 {node.ip}
               </span>
             </div>
@@ -289,16 +289,16 @@ export function LiveAttackMap() {
 
       {/* Bottom Inspection Drawer for Selected Node */}
       {selectedNode && (
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-border/70 pt-3 text-xs">
-          <div className="space-y-1">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-[#1A2730] pt-3 text-xs">
+          <div className="space-y-0.5">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-slate-100 uppercase">{selectedNode.name}</span>
-              <span className="text-[10px] text-cyan-400">[{selectedNode.ip}]</span>
-              <span className="rounded bg-red-950/40 px-1.5 py-0.2 text-[9px] font-bold text-red-400 border border-red-500/30">
+              <span className="font-bold text-[#F2F7FA] uppercase">{selectedNode.name}</span>
+              <span className="text-[10px] text-[#19E6FF]">[{selectedNode.ip}]</span>
+              <span className="rounded-[2px] bg-[#B91C2E]/20 px-1.5 py-0.2 text-[8.5px] font-mono font-semibold text-[#FF5264] border border-[#FF3045]/40">
                 MITRE: {selectedNode.mitre}
               </span>
             </div>
-            <p className="text-[11px] text-slate-400">{selectedNode.description}</p>
+            <p className="text-[10.5px] text-[#A6B6C2]">{selectedNode.description}</p>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
@@ -308,11 +308,11 @@ export function LiveAttackMap() {
                 else if (isAttackRunning) pauseSimulation();
                 else resumeSimulation();
               }}
-              className="flex items-center gap-1.5 rounded border border-cyan-500/40 bg-cyan-950/30 px-3 py-1.5 text-xs font-bold text-cyan-300 hover:bg-cyan-500/20 hover:text-white transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 rounded-[2px] border border-[#19E6FF]/40 bg-[#08758A]/20 px-3 py-1.5 text-[10.5px] font-mono font-bold text-[#19E6FF] hover:bg-[#19E6FF]/20 hover:text-white transition-colors cursor-pointer"
             >
               {!isAttackRunning && !isPaused ? (
                 <>
-                  <Play className="size-3 fill-cyan-400" />
+                  <Play className="size-3 fill-[#19E6FF]" />
                   <span>SIMULATE ATTACK</span>
                 </>
               ) : isAttackRunning ? (
@@ -322,7 +322,7 @@ export function LiveAttackMap() {
                 </>
               ) : (
                 <>
-                  <Play className="size-3 fill-cyan-400" />
+                  <Play className="size-3 fill-[#19E6FF]" />
                   <span>RESUME STREAM</span>
                 </>
               )}
@@ -330,7 +330,7 @@ export function LiveAttackMap() {
 
             <button
               onClick={resetDemo}
-              className="flex items-center gap-1 rounded border border-border bg-black/40 px-2.5 py-1.5 text-xs text-slate-400 hover:text-white hover:border-slate-500 transition-colors cursor-pointer"
+              className="flex items-center gap-1 rounded-[2px] border border-[#1A2730] bg-[#080D12] px-2.5 py-1.5 text-[10.5px] font-mono text-[#A6B6C2] hover:text-[#F2F7FA] hover:border-[#19E6FF]/40 transition-colors cursor-pointer"
               title="Reset Simulation"
             >
               <RotateCcw className="size-3" />
@@ -342,3 +342,4 @@ export function LiveAttackMap() {
     </div>
   );
 }
+

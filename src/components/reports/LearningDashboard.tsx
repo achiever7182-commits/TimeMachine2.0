@@ -279,7 +279,7 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
                     : node === "LAPTOP-042"
                       ? "bg-amber-500/20 text-amber-300 border-amber-500/50"
                       : node === "SERVER-03"
-                        ? "bg-purple-500/20 text-purple-300 border-purple-500/50"
+                        ? "bg-blue-500/20 text-blue-300 border-blue-500/50"
                         : "bg-background/80 text-foreground border-border/80"
                 }`}
                 title={`Inspect ${node} in Attack Graph`}
