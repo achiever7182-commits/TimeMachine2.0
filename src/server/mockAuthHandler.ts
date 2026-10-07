@@ -164,6 +164,15 @@ export async function handleMockSupabaseRequest(request: Request): Promise<Respo
     });
   }
 
+const VALID_PASSWORDS: Record<string, string> = {
+  "admin@timemachine.soc": "admin",
+  "operator@time-machine.soc": "password123",
+  "analyst.smith@time-machine.soc": "analyst123",
+  "ciso.director@time-machine.soc": "ciso123",
+  "responder.chen@time-machine.soc": "responder123",
+  "guest.auditor@external.audit": "audit123",
+};
+
   // Auth endpoints
   if (pathname === "/auth/v1/token") {
     let body: Record<string, unknown> = {};
@@ -172,7 +181,23 @@ export async function handleMockSupabaseRequest(request: Request): Promise<Respo
     } catch {
       // Empty or invalid body
     }
-    const email = String(body["email"] || "operator@time-machine.soc");
+    const email = String(body["email"] || "").trim().toLowerCase();
+    const password = String(body["password"] || "");
+
+    const expectedPass = VALID_PASSWORDS[email];
+    if (!expectedPass || password !== expectedPass) {
+      return new Response(
+        JSON.stringify({
+          error: "invalid_grant",
+          error_description: "Invalid login credentials. Access denied.",
+        }),
+        {
+          status: 400,
+          headers: { ...cors, "Content-Type": "application/json" },
+        },
+      );
+    }
+
     const session = createSessionPayload(email);
     return new Response(JSON.stringify(session), {
       status: 200,
@@ -289,7 +314,20 @@ export function handleMockSupabaseNode(
     res.setHeader("Content-Type", "application/json");
 
     if (pathname === "/auth/v1/token") {
-      const email = String(body["email"] || "operator@time-machine.soc");
+      const email = String(body["email"] || "").trim().toLowerCase();
+      const password = String(body["password"] || "");
+      const expectedPass = VALID_PASSWORDS[email];
+
+      if (!expectedPass || password !== expectedPass) {
+        res.statusCode = 400;
+        return res.end(
+          JSON.stringify({
+            error: "invalid_grant",
+            error_description: "Invalid operator access key. Access denied.",
+          }),
+        );
+      }
+
       const session = createSessionPayload(email);
       res.statusCode = 200;
       return res.end(JSON.stringify(session));

@@ -250,26 +250,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     email: string,
     password: string,
   ): Promise<{ success: boolean; error?: string }> => {
-    // 1. Try local verified users store
-    const localResult = userService.verifyCredentials(email, password);
-    if (localResult.success && localResult.user) {
-      userService.saveActiveSession(localResult.user);
-      setStoredUser(localResult.user);
-      setUser(convertStoredUserToSupabaseUser(localResult.user));
-      setProfile(convertStoredUserToProfile(localResult.user));
-      setAuthState("ACTIVE");
+    const existingLocalUser = userService.getUserByEmail(email.trim());
 
-      // Background attempt with Supabase client (if connected)
-      try {
-        await supabase.auth.signInWithPassword({ email: email.trim(), password });
-      } catch {
-        // Local auth is sufficient
+    // 1. If user is in local directory, strictly check their password
+    if (existingLocalUser) {
+      const localResult = userService.verifyCredentials(email, password);
+      if (!localResult.success) {
+        return {
+          success: false,
+          error: localResult.error || "Invalid access key (password). Access denied.",
+        };
       }
 
-      return { success: true };
+      if (localResult.user) {
+        userService.saveActiveSession(localResult.user);
+        setStoredUser(localResult.user);
+        setUser(convertStoredUserToSupabaseUser(localResult.user));
+        setProfile(convertStoredUserToProfile(localResult.user));
+        setAuthState("ACTIVE");
+        return { success: true };
+      }
     }
 
-    // 2. If not found in local seed/registered users, try Supabase directly
+    // 2. If user is NOT in local directory, attempt remote Supabase Auth
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
@@ -279,7 +282,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (error) {
         return {
           success: false,
-          error: localResult.error || error.message || "Invalid operator credentials.",
+          error: error.message || "Invalid operator credentials. Access denied.",
         };
       }
 
@@ -301,12 +304,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return { success: true };
       }
     } catch {
-      // Return local error
+      // Remote call failed
     }
 
     return {
       success: false,
-      error: localResult.error || "Authentication failed. Check your ID and access key.",
+      error: "Operator ID not found or access key is incorrect.",
     };
   };
 

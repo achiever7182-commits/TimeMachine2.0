@@ -430,7 +430,7 @@ export const userService = {
   },
 
   /**
-   * Verify credentials for authentication
+   * Verify credentials for authentication - strict password matching
    */
   verifyCredentials(
     email: string,
@@ -442,7 +442,7 @@ export const userService = {
     if (!user) {
       return {
         success: false,
-        error: "Operator ID not found in security directory. Please check credentials or register.",
+        error: "Operator ID not found in directory. Please register or verify spelling.",
       };
     }
 
@@ -453,13 +453,12 @@ export const userService = {
       };
     }
 
-    if (user.password && user.password !== password) {
-      if (password !== "admin" && password !== "admin123" && password !== "password123") {
-        return {
-          success: false,
-          error: "Invalid access key / password for operator account.",
-        };
-      }
+    const expectedPassword = user.password || "password123";
+    if (password !== expectedPassword) {
+      return {
+        success: false,
+        error: "Invalid access key (password). Please re-enter credentials.",
+      };
     }
 
     this.recordLogin(user.email);
@@ -479,7 +478,7 @@ export const userService = {
     if (!isMasterAdmin) {
       const user = this.getUserByEmail(clean);
       if (user && user.role === "Admin") {
-        if (password === user.password || password === "admin" || password === "admin123") {
+        if (password === (user.password || "admin")) {
           return { success: true, user };
         }
       }
@@ -489,17 +488,18 @@ export const userService = {
       };
     }
 
-    if (password !== "admin" && password !== "admin123" && password !== "TIMEMACHINE_ADMIN_2026") {
-      return {
-        success: false,
-        error: "Invalid Master Admin password. Access Key rejected.",
-      };
-    }
-
     const adminUser =
       this.getUserByEmail("admin@timemachine.soc") ||
       this.getUserByEmail(clean) ||
       SEED_USERS[0];
+
+    const expectedAdminPass = adminUser.password || "admin";
+    if (password !== expectedAdminPass && password !== "admin" && password !== "admin123") {
+      return {
+        success: false,
+        error: "Invalid Master Admin access key. Access denied.",
+      };
+    }
 
     return { success: true, user: adminUser };
   },
