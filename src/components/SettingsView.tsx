@@ -400,10 +400,18 @@ export function SettingsView() {
         {categoryCards.map((card) => {
           const Icon = card.icon;
           return (
-            <GlassPanel
+            <div
               key={card.id}
-              className="p-5 border-border bg-base-panel hover:border-cyan-signal/40 transition-all cursor-pointer group flex flex-col justify-between"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setActiveCategory(card.id);
+                }
+              }}
               onClick={() => setActiveCategory(card.id)}
+              className="rounded-xl border border-border bg-card/72 shadow-panel backdrop-blur-xl p-5 hover:border-cyan-signal/50 transition-all cursor-pointer group flex flex-col justify-between text-left focus:outline-none focus:ring-2 focus:ring-cyan-signal"
             >
               <div>
                 <div className="flex items-start justify-between gap-2 mb-3">
@@ -431,11 +439,11 @@ export function SettingsView() {
 
               <div className="mt-4 pt-3 border-t border-border/50 flex items-center justify-between font-mono text-[11px] text-cyan-signal font-semibold">
                 <span>OPEN SETTINGS MODAL</span>
-                <span className="group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                <span className="group-hover:translate-x-1 transition-transform flex items-center gap-1 bg-cyan-signal/10 px-2 py-0.5 rounded border border-cyan-signal/30">
                   MANAGE →
                 </span>
               </div>
-            </GlassPanel>
+            </div>
           );
         })}
       </div>

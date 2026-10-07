@@ -34,15 +34,18 @@ export function PageHeader({
 export function GlassPanel({
   children,
   className = "",
-}: {
+  ...props
+}: React.HTMLAttributes<HTMLElement> & {
   children: ReactNode;
   className?: string;
 }) {
   return (
     <section
       className={`rounded-xl border border-border bg-card/72 shadow-panel backdrop-blur-xl ${className}`}
+      {...props}
     >
       {children}
     </section>
   );
 }
+
