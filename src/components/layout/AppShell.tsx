@@ -10,24 +10,26 @@ import {
   ListChecks,
   Menu,
   Network,
-  PanelRightOpen,
   Radar,
   Search,
   Settings,
+  ShieldAlert,
   ShieldCheck,
   Siren,
   Terminal,
   Activity,
-  Users,
+  LogOut,
+  Zap,
+  Cpu,
+  Radio,
+  Clock,
+  Layers,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Link, useRouterState, useLocation, useNavigate } from "@tanstack/react-router";
@@ -36,7 +38,6 @@ import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import { IrisCopilot } from "@/components/ai-copilot/IrisCopilot";
 import { toast } from "sonner";
-import { LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -46,47 +47,56 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-const navSections = [
+interface NavItem {
+  cmd: string;
+  label: string;
+  to: string;
+  icon: any;
+  shortcut?: string;
+  tag?: string;
+}
+
+const navSections: { title: string; items: NavItem[] }[] = [
   {
     title: "COMMAND",
     items: [
-      { label: "Dashboard", to: "/dashboard", icon: Home, shortcut: "⌘1" },
-      { label: "Incidents", to: "/incidents", icon: Siren, shortcut: "⌘2" },
-      { label: "Admin Console", to: "/admin", icon: ShieldCheck, shortcut: "⌘A" },
+      { cmd: "CMD_01", label: "COMMAND CENTER", to: "/dashboard", icon: Terminal, shortcut: "⌘1" },
+      { cmd: "CMD_02", label: "INCIDENTS", to: "/incidents", icon: ShieldAlert, shortcut: "⌘2", tag: "LIVE" },
+      { cmd: "CMD_03", label: "ADMIN CONSOLE", to: "/admin", icon: ShieldCheck, shortcut: "⌘A" },
     ],
   },
   {
     title: "INVESTIGATION",
     items: [
-      { label: "Time Machine", to: "/time-machine", icon: BrainCircuit, shortcut: "⌘3" },
-      { label: "Attack Graph", to: "/attack-graph", icon: GitBranch, shortcut: "⌘4" },
-      { label: "Digital Twin", to: "/digital-twin", icon: Network },
-      { label: "IRIS Investigator", to: "/iris", icon: Bot },
-      { label: "Evidence", to: "/evidence", icon: Radar },
+      { cmd: "INV_01", label: "TIME MACHINE", to: "/time-machine", icon: BrainCircuit, shortcut: "⌘3", tag: "REWIND" },
+      { cmd: "INV_02", label: "ATTACK GRAPH", to: "/attack-graph", icon: GitBranch, shortcut: "⌘4" },
+      { cmd: "INV_03", label: "DIGITAL TWIN", to: "/digital-twin", icon: Network },
+      { cmd: "INV_04", label: "IRIS INVESTIGATOR", to: "/iris", icon: Bot, tag: "AI" },
+      { cmd: "INV_05", label: "EVIDENCE", to: "/evidence", icon: Radar },
     ],
   },
   {
     title: "SIMULATION",
     items: [
-      { label: "Simulation Lab", to: "/simulation-lab", icon: FlaskConical },
+      { cmd: "SIM_01", label: "SIMULATION LAB", to: "/simulation-lab", icon: FlaskConical, tag: "WAR-ROOM" },
     ],
   },
   {
     title: "RESPONSE",
     items: [
-      { label: "Response Center", to: "/response-center", icon: ListChecks },
+      { cmd: "RES_01", label: "RESPONSE CENTER", to: "/response-center", icon: ListChecks },
     ],
   },
   {
     title: "INTELLIGENCE",
     items: [
-      { label: "Reports", to: "/reports", icon: FileText },
+      { cmd: "INT_01", label: "REPORTS", to: "/reports", icon: FileText },
     ],
   },
   {
     title: "SYSTEM",
     items: [
-      { label: "Settings", to: "/settings", icon: Settings },
+      { cmd: "SYS_01", label: "SYSTEM SETTINGS", to: "/settings", icon: Settings },
     ],
   },
 ];
@@ -94,13 +104,14 @@ const navSections = [
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   return (
-    <nav className="space-y-6" aria-label="Primary">
+    <nav className="space-y-5 px-3" aria-label="Security Command Console">
       {navSections.map((section) => (
-        <div key={section.title} className="space-y-2">
-          <div className="px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/70">
-            {section.title}
+        <div key={section.title} className="space-y-1">
+          <div className="flex items-center justify-between px-2.5 py-1 text-[9px] font-mono font-bold tracking-[0.25em] text-[#6F8A99]/70 border-b border-[#0D1B24]/80">
+            <span>{section.title}</span>
+            <span className="text-[8px] text-[#00E5FF]/40">//</span>
           </div>
-          <div className="space-y-0.5">
+          <div className="space-y-0.5 pt-1">
             {section.items.map((item) => {
               const Icon = item.icon;
               const active = pathname === item.to || pathname.startsWith(item.to + "/");
@@ -110,28 +121,50 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
                   to={item.to}
                   onClick={onNavigate}
                   className={cn(
-                    "group relative flex min-h-10 items-center gap-3 rounded-none border-l-2 px-3 text-sm font-medium transition-all duration-200",
+                    "group relative flex min-h-[34px] items-center gap-2.5 px-2.5 text-xs font-mono transition-all duration-150 border",
                     active
-                      ? "border-primary bg-primary/10 text-foreground shadow-[inset_40px_0_40px_rgba(0,229,255,0.05)]"
-                      : "border-transparent text-muted-foreground hover:border-border hover:bg-secondary/40 hover:text-foreground",
+                      ? "border-[#00E5FF]/40 bg-[#00E5FF]/10 text-[#E8F7FF] shadow-[inset_0_0_15px_rgba(0,229,255,0.08)] border-l-2 border-l-[#00E5FF]"
+                      : "border-transparent text-[#6F8A99] hover:border-[#1683FF]/30 hover:bg-[#071017] hover:text-[#E8F7FF]",
                   )}
                 >
+                  <span className={cn(
+                    "text-[10px] transition-colors",
+                    active ? "text-[#00E5FF] font-bold" : "text-[#6F8A99]/40 group-hover:text-[#00E5FF]/70"
+                  )}>
+                    &gt;
+                  </span>
+
                   <Icon
                     className={cn(
-                      "size-[14px]",
+                      "size-3.5 shrink-0 transition-transform group-hover:scale-110",
                       active
-                        ? "text-cyan-signal drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]"
-                        : "text-muted-foreground/70 group-hover:text-cyan-signal",
+                        ? "text-[#00E5FF] drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]"
+                        : "text-[#6F8A99] group-hover:text-[#00E5FF]",
                     )}
                   />
-                  <span className="font-sans text-[13px]">{item.label}</span>
-                  {item.shortcut && (
-                    <span className="ml-auto font-mono text-[10px] text-muted-foreground/50 opacity-0 transition-opacity group-hover:opacity-100">
+
+                  <span className="truncate tracking-wide text-[11px] font-medium">{item.label}</span>
+
+                  {item.tag && (
+                    <span className={cn(
+                      "ml-auto text-[8px] px-1 py-0.2 rounded border font-mono",
+                      item.tag === "LIVE" ? "border-[#FF2638]/40 bg-[#FF2638]/10 text-[#FF2638] animate-pulse" :
+                      item.tag === "REWIND" ? "border-[#00E5FF]/40 bg-[#00E5FF]/10 text-[#00E5FF]" :
+                      item.tag === "AI" ? "border-[#00FF88]/40 bg-[#00FF88]/10 text-[#00FF88]" :
+                      "border-[#FFB000]/40 bg-[#FFB000]/10 text-[#FFB000]"
+                    )}>
+                      {item.tag}
+                    </span>
+                  )}
+
+                  {item.shortcut && !item.tag && (
+                    <span className="ml-auto text-[9px] text-[#6F8A99]/40 opacity-0 transition-opacity group-hover:opacity-100">
                       {item.shortcut}
                     </span>
                   )}
+
                   {active && (
-                    <div className="absolute right-3 size-1.5 rounded-full bg-cyan-signal animate-pulse-ring" />
+                    <div className="absolute right-1.5 size-1.5 rounded-full bg-[#00E5FF] animate-pulse drop-shadow-[0_0_6px_#00E5FF]" />
                   )}
                 </Link>
               );
@@ -161,7 +194,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const breadcrumbName =
     navSections.flatMap((s) => s.items).find((i) => i.to === location.pathname)?.label ||
     location.pathname.substring(1).toUpperCase() ||
-    "DASHBOARD";
+    "COMMAND CENTER";
 
   const handleSignOut = async () => {
     toast.info("Terminating operator session...");
@@ -174,83 +207,103 @@ export function AppShell({ children }: { children: ReactNode }) {
   const userEmail = user?.email || storedUser?.email || "operator@time-machine.soc";
 
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-border bg-sidebar px-0 py-0 lg:flex lg:flex-col">
-        <div className="flex items-center gap-3 border-b border-border p-5">
-          <Terminal className="size-5 text-cyan-signal drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]" />
-          <div>
-            <span className="block font-sans text-sm font-bold tracking-[0.1em] text-foreground">
-              TIMEMACHINE
-            </span>
-            <span className="block font-mono text-[9px] uppercase tracking-[0.2em] text-cyan-signal/70">
-              Incident Response Platform
-            </span>
+    <div className="min-h-screen bg-[#03070B] text-[#E8F7FF] font-sans selection:bg-[#00E5FF]/30 selection:text-[#00E5FF]">
+      {/* Background Matrix Grid */}
+      <div className="fixed inset-0 pointer-events-none opacity-20 bg-[linear-gradient(to_right,#00E5FF08_1px,transparent_1px),linear-gradient(to_bottom,#00E5FF08_1px,transparent_1px)] bg-[size:32px_32px] z-0" />
+
+      {/* LEFT SIDEBAR: SECURITY COMMAND CONSOLE */}
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-[#0D1B24] bg-[#050A0F] px-0 py-0 lg:flex lg:flex-col shadow-[4px_0_24px_rgba(0,0,0,0.6)]">
+        {/* Brand Header */}
+        <div className="border-b border-[#0D1B24] p-4 bg-[#071017]">
+          <div className="flex items-center gap-2.5">
+            <div className="p-1.5 rounded border border-[#00E5FF]/40 bg-[#00E5FF]/10 text-[#00E5FF] shadow-[0_0_12px_rgba(0,229,255,0.4)]">
+              <Terminal className="size-4.5" />
+            </div>
+            <div>
+              <div className="font-mono text-xs font-black tracking-[0.18em] text-[#E8F7FF] flex items-center gap-1.5">
+                TIMEMACHINE
+                <span className="text-[9px] px-1 py-0.2 bg-[#00E5FF]/20 text-[#00E5FF] border border-[#00E5FF]/40 rounded font-bold">2.0</span>
+              </div>
+              <div className="font-mono text-[8.5px] uppercase tracking-[0.2em] text-[#00E5FF]/70">
+                INCIDENT RESPONSE ENGINE
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 border-b border-border bg-black/40 px-5 py-2 font-mono text-[10px]">
-          <CircleDot className="size-2 text-cyan-signal animate-pulse" />
-          <span className="text-muted-foreground">
-            NODE: <span className="text-cyan-signal">TM-CORE-01</span>
-          </span>
+        {/* Node & System State */}
+        <div className="flex items-center justify-between border-b border-[#0D1B24] bg-[#03070B] px-4 py-2 font-mono text-[9.5px]">
+          <div className="flex items-center gap-1.5 text-[#6F8A99]">
+            <span>NODE:</span>
+            <span className="text-[#00E5FF] font-bold">TM-CORE-01</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-[#00FF88]">
+            <CircleDot className="size-2 text-[#00FF88] animate-pulse" />
+            <span className="font-bold tracking-wider">ONLINE</span>
+          </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-2 py-6 custom-scrollbar">
+        {/* Navigation Console */}
+        <div className="flex-1 overflow-y-auto py-4 custom-scrollbar">
           <NavLinks />
         </div>
 
-        <div className="mt-auto border-t border-border bg-black/60 p-4">
-          <div className="mb-3 rounded border border-warning/30 bg-warning/5 p-3">
-            <div className="flex items-center gap-2 font-mono text-[10px] uppercase text-warning">
-              <Activity className={cn("size-3", isAttackRunning && "animate-pulse")} />
-              <span>DEMO ENVIRONMENT</span>
+        {/* Simulator / Temporal Control Footer */}
+        <div className="mt-auto border-t border-[#0D1B24] bg-[#03070B] p-3.5 space-y-2.5">
+          <div className="rounded border border-[#FFB000]/30 bg-[#FFB000]/5 p-2.5">
+            <div className="flex items-center justify-between font-mono text-[9px] uppercase">
+              <span className="text-[#FFB000] font-bold flex items-center gap-1.5">
+                <Activity className={cn("size-3", isAttackRunning && "animate-pulse")} />
+                DEMO ENVIRONMENT
+              </span>
+              <span className="text-[#6F8A99]/80 font-mono text-[8px]">{currentTime}</span>
             </div>
-            <p className="mt-1.5 font-sans text-[11px] text-muted-foreground leading-tight">
-              Synthetic telemetry active. No verified live endpoint telemetry connected.
+            <p className="mt-1 font-mono text-[9.5px] text-[#6F8A99] leading-tight">
+              Synthetic telemetry active. No live endpoints currently streaming.
             </p>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1.5">
             {!isAttackRunning && !isPaused ? (
               <Button
                 size="sm"
                 onClick={startAttackSimulation}
-                className="w-full bg-primary/10 text-cyan-signal border border-primary/30 hover:bg-primary/20 hover:text-white transition-colors font-mono text-xs rounded-sm h-8 cursor-pointer"
+                className="w-full bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/40 hover:bg-[#00E5FF] hover:text-[#03070B] transition-all font-mono text-[10px] h-7.5 rounded-none font-bold tracking-wider cursor-pointer"
               >
-                [ RUN SIMULATION ]
+                ▶ RUN SIMULATION
               </Button>
             ) : isAttackRunning ? (
-              <div className="flex gap-2">
+              <div className="flex gap-1.5">
                 <Button
                   size="sm"
                   onClick={pauseSimulation}
-                  className="flex-1 bg-warning/10 text-warning border border-warning/30 hover:bg-warning/20 rounded-sm font-mono text-xs h-8 cursor-pointer"
+                  className="flex-1 bg-[#FFB000]/10 text-[#FFB000] border border-[#FFB000]/40 hover:bg-[#FFB000] hover:text-[#03070B] font-mono text-[10px] h-7.5 rounded-none font-bold cursor-pointer"
                 >
-                  PAUSE
+                  ❚❚ PAUSE
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={resetDemo}
-                  className="rounded-sm font-mono text-xs h-8 cursor-pointer"
+                  className="bg-transparent border-[#0D1B24] hover:bg-[#FF2638]/10 hover:text-[#FF2638] hover:border-[#FF2638]/40 font-mono text-[10px] h-7.5 rounded-none cursor-pointer"
                 >
                   RESET
                 </Button>
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex gap-1.5">
                 <Button
                   size="sm"
                   onClick={resumeSimulation}
-                  className="flex-1 bg-primary/10 text-cyan-signal border border-primary/30 hover:bg-primary/20 rounded-sm font-mono text-xs h-8 cursor-pointer"
+                  className="flex-1 bg-[#00E5FF]/10 text-[#00E5FF] border border-[#00E5FF]/40 hover:bg-[#00E5FF] hover:text-[#03070B] font-mono text-[10px] h-7.5 rounded-none font-bold cursor-pointer"
                 >
-                  RESUME
+                  ▶ RESUME
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={resetDemo}
-                  className="rounded-sm font-mono text-xs h-8 cursor-pointer"
+                  className="bg-transparent border-[#0D1B24] hover:bg-[#FF2638]/10 hover:text-[#FF2638] hover:border-[#FF2638]/40 font-mono text-[10px] h-7.5 rounded-none cursor-pointer"
                 >
                   RESET
                 </Button>
@@ -260,124 +313,138 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
+      {/* MAIN CONTAINER */}
       <div className="flex min-h-screen flex-col lg:pl-64">
-        <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-4 border-b border-border bg-sidebar/80 px-4 backdrop-blur-xl sm:gap-6 sm:px-6">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="shrink-0 lg:hidden rounded-sm">
-                <Menu className="size-4" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-64 border-border bg-sidebar p-0">
-              {/* Mobile nav */}
-              <div className="flex items-center gap-3 border-b border-border p-5">
-                <Terminal className="size-5 text-cyan-signal" />
-                <div>
-                  <span className="block font-sans text-sm font-bold tracking-[0.1em] text-foreground">
-                    TIMEMACHINE
+        {/* TOP SYSTEM BAR */}
+        <header className="sticky top-0 z-20 flex h-13 shrink-0 items-center justify-between border-b border-[#0D1B24] bg-[#050A0F]/90 px-4 backdrop-blur-xl sm:px-6">
+          <div className="flex items-center gap-3">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon" className="shrink-0 lg:hidden rounded-none border-[#0D1B24] bg-transparent text-[#6F8A99] hover:text-[#00E5FF] hover:border-[#00E5FF]/40">
+                  <Menu className="size-4" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-64 border-[#0D1B24] bg-[#050A0F] p-0 text-[#E8F7FF]">
+                <div className="flex items-center gap-2 border-b border-[#0D1B24] p-4 bg-[#071017]">
+                  <Terminal className="size-4 text-[#00E5FF]" />
+                  <span className="font-mono text-xs font-bold tracking-widest text-[#E8F7FF]">
+                    TIMEMACHINE CONSOLE
                   </span>
                 </div>
-              </div>
-              <div className="px-2 py-6">
-                <NavLinks />
-              </div>
-            </SheetContent>
-          </Sheet>
+                <div className="py-4">
+                  <NavLinks />
+                </div>
+              </SheetContent>
+            </Sheet>
 
-          <div className="hidden items-center gap-2 font-mono text-[10px] text-muted-foreground/60 sm:flex">
-            <span>TIMEMACHINE</span>
-            <span>/</span>
-            <span>INCIDENT RESPONSE</span>
-            <span>/</span>
-            <span className="text-cyan-signal">{breadcrumbName.toUpperCase()}</span>
+            {/* Breadcrumb Path */}
+            <div className="hidden items-center gap-1.5 font-mono text-[10.5px] text-[#6F8A99] sm:flex">
+              <span className="text-[#6F8A99]/50">TM-CORE-01</span>
+              <span className="text-[#00E5FF]/40">/</span>
+              <span className="text-[#6F8A99]/50">OPS</span>
+              <span className="text-[#00E5FF]/40">/</span>
+              <span className="text-[#00E5FF] font-bold">{breadcrumbName}</span>
+            </div>
           </div>
 
-          <div className="mx-auto hidden max-w-md flex-1 items-center rounded-sm border border-border bg-black/50 px-3 py-1.5 sm:flex">
-            <Search className="mr-2 size-3 text-muted-foreground" />
+          {/* Center Search Bar */}
+          <div className="hidden max-w-sm flex-1 items-center border border-[#0D1B24] bg-[#03070B] px-3 py-1 md:flex mx-4 focus-within:border-[#00E5FF]/40">
+            <Search className="mr-2 size-3 text-[#6F8A99]" />
             <input
               type="text"
-              placeholder="Search incidents, hosts, hashes, IPs, evidence..."
-              className="flex-1 bg-transparent font-mono text-xs text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
+              placeholder="SEARCH INCIDENTS, HOSTS, MITRE T1059, IPS..."
+              className="flex-1 bg-transparent font-mono text-[10px] text-[#E8F7FF] placeholder:text-[#6F8A99]/40 focus:outline-none uppercase"
             />
+            <span className="font-mono text-[8.5px] text-[#6F8A99]/40 border border-[#0D1B24] px-1">CTRL+K</span>
           </div>
 
-          <div className="ml-auto flex items-center gap-4">
-            <div className="hidden lg:flex items-center gap-4 border-r border-border pr-4 font-mono text-[10px]">
+          {/* Right Status Indicators HUD */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            {/* Real-time System Metrics */}
+            <div className="hidden xl:flex items-center gap-4 border-r border-[#0D1B24] pr-4 font-mono text-[9px]">
               <div className="flex flex-col items-end">
-                <span className="text-muted-foreground/50">EVENTS</span>
-                <span className="text-foreground">12.4K</span>
+                <span className="text-[#6F8A99]/60">TELEMETRY</span>
+                <span className="text-[#00E5FF] font-bold">12,482/s</span>
               </div>
               <div className="flex flex-col items-end">
-                <span className="text-muted-foreground/50">ALERTS</span>
-                <span className="text-warning">03</span>
+                <span className="text-[#6F8A99]/60">THREATS</span>
+                <span className="text-[#FF2638] font-bold">03 ACTIVE</span>
               </div>
               <div className="flex flex-col items-end">
-                <span className="text-muted-foreground/50">AGENTS</span>
-                <span className="text-foreground">08</span>
+                <span className="text-[#6F8A99]/60">NETWORK</span>
+                <span className="text-[#00FF88] font-bold flex items-center gap-1">
+                  <span className="size-1 rounded-full bg-[#00FF88]" /> STABLE
+                </span>
+              </div>
+              <div className="flex flex-col items-end">
+                <span className="text-[#6F8A99]/60">AI ENGINE</span>
+                <span className="text-[#00E5FF] font-bold">ACTIVE</span>
               </div>
             </div>
 
-            <span className="hidden items-center gap-2 rounded-sm border border-warning/30 bg-warning/10 px-2 py-1 font-mono text-[10px] font-bold text-warning sm:inline-flex">
-              <CircleDot className="size-2 animate-pulse" /> SYNTHETIC DATA
+            {/* Mode Tag */}
+            <span className="hidden items-center gap-1.5 border border-[#FFB000]/40 bg-[#FFB000]/10 px-2 py-0.5 font-mono text-[9px] font-bold text-[#FFB000] sm:inline-flex">
+              <CircleDot className="size-2 animate-pulse text-[#FFB000]" /> DEMO ENVIRONMENT
             </span>
 
-            <Button variant="ghost" size="icon" className="rounded-sm hover:bg-secondary/50">
-              <Bell className="size-4 text-muted-foreground" />
-            </Button>
-
+            {/* User Profile Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  size="icon"
-                  className="size-8 rounded-sm bg-black/50 font-mono text-xs font-bold text-cyan-signal border-primary/20 hover:bg-primary/10 hover:text-cyan-signal cursor-pointer"
+                  size="sm"
+                  className="h-8 gap-2 border-[#00E5FF]/30 bg-[#071017] px-2.5 font-mono text-xs text-[#00E5FF] hover:bg-[#00E5FF]/10 hover:text-[#00E5FF] rounded-none cursor-pointer"
                 >
-                  {displayName.substring(0, 2).toUpperCase()}
+                  <div className="size-2 rounded-full bg-[#00FF88] animate-pulse" />
+                  <span className="font-bold tracking-wider">{displayName.toUpperCase()}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="w-60 rounded-sm border-border bg-sidebar font-mono text-xs"
+                className="w-64 rounded-none border-[#0D1B24] bg-[#050A0F] font-mono text-xs text-[#E8F7FF] shadow-2xl"
               >
-                <DropdownMenuLabel className="font-normal text-muted-foreground space-y-1">
-                  <div className="font-bold text-foreground truncate">{displayName}</div>
-                  <div className="text-[10px] text-cyan-signal font-semibold">{displayRole}</div>
-                  <div className="text-[10px] text-muted-foreground/80 truncate">{userEmail}</div>
+                <DropdownMenuLabel className="font-normal text-[#6F8A99] space-y-1 p-3 bg-[#071017]">
+                  <div className="font-bold text-[#E8F7FF] truncate">{displayName}</div>
+                  <div className="text-[9.5px] text-[#00E5FF] font-semibold">{displayRole}</div>
+                  <div className="text-[9px] text-[#6F8A99]/80 truncate">{userEmail}</div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-border" />
+                <DropdownMenuSeparator className="bg-[#0D1B24]" />
                 <DropdownMenuItem
                   asChild
-                  className="hover:bg-primary/10 hover:text-cyan-signal focus:bg-primary/10 focus:text-cyan-signal cursor-pointer"
+                  className="hover:bg-[#00E5FF]/10 hover:text-[#00E5FF] focus:bg-[#00E5FF]/10 focus:text-[#00E5FF] cursor-pointer"
                 >
-                  <Link to="/admin" className="flex items-center gap-2">
-                    <ShieldCheck className="size-3.5 text-red-400" />
-                    <span>ADMIN CONSOLE</span>
+                  <Link to="/admin" className="flex items-center gap-2 p-2 font-mono text-[11px]">
+                    <ShieldCheck className="size-3.5 text-[#FF2638]" />
+                    <span>&gt; ADMIN CONSOLE</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   asChild
-                  className="hover:bg-primary/10 hover:text-cyan-signal focus:bg-primary/10 focus:text-cyan-signal cursor-pointer"
+                  className="hover:bg-[#00E5FF]/10 hover:text-[#00E5FF] focus:bg-[#00E5FF]/10 focus:text-[#00E5FF] cursor-pointer"
                 >
-                  <Link to="/settings" className="flex items-center gap-2">
-                    <Settings className="size-3.5" />
-                    <span>SYSTEM SETTINGS</span>
+                  <Link to="/settings" className="flex items-center gap-2 p-2 font-mono text-[11px]">
+                    <Settings className="size-3.5 text-[#00E5FF]" />
+                    <span>&gt; SYSTEM SETTINGS</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-border" />
+                <DropdownMenuSeparator className="bg-[#0D1B24]" />
                 <DropdownMenuItem
                   onClick={handleSignOut}
-                  className="text-destructive hover:bg-destructive/10 focus:bg-destructive/10 focus:text-destructive font-bold flex items-center justify-between cursor-pointer"
+                  className="text-[#FF2638] hover:bg-[#FF2638]/10 focus:bg-[#FF2638]/10 focus:text-[#FF2638] font-bold flex items-center justify-between p-2 cursor-pointer font-mono text-[11px]"
                 >
-                  <span>TERMINATE SESSION</span>
+                  <span>&gt; TERMINATE SESSION</span>
                   <LogOut className="size-3.5" />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </header>
-        <main className="flex-1 p-3.5 sm:p-5 lg:p-6 w-full">{children}</main>
+
+        {/* Content Area */}
+        <main className="flex-1 p-3.5 sm:p-5 lg:p-6 w-full relative z-10">{children}</main>
       </div>
       <IrisCopilot />
     </div>
   );
 }
+
