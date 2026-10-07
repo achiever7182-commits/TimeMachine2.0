@@ -112,19 +112,19 @@ export function DigitalTwinGraph({ viewMode = "ACTUAL" }: { viewMode?: "ACTUAL" 
     <div className="relative h-[640px] w-full select-none overflow-hidden rounded-xl border border-border bg-card/60 p-4 shadow-panel backdrop-blur-xl">
       {/* Background Command Grid & Radar sweep */}
       <div className="pointer-events-none absolute inset-0 bg-command-grid opacity-50" />
-      <div className="pointer-events-none absolute -right-20 -top-20 size-96 rounded-full bg-[#19E6FF]/5 blur-3xl" />
+      <div className="pointer-events-none absolute -right-20 -top-20 size-96 rounded-full bg-[#16D9F2]/5 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-20 -left-20 size-96 rounded-full bg-[#3B82F6]/5 blur-3xl" />
 
       {/* SVG Canvas for Network Connections */}
       <svg className="absolute inset-0 size-full pointer-events-none">
         <defs>
           <linearGradient id="grad-active-conn" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#19E6FF" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#FF3045" stopOpacity="0.9" />
+            <stop offset="0%" stopColor="#16D9F2" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="#FF3347" stopOpacity="0.9" />
           </linearGradient>
           <linearGradient id="grad-healthy-conn" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#19E6FF" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="#19E6FF" stopOpacity="0.1" />
+            <stop offset="0%" stopColor="#16D9F2" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#16D9F2" stopOpacity="0.1" />
           </linearGradient>
           <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur stdDeviation="3" result="blur" />
@@ -155,7 +155,7 @@ export function DigitalTwinGraph({ viewMode = "ACTUAL" }: { viewMode?: "ACTUAL" 
                 y1={sourceNode.y + 40}
                 x2={destNode.x + 95}
                 y2={destNode.y + 40}
-                stroke={isAttackPath ? "#FF3045" : "#19E6FF"}
+                stroke={isAttackPath ? "#FF3347" : "#16D9F2"}
                 strokeWidth={isAttackPath ? 2.5 : 1.5}
                 strokeDasharray={isLateral ? "5 4" : undefined}
                 strokeOpacity={isConnectedToHovered ? 1 : isAttackPath ? 0.75 : 0.3}
@@ -164,7 +164,7 @@ export function DigitalTwinGraph({ viewMode = "ACTUAL" }: { viewMode?: "ACTUAL" 
 
               {/* Animated Packet / Flow Signal */}
               {isAttackPath ? (
-                <circle r="4" fill="#ff2a5f">
+                <circle r="4" fill="#FF3347">
                   <animateMotion
                     path={`M ${sourceNode.x + 95} ${sourceNode.y + 40} L ${destNode.x + 95} ${destNode.y + 40}`}
                     dur="2.5s"
@@ -172,7 +172,7 @@ export function DigitalTwinGraph({ viewMode = "ACTUAL" }: { viewMode?: "ACTUAL" 
                   />
                 </circle>
               ) : (
-                <circle r="2.5" fill="#00f2fe" opacity="0.6">
+                <circle r="2.5" fill="#16D9F2" opacity="0.6">
                   <animateMotion
                     path={`M ${sourceNode.x + 95} ${sourceNode.y + 40} L ${destNode.x + 95} ${destNode.y + 40}`}
                     dur="4s"

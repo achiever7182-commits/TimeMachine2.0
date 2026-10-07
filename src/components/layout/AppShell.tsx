@@ -107,9 +107,9 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
     <nav className="space-y-4 px-2.5" aria-label="Security Command Console">
       {navSections.map((section) => (
         <div key={section.title} className="space-y-1">
-          <div className="flex items-center justify-between px-2.5 py-1 text-[9.5px] font-mono font-bold tracking-[0.2em] text-[#6F9AAA] border-b border-[#142029]">
+          <div className="flex items-center justify-between px-2.5 py-1 text-[9.5px] font-mono font-bold tracking-[0.2em] text-[#7893A1] border-b border-[#142029]">
             <span>// {section.title}</span>
-            <span className="text-[8px] text-[#19E6FF]/40">SYS</span>
+            <span className="text-[8px] text-[#16D9F2]/40">SYS</span>
           </div>
           <div className="space-y-0.5 pt-1">
             {section.items.map((item) => {
@@ -123,13 +123,13 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
                   className={cn(
                     "group relative flex min-h-[34px] items-center gap-2.5 px-2.5 text-xs font-mono transition-all duration-150 rounded-[3px] border",
                     active
-                      ? "border-[#19E6FF]/40 bg-[#19E6FF]/10 text-[#F2F7FA] shadow-[inset_0_0_12px_rgba(25,230,255,0.08)] border-l-2 border-l-[#19E6FF]"
-                      : "border-transparent text-[#A6B6C2] hover:border-[#1A2730] hover:bg-[#0B1117] hover:text-[#F2F7FA]",
+                      ? "border-[#16D9F2]/40 bg-[#16D9F2]/10 text-[#F3F7FA] shadow-[inset_0_0_12px_rgba(22,217,242,0.08)] border-l-2 border-l-[#16D9F2]"
+                      : "border-transparent text-[#A5B5C0] hover:border-[#1B2933] hover:bg-[#0B1117] hover:text-[#F3F7FA]",
                   )}
                 >
                   <span className={cn(
                     "text-[10px] transition-colors font-mono",
-                    active ? "text-[#19E6FF] font-bold" : "text-[#667783] group-hover:text-[#19E6FF]/70"
+                    active ? "text-[#16D9F2] font-bold" : "text-[#647682] group-hover:text-[#16D9F2]/70"
                   )}>
                     &gt;
                   </span>
@@ -138,8 +138,8 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
                     className={cn(
                       "size-3.5 shrink-0 transition-transform group-hover:scale-105",
                       active
-                        ? "text-[#19E6FF] drop-shadow-[0_0_6px_rgba(25,230,255,0.6)]"
-                        : "text-[#6F9AAA] group-hover:text-[#19E6FF]",
+                        ? "text-[#16D9F2] drop-shadow-[0_0_6px_rgba(22,217,242,0.6)]"
+                        : "text-[#7893A1] group-hover:text-[#16D9F2]",
                     )}
                   />
 
@@ -148,9 +148,9 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
                   {item.tag && (
                     <span className={cn(
                       "ml-auto text-[8px] px-1.5 py-0.2 rounded-[2px] border font-mono font-semibold",
-                      item.tag === "LIVE" ? "border-[#FF3045]/40 bg-[#FF3045]/10 text-[#FF3045] animate-pulse" :
-                      item.tag === "REWIND" ? "border-[#19E6FF]/40 bg-[#19E6FF]/10 text-[#19E6FF]" :
-                      item.tag === "AI" ? "border-[#20E3A2]/40 bg-[#20E3A2]/10 text-[#20E3A2]" :
+                      item.tag === "LIVE" ? "border-[#FF3347]/40 bg-[#FF3347]/10 text-[#FF3347] animate-pulse" :
+                      item.tag === "REWIND" ? "border-[#16D9F2]/40 bg-[#16D9F2]/10 text-[#16D9F2]" :
+                      item.tag === "AI" ? "border-[#20DFA0]/40 bg-[#20DFA0]/10 text-[#20DFA0]" :
                       "border-[#FFB020]/40 bg-[#FFB020]/10 text-[#FFB020]"
                     )}>
                       {item.tag}
@@ -158,13 +158,13 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
                   )}
 
                   {item.shortcut && !item.tag && (
-                    <span className="ml-auto text-[9px] text-[#667783] opacity-0 transition-opacity group-hover:opacity-100">
+                    <span className="ml-auto text-[9px] text-[#647682] opacity-0 transition-opacity group-hover:opacity-100">
                       {item.shortcut}
                     </span>
                   )}
 
                   {active && (
-                    <div className="absolute right-1.5 size-1.5 rounded-full bg-[#19E6FF] animate-pulse shadow-[0_0_6px_#19E6FF]" />
+                    <div className="absolute right-1.5 size-1.5 rounded-full bg-[#16D9F2] animate-pulse shadow-[0_0_6px_#16D9F2]" />
                   )}
                 </Link>
               );
@@ -207,24 +207,24 @@ export function AppShell({ children }: { children: ReactNode }) {
   const userEmail = user?.email || storedUser?.email || "operator@time-machine.soc";
 
   return (
-    <div className="min-h-screen bg-[#05080C] text-[#F2F7FA] font-sans selection:bg-[#19E6FF]/30 selection:text-[#19E6FF]">
+    <div className="min-h-screen bg-[#05080C] text-[#F3F7FA] font-sans selection:bg-[#16D9F2]/30 selection:text-[#16D9F2]">
       {/* Background Matrix Grid */}
-      <div className="fixed inset-0 pointer-events-none opacity-20 bg-[linear-gradient(to_right,#19E6FF08_1px,transparent_1px),linear-gradient(to_bottom,#19E6FF08_1px,transparent_1px)] bg-[size:32px_32px] z-0" />
+      <div className="fixed inset-0 pointer-events-none opacity-20 bg-[linear-gradient(to_right,#16D9F208_1px,transparent_1px),linear-gradient(to_bottom,#16D9F208_1px,transparent_1px)] bg-[size:32px_32px] z-0" />
 
       {/* LEFT SIDEBAR: SECURITY COMMAND CONSOLE */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-[#1A2730] bg-[#080D12] px-0 py-0 lg:flex lg:flex-col shadow-[4px_0_24px_rgba(0,0,0,0.8)]">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-[#142029] bg-[#05080C] px-0 py-0 lg:flex lg:flex-col shadow-[4px_0_24px_rgba(0,0,0,0.8)]">
         {/* Brand Header */}
-        <div className="border-b border-[#1A2730] p-4 bg-[#0B1117]">
+        <div className="border-b border-[#142029] p-4 bg-[#070C11]">
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 rounded-[4px] border border-[#19E6FF]/40 bg-[#19E6FF]/10 text-[#19E6FF] shadow-[0_0_12px_rgba(25,230,255,0.15)]">
+            <div className="p-1.5 rounded-[4px] border border-[#16D9F2]/40 bg-[#16D9F2]/10 text-[#16D9F2] shadow-[0_0_12px_rgba(22,217,242,0.15)]">
               <Terminal className="size-4.5" />
             </div>
             <div>
-              <div className="font-mono text-xs font-black tracking-[0.18em] text-[#F2F7FA] flex items-center gap-1.5">
+              <div className="font-mono text-xs font-black tracking-[0.18em] text-[#F3F7FA] flex items-center gap-1.5">
                 TIMEMACHINE
-                <span className="text-[9px] px-1 py-0.2 bg-[#19E6FF]/20 text-[#19E6FF] border border-[#19E6FF]/40 rounded-[2px] font-bold">2.0</span>
+                <span className="text-[9px] px-1 py-0.2 bg-[#16D9F2]/20 text-[#16D9F2] border border-[#16D9F2]/40 rounded-[2px] font-bold">2.0</span>
               </div>
-              <div className="font-mono text-[8.5px] uppercase tracking-[0.2em] text-[#19E6FF]/80">
+              <div className="font-mono text-[8.5px] uppercase tracking-[0.2em] text-[#16D9F2]/80">
                 INCIDENT RESPONSE ENGINE
               </div>
             </div>
@@ -232,13 +232,13 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
 
         {/* Node & System State */}
-        <div className="flex items-center justify-between border-b border-[#1A2730] bg-[#05080C] px-4 py-2 font-mono text-[9.5px]">
-          <div className="flex items-center gap-1.5 text-[#667783]">
+        <div className="flex items-center justify-between border-b border-[#142029] bg-[#05080C] px-4 py-2 font-mono text-[9.5px]">
+          <div className="flex items-center gap-1.5 text-[#647682]">
             <span>NODE:</span>
-            <span className="text-[#19E6FF] font-bold">TM-CORE-01</span>
+            <span className="text-[#16D9F2] font-bold">TM-CORE-01</span>
           </div>
-          <div className="flex items-center gap-1.5 text-[#20E3A2]">
-            <CircleDot className="size-2 text-[#20E3A2] animate-pulse" />
+          <div className="flex items-center gap-1.5 text-[#20DFA0]">
+            <CircleDot className="size-2 text-[#20DFA0] animate-pulse" />
             <span className="font-bold tracking-wider">ONLINE</span>
           </div>
         </div>
@@ -249,16 +249,16 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
 
         {/* Simulator / Temporal Control Footer */}
-        <div className="mt-auto border-t border-[#1A2730] bg-[#05080C] p-3.5 space-y-2.5">
+        <div className="mt-auto border-t border-[#142029] bg-[#05080C] p-3.5 space-y-2.5">
           <div className="rounded-[4px] border border-[#FFB020]/30 bg-[#FFB020]/5 p-2.5">
             <div className="flex items-center justify-between font-mono text-[9px] uppercase">
               <span className="text-[#FFB020] font-bold flex items-center gap-1.5">
                 <Activity className={cn("size-3", isAttackRunning && "animate-pulse")} />
                 DEMO ENVIRONMENT
               </span>
-              <span className="text-[#667783] font-mono text-[8px]">{currentTime}</span>
+              <span className="text-[#647682] font-mono text-[8px]">{currentTime}</span>
             </div>
-            <p className="mt-1 font-mono text-[9.5px] text-[#A6B6C2] leading-tight">
+            <p className="mt-1 font-mono text-[9.5px] text-[#A5B5C0] leading-tight">
               Synthetic telemetry active. No live endpoints currently streaming.
             </p>
           </div>
@@ -268,7 +268,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Button
                 size="sm"
                 onClick={startAttackSimulation}
-                className="w-full bg-[#19E6FF]/10 text-[#19E6FF] border border-[#19E6FF]/40 hover:bg-[#19E6FF] hover:text-[#05080C] transition-all font-mono text-[10px] h-7.5 rounded-[3px] font-bold tracking-wider cursor-pointer shadow-[0_0_12px_rgba(25,230,255,0.15)]"
+                className="w-full bg-[#16D9F2]/10 text-[#16D9F2] border border-[#16D9F2]/40 hover:bg-[#16D9F2] hover:text-[#05080C] transition-all font-mono text-[10px] h-7.5 rounded-[3px] font-bold tracking-wider cursor-pointer shadow-[0_0_12px_rgba(22,217,242,0.15)]"
               >
                 ▶ RUN SIMULATION
               </Button>
@@ -285,7 +285,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   size="sm"
                   variant="outline"
                   onClick={resetDemo}
-                  className="bg-transparent border-[#1A2730] hover:bg-[#FF3045]/10 hover:text-[#FF3045] hover:border-[#FF3045]/40 font-mono text-[10px] h-7.5 rounded-[3px] cursor-pointer"
+                  className="bg-transparent border-[#1B2933] hover:bg-[#FF3347]/10 hover:text-[#FF3347] hover:border-[#FF3347]/40 font-mono text-[10px] h-7.5 rounded-[3px] cursor-pointer"
                 >
                   RESET
                 </Button>
@@ -295,7 +295,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <Button
                   size="sm"
                   onClick={resumeSimulation}
-                  className="flex-1 bg-[#19E6FF]/10 text-[#19E6FF] border border-[#19E6FF]/40 hover:bg-[#19E6FF] hover:text-[#05080C] font-mono text-[10px] h-7.5 rounded-[3px] font-bold cursor-pointer"
+                  className="flex-1 bg-[#16D9F2]/10 text-[#16D9F2] border border-[#16D9F2]/40 hover:bg-[#16D9F2] hover:text-[#05080C] font-mono text-[10px] h-7.5 rounded-[3px] font-bold cursor-pointer"
                 >
                   ▶ RESUME
                 </Button>
@@ -303,7 +303,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   size="sm"
                   variant="outline"
                   onClick={resetDemo}
-                  className="bg-transparent border-[#1A2730] hover:bg-[#FF3045]/10 hover:text-[#FF3045] hover:border-[#FF3045]/40 font-mono text-[10px] h-7.5 rounded-[3px] cursor-pointer"
+                  className="bg-transparent border-[#1B2933] hover:bg-[#FF3347]/10 hover:text-[#FF3347] hover:border-[#FF3347]/40 font-mono text-[10px] h-7.5 rounded-[3px] cursor-pointer"
                 >
                   RESET
                 </Button>
@@ -316,18 +316,18 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* MAIN CONTAINER */}
       <div className="flex min-h-screen flex-col lg:pl-64">
         {/* TOP SYSTEM BAR */}
-        <header className="sticky top-0 z-20 flex h-13 shrink-0 items-center justify-between border-b border-[#1A2730] bg-[#080D12]/90 px-4 backdrop-blur-xl sm:px-6">
+        <header className="sticky top-0 z-20 flex h-13 shrink-0 items-center justify-between border-b border-[#142029] bg-[#05080C]/95 px-4 backdrop-blur-xl sm:px-6">
           <div className="flex items-center gap-3">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="shrink-0 lg:hidden rounded-[3px] border-[#1A2730] bg-transparent text-[#A6B6C2] hover:text-[#19E6FF] hover:border-[#19E6FF]/40">
+                <Button variant="outline" size="icon" className="shrink-0 lg:hidden rounded-[3px] border-[#1B2933] bg-transparent text-[#A5B5C0] hover:text-[#16D9F2] hover:border-[#16D9F2]/40">
                   <Menu className="size-4" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-64 border-[#1A2730] bg-[#080D12] p-0 text-[#F2F7FA]">
-                <div className="flex items-center gap-2 border-b border-[#1A2730] p-4 bg-[#0B1117]">
-                  <Terminal className="size-4 text-[#19E6FF]" />
-                  <span className="font-mono text-xs font-bold tracking-widest text-[#F2F7FA]">
+              <SheetContent side="left" className="w-64 border-[#142029] bg-[#05080C] p-0 text-[#F3F7FA]">
+                <div className="flex items-center gap-2 border-b border-[#142029] p-4 bg-[#070C11]">
+                  <Terminal className="size-4 text-[#16D9F2]" />
+                  <span className="font-mono text-xs font-bold tracking-widest text-[#F3F7FA]">
                     TIMEMACHINE CONSOLE
                   </span>
                 </div>
@@ -338,47 +338,47 @@ export function AppShell({ children }: { children: ReactNode }) {
             </Sheet>
 
             {/* Breadcrumb Path */}
-            <div className="hidden items-center gap-1.5 font-mono text-[10.5px] text-[#A6B6C2] sm:flex">
-              <span className="text-[#667783]">TM-CORE-01</span>
-              <span className="text-[#19E6FF]/40">/</span>
-              <span className="text-[#667783]">OPS</span>
-              <span className="text-[#19E6FF]/40">/</span>
-              <span className="text-[#19E6FF] font-bold">{breadcrumbName}</span>
+            <div className="hidden items-center gap-1.5 font-mono text-[10.5px] text-[#A5B5C0] sm:flex">
+              <span className="text-[#647682]">TM-CORE-01</span>
+              <span className="text-[#16D9F2]/40">/</span>
+              <span className="text-[#647682]">OPS</span>
+              <span className="text-[#16D9F2]/40">/</span>
+              <span className="text-[#16D9F2] font-bold">{breadcrumbName}</span>
             </div>
           </div>
 
           {/* Center Search Bar */}
-          <div className="hidden max-w-sm flex-1 items-center border border-[#1A2730] bg-[#05080C] px-3 py-1 md:flex mx-4 focus-within:border-[#19E6FF]/40 rounded-[3px]">
-            <Search className="mr-2 size-3 text-[#6F9AAA]" />
+          <div className="hidden max-w-sm flex-1 items-center border border-[#1B2933] bg-[#070C11] px-3 py-1 md:flex mx-4 focus-within:border-[#16D9F2]/60 rounded-[3px]">
+            <Search className="mr-2 size-3 text-[#7893A1]" />
             <input
               type="text"
               placeholder="SEARCH INCIDENTS, HOSTS, MITRE T1059, IPS..."
-              className="flex-1 bg-transparent font-mono text-[10px] text-[#F2F7FA] placeholder:text-[#667783] focus:outline-none uppercase"
+              className="flex-1 bg-transparent font-mono text-[10px] text-[#F3F7FA] placeholder:text-[#647682] focus:outline-none uppercase"
             />
-            <span className="font-mono text-[8.5px] text-[#667783] border border-[#1A2730] px-1 rounded-[2px]">CTRL+K</span>
+            <span className="font-mono text-[8.5px] text-[#647682] border border-[#1B2933] px-1 rounded-[2px]">CTRL+K</span>
           </div>
 
           {/* Right Status Indicators HUD */}
           <div className="flex items-center gap-3 sm:gap-4">
             {/* Real-time System Metrics */}
-            <div className="hidden xl:flex items-center gap-4 border-r border-[#1A2730] pr-4 font-mono text-[9px]">
+            <div className="hidden xl:flex items-center gap-4 border-r border-[#142029] pr-4 font-mono text-[9px]">
               <div className="flex flex-col items-end">
-                <span className="text-[#6F9AAA]">TELEMETRY</span>
-                <span className="text-[#19E6FF] font-bold">12,482/s</span>
+                <span className="text-[#7893A1]">TELEMETRY</span>
+                <span className="text-[#F3F7FA] font-bold">12,482/s</span>
               </div>
               <div className="flex flex-col items-end">
-                <span className="text-[#6F9AAA]">THREATS</span>
-                <span className="text-[#FF3045] font-bold">03 ACTIVE</span>
+                <span className="text-[#7893A1]">THREATS</span>
+                <span className="text-[#FF3347] font-bold">03 ACTIVE</span>
               </div>
               <div className="flex flex-col items-end">
-                <span className="text-[#6F9AAA]">NETWORK</span>
-                <span className="text-[#20E3A2] font-bold flex items-center gap-1">
-                  <span className="size-1 rounded-full bg-[#20E3A2]" /> STABLE
+                <span className="text-[#7893A1]">NETWORK</span>
+                <span className="text-[#20DFA0] font-bold flex items-center gap-1">
+                  <span className="size-1 rounded-full bg-[#20DFA0]" /> STABLE
                 </span>
               </div>
               <div className="flex flex-col items-end">
-                <span className="text-[#6F9AAA]">AI ENGINE</span>
-                <span className="text-[#19E6FF] font-bold">ACTIVE</span>
+                <span className="text-[#7893A1]">AI ENGINE</span>
+                <span className="text-[#16D9F2] font-bold">ACTIVE</span>
               </div>
             </div>
 
@@ -393,44 +393,44 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-8 gap-2 border-[#19E6FF]/30 bg-[#0B1117] px-2.5 font-mono text-xs text-[#19E6FF] hover:bg-[#19E6FF]/10 hover:text-[#19E6FF] rounded-[3px] cursor-pointer"
+                  className="h-8 gap-2 border-[#16D9F2]/30 bg-[#0B1117] px-2.5 font-mono text-xs text-[#16D9F2] hover:bg-[#16D9F2]/10 hover:text-[#16D9F2] rounded-[3px] cursor-pointer"
                 >
-                  <div className="size-2 rounded-full bg-[#20E3A2] animate-pulse" />
+                  <div className="size-2 rounded-full bg-[#20DFA0] animate-pulse" />
                   <span className="font-bold tracking-wider">{displayName.toUpperCase()}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent
                 align="end"
-                className="w-64 rounded-[4px] border-[#1A2730] bg-[#080D12] font-mono text-xs text-[#F2F7FA] shadow-2xl"
+                className="w-64 rounded-[4px] border-[#1B2933] bg-[#070C11] font-mono text-xs text-[#F3F7FA] shadow-2xl"
               >
-                <DropdownMenuLabel className="font-normal text-[#A6B6C2] space-y-1 p-3 bg-[#0B1117]">
-                  <div className="font-bold text-[#F2F7FA] truncate">{displayName}</div>
-                  <div className="text-[9.5px] text-[#19E6FF] font-semibold">{displayRole}</div>
-                  <div className="text-[9px] text-[#667783] truncate">{userEmail}</div>
+                <DropdownMenuLabel className="font-normal text-[#A5B5C0] space-y-1 p-3 bg-[#0B1117]">
+                  <div className="font-bold text-[#F3F7FA] truncate">{displayName}</div>
+                  <div className="text-[9.5px] text-[#16D9F2] font-semibold">{displayRole}</div>
+                  <div className="text-[9px] text-[#647682] truncate">{userEmail}</div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-[#1A2730]" />
+                <DropdownMenuSeparator className="bg-[#1B2933]" />
                 <DropdownMenuItem
                   asChild
-                  className="hover:bg-[#19E6FF]/10 hover:text-[#19E6FF] focus:bg-[#19E6FF]/10 focus:text-[#19E6FF] cursor-pointer"
+                  className="hover:bg-[#16D9F2]/10 hover:text-[#16D9F2] focus:bg-[#16D9F2]/10 focus:text-[#16D9F2] cursor-pointer"
                 >
                   <Link to="/admin" className="flex items-center gap-2 p-2 font-mono text-[11px]">
-                    <ShieldCheck className="size-3.5 text-[#FF3045]" />
+                    <ShieldCheck className="size-3.5 text-[#FF3347]" />
                     <span>&gt; ADMIN CONSOLE</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   asChild
-                  className="hover:bg-[#19E6FF]/10 hover:text-[#19E6FF] focus:bg-[#19E6FF]/10 focus:text-[#19E6FF] cursor-pointer"
+                  className="hover:bg-[#16D9F2]/10 hover:text-[#16D9F2] focus:bg-[#16D9F2]/10 focus:text-[#16D9F2] cursor-pointer"
                 >
                   <Link to="/settings" className="flex items-center gap-2 p-2 font-mono text-[11px]">
-                    <Settings className="size-3.5 text-[#19E6FF]" />
+                    <Settings className="size-3.5 text-[#16D9F2]" />
                     <span>&gt; SYSTEM SETTINGS</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator className="bg-[#1A2730]" />
+                <DropdownMenuSeparator className="bg-[#1B2933]" />
                 <DropdownMenuItem
                   onClick={handleSignOut}
-                  className="text-[#FF3045] hover:bg-[#FF3045]/10 focus:bg-[#FF3045]/10 focus:text-[#FF3045] font-bold flex items-center justify-between p-2 cursor-pointer font-mono text-[11px]"
+                  className="text-[#FF3347] hover:bg-[#FF3347]/10 focus:bg-[#FF3347]/10 focus:text-[#FF3347] font-bold flex items-center justify-between p-2 cursor-pointer font-mono text-[11px]"
                 >
                   <span>&gt; TERMINATE SESSION</span>
                   <LogOut className="size-3.5" />

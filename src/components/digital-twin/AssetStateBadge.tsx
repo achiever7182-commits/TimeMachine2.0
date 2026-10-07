@@ -12,12 +12,12 @@ export function AssetStateBadge({ status, className, showIcon = true }: AssetSta
   const config = {
     HEALTHY: {
       label: "Healthy",
-      color: "border-[#20E3A2]/40 bg-[#087F60]/20 text-[#5AF2C0]",
+      color: "border-[#20DFA0]/40 bg-[#087F60]/20 text-[#5AF2C0]",
       icon: ShieldCheck,
     },
     MONITORED: {
       label: "Monitored",
-      color: "border-[#19E6FF]/40 bg-[#08758A]/20 text-[#19E6FF]",
+      color: "border-[#16D9F2]/40 bg-[#08798A]/20 text-[#16D9F2]",
       icon: Eye,
     },
     SUSPICIOUS: {
@@ -27,7 +27,7 @@ export function AssetStateBadge({ status, className, showIcon = true }: AssetSta
     },
     COMPROMISED: {
       label: "Compromised",
-      color: "border-[#FF3045]/50 bg-[#B91C2E]/20 text-[#FF5264] shadow-[0_0_10px_rgba(255,48,69,0.3)] animate-pulse",
+      color: "border-[#FF3347]/50 bg-[#B91C2E]/20 text-[#FF5264] shadow-[0_0_10px_rgba(255,51,71,0.12)] animate-pulse",
       icon: ShieldAlert,
     },
     ISOLATED: {
@@ -37,12 +37,12 @@ export function AssetStateBadge({ status, className, showIcon = true }: AssetSta
     },
     RECOVERED: {
       label: "Recovered",
-      color: "border-[#20E3A2]/40 bg-[#087F60]/20 text-[#20E3A2]",
+      color: "border-[#20DFA0]/40 bg-[#087F60]/20 text-[#20DFA0]",
       icon: CheckCircle2,
     },
   }[status] ?? {
     label: status,
-    color: "border-[#1A2730] bg-[#080D12] text-[#667783]",
+    color: "border-[#1B2933] bg-[#070C11] text-[#647682]",
     icon: ShieldCheck,
   };
 

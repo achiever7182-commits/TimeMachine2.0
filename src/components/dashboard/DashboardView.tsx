@@ -41,33 +41,33 @@ export function DashboardView() {
       <SystemStatusBar />
 
       {/* Cinematic Command Center Hero Banner */}
-      <div className="relative overflow-hidden rounded-[4px] border border-[#1A2730] bg-[#080D12] p-5 backdrop-blur-xl shadow-[0_0_20px_rgba(0,0,0,0.8)]">
-        <div className="absolute -left-1 -top-1 size-2.5 border-l-2 border-t-2 border-[#19E6FF]" />
-        <div className="absolute -right-1 -top-1 size-2.5 border-r-2 border-t-2 border-[#19E6FF]" />
-        <div className="absolute -bottom-1 -left-1 size-2.5 border-b-2 border-l-2 border-[#19E6FF]" />
-        <div className="absolute -bottom-1 -right-1 size-2.5 border-b-2 border-r-2 border-[#19E6FF]" />
+      <div className="relative overflow-hidden rounded-[4px] border border-[#1B2933] bg-[#070C11] p-5 backdrop-blur-xl shadow-[0_0_20px_rgba(0,0,0,0.8)]">
+        <div className="absolute -left-1 -top-1 size-2.5 border-l-2 border-t-2 border-[#16D9F2]" />
+        <div className="absolute -right-1 -top-1 size-2.5 border-r-2 border-t-2 border-[#16D9F2]" />
+        <div className="absolute -bottom-1 -left-1 size-2.5 border-b-2 border-l-2 border-[#16D9F2]" />
+        <div className="absolute -bottom-1 -right-1 size-2.5 border-b-2 border-r-2 border-[#16D9F2]" />
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div className="space-y-1.5">
-            <div className="flex flex-wrap items-center gap-2 text-[10.5px] font-mono text-[#19E6FF]">
-              <span className="flex items-center gap-1.5 rounded-[2px] border border-[#19E6FF]/30 bg-[#19E6FF]/10 px-2 py-0.5 font-bold">
-                <Radio className="size-3 text-[#19E6FF] animate-pulse" />
+            <div className="flex flex-wrap items-center gap-2 text-[10.5px] font-mono text-[#16D9F2]">
+              <span className="flex items-center gap-1.5 rounded-[2px] border border-[#16D9F2]/30 bg-[#16D9F2]/10 px-2 py-0.5 font-bold">
+                <Radio className="size-3 text-[#16D9F2] animate-pulse" />
                 // GLOBAL DEFENSE MATRIX
               </span>
-              <span className="text-[#667783]">//</span>
-              <span className="text-[#A6B6C2] uppercase tracking-widest text-[9.5px]">
+              <span className="text-[#647682]">//</span>
+              <span className="text-[#A5B5C0] uppercase tracking-widest text-[9.5px]">
                 NODE: TM-CORE-01 // SECTOR 07
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#F2F7FA] uppercase font-sans">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#F3F7FA] uppercase font-sans">
               SYSTEM UNDER{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#19E6FF] via-[#5CEFFF] to-[#3B82F6]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#16D9F2] via-[#55EAF8] to-[#3B82F6]">
                 CONTINUOUS OBSERVATION
               </span>
             </h1>
 
-            <p className="max-w-2xl font-sans text-xs text-[#A6B6C2] leading-relaxed">
+            <p className="max-w-2xl font-sans text-xs text-[#A5B5C0] leading-relaxed">
               Every packet, process spawn, and Kerberos ticket is correlated into an immutable temporal
               timeline. Observe attack progression in real-time, rewind to initial patient zero, and test
               counterfactual response actions.
@@ -76,22 +76,22 @@ export function DashboardView() {
 
           {/* Threat Matrix Status Pill */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 shrink-0">
-            <div className="rounded-[3px] border border-[#FF3045]/50 bg-[#FF3045]/10 p-3 shadow-[0_0_18px_rgba(255,48,69,0.20)]">
-              <div className="text-[9.5px] text-[#FF3045] uppercase tracking-wider font-bold flex items-center gap-1.5 font-mono">
-                <ShieldAlert className="size-3.5 text-[#FF3045] animate-pulse" />
+            <div className="rounded-[3px] border border-[#FF3347]/50 bg-[#FF3347]/10 p-3 shadow-[0_0_10px_rgba(255,51,71,0.12)]">
+              <div className="text-[9.5px] text-[#FF3347] uppercase tracking-wider font-bold flex items-center gap-1.5 font-mono">
+                <ShieldAlert className="size-3.5 text-[#FF3347] animate-pulse" />
                 DEFENSE MATRIX STATUS
               </div>
               <div className="mt-1 flex items-baseline gap-2 font-mono">
-                <span className="text-xl font-black text-[#FF3045] tracking-tight">
+                <span className="text-xl font-black text-[#FF3347] tracking-tight">
                   {currentRisk?.toUpperCase() || "CRITICAL"}
                 </span>
-                <span className="text-[9.5px] text-[#FF3045]/80 font-semibold">THREAT ACTIVE</span>
+                <span className="text-[9.5px] text-[#FF3347]/80 font-semibold">THREAT ACTIVE</span>
               </div>
             </div>
 
             <Link
               to="/time-machine"
-              className="flex items-center gap-2 rounded-[3px] bg-[#19E6FF]/15 border border-[#19E6FF]/50 px-4 py-3 font-mono text-xs font-bold text-[#19E6FF] shadow-[0_0_12px_rgba(25,230,255,0.15)] hover:bg-[#19E6FF] hover:text-[#05080C] transition-all cursor-pointer"
+              className="flex items-center gap-2 rounded-[3px] bg-[#16D9F2]/15 border border-[#16D9F2]/50 px-4 py-3 font-mono text-xs font-bold text-[#16D9F2] shadow-[0_0_10px_rgba(22,217,242,0.12)] hover:bg-[#16D9F2] hover:text-[#05080C] transition-all cursor-pointer"
             >
               <BrainCircuit className="size-4" />
               <span>[ LAUNCH TIME MACHINE ]</span>

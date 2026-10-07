@@ -82,7 +82,7 @@
 
   --font-sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: "JetBrains Mono", "IBM Plex Mono", Consolas, monospace;
-  --font-display: "Rajdhani", "Space Grotesk", sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
 }
 
 :root,
@@ -91,25 +91,25 @@
 
   /* 1. DARK GRAPHITE / OBSIDIAN FOUNDATION */
   --tm-bg: #05080C;
-  --tm-surface: #080D12;
+  --tm-surface: #070C11;
   --tm-panel: #0B1117;
   --tm-elevated: #0F171E;
 
-  --tm-border: #1A2730;
+  --tm-border: #1B2933;
   --tm-border-subtle: #142029;
 
   /* 2. TEXT PALETTE */
-  --tm-text: #F2F7FA;
-  --tm-text-secondary: #A6B6C2;
-  --tm-text-muted: #667783;
-  --tm-text-label: #6F9AAA;
+  --tm-text: #F3F7FA;
+  --tm-text-secondary: #A5B5C0;
+  --tm-text-muted: #647682;
+  --tm-text-label: #7893A1;
   --tm-text-disabled: #3F4D56;
 
-  /* 3. ICE CYAN (PRIMARY) */
-  --tm-cyan: #19E6FF;
-  --tm-cyan-bright: #5CEFFF;
+  /* 3. ICE CYAN (PRIMARY BRAND) */
+  --tm-cyan: #16D9F2;
+  --tm-cyan-bright: #55EAF8;
   --tm-cyan-muted: #0FA8C2;
-  --tm-cyan-dark: #08758A;
+  --tm-cyan-dark: #08798A;
 
   /* 4. ELECTRIC BLUE (SECONDARY) */
   --tm-blue: #3B82F6;
@@ -117,7 +117,7 @@
   --tm-blue-dark: #1D4ED8;
 
   /* 5. CRIMSON RED (THREAT) */
-  --tm-critical: #FF3045;
+  --tm-critical: #FF3347;
   --tm-critical-bright: #FF5264;
   --tm-critical-dark: #B91C2E;
 
@@ -126,8 +126,8 @@
   --tm-warning-bright: #FFD166;
   --tm-warning-dark: #B77900;
 
-  /* 7. SOPHISTICATED GREEN (SECURE) */
-  --tm-success: #20E3A2;
+  /* 7. GREEN (SUCCESS / SECURE) */
+  --tm-success: #20DFA0;
   --tm-success-bright: #5AF2C0;
   --tm-success-dark: #087F60;
 
@@ -164,10 +164,10 @@
   --sidebar-foreground: var(--tm-text);
 
   /* Subtle signal glows */
-  --cyan-glow: rgba(25, 230, 255, 0.15);
-  --threat-glow: rgba(255, 48, 69, 0.20);
-  --warning-glow: rgba(255, 176, 32, 0.18);
-  --success-glow: rgba(32, 227, 162, 0.18);
+  --cyan-glow: rgba(22, 217, 242, 0.12);
+  --threat-glow: rgba(255, 51, 71, 0.12);
+  --warning-glow: rgba(255, 176, 32, 0.12);
+  --success-glow: rgba(32, 223, 160, 0.10);
 }
 
 @layer base {
@@ -187,7 +187,7 @@
     letter-spacing: -0.01em;
     /* Subtle military grid background */
     background-image:
-      radial-gradient(circle at 50% 0%, rgba(25, 230, 255, 0.04) 0%, transparent 60%),
+      radial-gradient(circle at 50% 0%, rgba(22, 217, 242, 0.025) 0%, transparent 60%),
       linear-gradient(var(--tm-border-subtle) 1px, transparent 1px),
       linear-gradient(90deg, var(--tm-border-subtle) 1px, transparent 1px);
     background-size:
@@ -212,7 +212,7 @@
     background-size: 100% 4px;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.25;
+    opacity: 0.20;
   }
 
   button,
@@ -222,8 +222,8 @@
   }
 
   ::selection {
-    background: rgba(25, 230, 255, 0.25);
-    color: #19E6FF;
+    background: rgba(22, 217, 242, 0.20);
+    color: #16D9F2;
   }
 
   h1 {
@@ -243,16 +243,16 @@
   box-shadow: 0 4px 20px rgba(5, 8, 12, 0.8), 0 0 1px 1px var(--tm-border);
 }
 @utility shadow-glow {
-  box-shadow: 0 0 12px var(--cyan-glow);
+  box-shadow: 0 0 10px var(--cyan-glow);
 }
 @utility shadow-threat {
-  box-shadow: 0 0 18px var(--threat-glow);
+  box-shadow: 0 0 10px var(--threat-glow);
 }
 @utility shadow-warning {
-  box-shadow: 0 0 12px var(--warning-glow);
+  box-shadow: 0 0 10px var(--warning-glow);
 }
 @utility shadow-success {
-  box-shadow: 0 0 12px var(--success-glow);
+  box-shadow: 0 0 10px var(--success-glow);
 }
 
 .timeline-range {

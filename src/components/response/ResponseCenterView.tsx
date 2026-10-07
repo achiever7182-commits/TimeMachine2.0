@@ -37,18 +37,18 @@ export function ResponseCenterView() {
   return (
     <div className="mx-auto max-w-5xl space-y-6 font-sans animate-fade-in">
       {/* HEADER BAR */}
-      <div className="flex flex-col gap-4 border-b border-[#1A2730] pb-5 md:flex-row md:items-end md:justify-between">
+      <div className="flex flex-col gap-4 border-b border-[#1B2933] pb-5 md:flex-row md:items-end md:justify-between">
         <div>
-          <div className="flex items-center gap-2 mb-1.5 font-mono text-[10px] text-[#19E6FF] tracking-[0.2em] uppercase">
-            <Lock className="size-3.5 text-[#19E6FF] animate-pulse" />
+          <div className="flex items-center gap-2 mb-1.5 font-mono text-[10px] text-[#16D9F2] tracking-[0.2em] uppercase">
+            <Lock className="size-3.5 text-[#16D9F2] animate-pulse" />
             <span>INCIDENT COMMAND & TACTICAL CONTAINMENT CONSOLE</span>
           </div>
-          <h1 className="font-mono text-2xl font-black uppercase tracking-wider text-[#F2F7FA] flex items-center gap-3">
+          <h1 className="font-mono text-2xl font-black uppercase tracking-wider text-[#F3F7FA] flex items-center gap-3">
             RESPONSE CENTER // INC-2048
             <span className={cn(
               "text-[10px] font-mono px-2 py-0.5 border font-bold rounded-[2px]",
               contained
-                ? "border-[#20E3A2] bg-[#20E3A2]/15 text-[#20E3A2]"
+                ? "border-[#20DFA0] bg-[#20DFA0]/15 text-[#20DFA0]"
                 : "border-[#FFB020] bg-[#FFB020]/15 text-[#FFB020]"
             )}>
               {contained ? "SYSTEM SECURED" : "APPROVAL PENDING"}
@@ -72,9 +72,9 @@ export function ResponseCenterView() {
 
       {!responseApproved ? (
         <div className="space-y-4">
-          <div className="border border-[#1A2730] bg-[#080D12] p-4 font-mono text-xs text-[#A6B6C2] rounded-[3px]">
-            <span className="text-[#19E6FF] font-bold">&gt; HUMAN-IN-THE-LOOP CONTROL MATRIX:</span>
-            <p className="mt-1 text-[#F2F7FA]">
+          <div className="border border-[#1B2933] bg-[#070C11] p-4 font-mono text-xs text-[#A5B5C0] rounded-[3px]">
+            <span className="text-[#16D9F2] font-bold">&gt; HUMAN-IN-THE-LOOP CONTROL MATRIX:</span>
+            <p className="mt-1 text-[#F3F7FA]">
               Autonomous response playbook ready for incident INC-2048. Review and authorize tactical containment procedures below before synthetic execution.
             </p>
           </div>
@@ -88,8 +88,8 @@ export function ResponseCenterView() {
                   className={cn(
                     "border p-4 transition-all duration-150 rounded-[3px]",
                     isSelected
-                      ? "border-[#1A2730] bg-[#080D12] hover:border-[#19E6FF]/40"
-                      : "border-[#1A2730]/40 bg-[#05080C] opacity-60",
+                      ? "border-[#1B2933] bg-[#070C11] hover:border-[#16D9F2]/40"
+                      : "border-[#1B2933]/40 bg-[#05080C] opacity-60",
                   )}
                 >
                   <div className="flex items-start gap-4">
@@ -99,16 +99,16 @@ export function ResponseCenterView() {
                         setChecked((current) => ({ ...current, [action.id]: Boolean(value) }))
                       }
                       aria-label={`Select ${action.label}`}
-                      className="mt-1 border-[#19E6FF]/50 data-[state=checked]:bg-[#19E6FF] data-[state=checked]:text-[#05080C] rounded-[2px]"
+                      className="mt-1 border-[#16D9F2]/50 data-[state=checked]:bg-[#16D9F2] data-[state=checked]:text-[#05080C] rounded-[2px]"
                     />
 
                     <div className="min-w-0 flex-1 space-y-3">
-                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1A2730] pb-2.5">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1B2933] pb-2.5">
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-[#19E6FF] font-bold text-sm">
+                          <span className="font-mono text-[#16D9F2] font-bold text-sm">
                             [{String(index + 1).padStart(2, "0")}]
                           </span>
-                          <h2 className="font-bold text-sm uppercase text-[#F2F7FA] tracking-wide">
+                          <h2 className="font-bold text-sm uppercase text-[#F3F7FA] tracking-wide">
                             {action.label}
                           </h2>
                         </div>
@@ -117,23 +117,23 @@ export function ResponseCenterView() {
                           <span className="border border-[#FFB020]/40 bg-[#FFB020]/10 text-[#FFB020] px-2 py-0.5 text-[9px] font-bold rounded-[2px]">
                             RISK: {action.risk}
                           </span>
-                          <span className="border border-[#19E6FF]/40 bg-[#19E6FF]/10 text-[#19E6FF] px-2 py-0.5 text-[9px] font-bold rounded-[2px]">
+                          <span className="border border-[#16D9F2]/40 bg-[#16D9F2]/10 text-[#16D9F2] px-2 py-0.5 text-[9px] font-bold rounded-[2px]">
                             APPROVAL: REQUIRED
                           </span>
                         </div>
                       </div>
 
-                      <p className="text-xs text-[#A6B6C2] leading-relaxed">
+                      <p className="text-xs text-[#A5B5C0] leading-relaxed">
                         {action.explanation}
                       </p>
 
                       <div className="grid gap-3 sm:grid-cols-2 text-xs">
-                        <div className="border border-[#1A2730] bg-[#0B1117] p-2.5 rounded-[2px]">
-                          <span className="text-[9px] text-[#6F9AAA] uppercase block mb-0.5">&gt; EXPECTED EFFECT:</span>
-                          <span className="text-[#19E6FF] font-medium">{action.expectedEffect}</span>
+                        <div className="border border-[#1B2933] bg-[#0B1117] p-2.5 rounded-[2px]">
+                          <span className="text-[9px] text-[#7893A1] uppercase block mb-0.5">&gt; EXPECTED EFFECT:</span>
+                          <span className="text-[#16D9F2] font-medium">{action.expectedEffect}</span>
                         </div>
-                        <div className="border border-[#1A2730] bg-[#0B1117] p-2.5 rounded-[2px]">
-                          <span className="text-[9px] text-[#6F9AAA] uppercase block mb-0.5">&gt; BUSINESS IMPACT:</span>
+                        <div className="border border-[#1B2933] bg-[#0B1117] p-2.5 rounded-[2px]">
+                          <span className="text-[9px] text-[#7893A1] uppercase block mb-0.5">&gt; BUSINESS IMPACT:</span>
                           <span className="text-[#FFB020] font-medium">{action.businessImpact}</span>
                         </div>
                       </div>
@@ -144,23 +144,23 @@ export function ResponseCenterView() {
             })}
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#1A2730] pt-5 font-mono">
-            <div className="text-[10px] text-[#6F9AAA]">
-              <span>STATUS:</span> <span className="text-[#F2F7FA] font-bold">{Object.values(checked).filter(Boolean).length} OF {responseActions.length} ACTIONS SELECTED</span>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#1B2933] pt-5 font-mono">
+            <div className="text-[10px] text-[#7893A1]">
+              <span>STATUS:</span> <span className="text-[#F3F7FA] font-bold">{Object.values(checked).filter(Boolean).length} OF {responseActions.length} ACTIONS SELECTED</span>
             </div>
 
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
                 onClick={() => setChecked(Object.fromEntries(responseActions.map((a) => [a.id, true])))}
-                className="rounded-[3px] border-[#1A2730] bg-transparent text-[#A6B6C2] hover:text-[#F2F7FA] text-xs h-9 cursor-pointer"
+                className="rounded-[3px] border-[#1B2933] bg-transparent text-[#A5B5C0] hover:text-[#F3F7FA] text-xs h-9 cursor-pointer"
               >
                 SELECT ALL
               </Button>
               <Button
                 onClick={approveResponse}
                 disabled={!allSelected}
-                className="rounded-[3px] bg-[#19E6FF]/15 text-[#19E6FF] border border-[#19E6FF]/50 hover:bg-[#19E6FF] hover:text-[#05080C] font-black text-xs h-9 px-6 cursor-pointer shadow-[0_0_15px_rgba(25,230,255,0.15)] tracking-wider"
+                className="rounded-[3px] bg-[#16D9F2]/15 text-[#16D9F2] border border-[#16D9F2]/50 hover:bg-[#16D9F2] hover:text-[#05080C] font-black text-xs h-9 px-6 cursor-pointer shadow-[0_0_10px_rgba(22,217,242,0.12)] tracking-wider"
               >
                 ⚡ EXECUTE RESPONSE PLAYBOOK
               </Button>
@@ -172,16 +172,16 @@ export function ResponseCenterView() {
         <div className={cn(
           "border p-6 sm:p-8 font-mono space-y-6 transition-all duration-700 rounded-[4px]",
           contained
-            ? "border-[#20E3A2] bg-[#20E3A2]/5 shadow-[0_0_24px_rgba(32,227,162,0.15)]"
-            : "border-[#19E6FF] bg-[#19E6FF]/5 shadow-[0_0_20px_rgba(25,230,255,0.1)]"
+            ? "border-[#20DFA0] bg-[#20DFA0]/5 shadow-[0_0_10px_rgba(32,223,160,0.10)]"
+            : "border-[#16D9F2] bg-[#16D9F2]/5 shadow-[0_0_10px_rgba(22,217,242,0.12)]"
         )}>
           {/* Center Status Icon */}
           <div className="text-center space-y-4">
             <div className={cn(
               "mx-auto size-20 border flex items-center justify-center transition-all duration-500 rounded-[4px]",
               contained
-                ? "border-[#20E3A2] bg-[#20E3A2]/15 text-[#20E3A2] shadow-[0_0_20px_rgba(32,227,162,0.3)]"
-                : "border-[#19E6FF] bg-[#19E6FF]/15 text-[#19E6FF] animate-pulse"
+                ? "border-[#20DFA0] bg-[#20DFA0]/15 text-[#20DFA0] shadow-[0_0_10px_rgba(32,223,160,0.10)]"
+                : "border-[#16D9F2] bg-[#16D9F2]/15 text-[#16D9F2] animate-pulse"
             )}>
               <ShieldCheck className="size-10" />
             </div>
@@ -189,11 +189,11 @@ export function ResponseCenterView() {
             <div>
               <h2 className={cn(
                 "text-2xl sm:text-3xl font-black uppercase tracking-wider",
-                contained ? "text-[#20E3A2]" : "text-[#19E6FF]"
+                contained ? "text-[#20DFA0]" : "text-[#16D9F2]"
               )}>
                 {contained ? "SYSTEM SECURED // THREAT CONTAINED" : "EXECUTING SIMULATED CONTAINMENT..."}
               </h2>
-              <p className="mt-1 text-xs text-[#A6B6C2]">
+              <p className="mt-1 text-xs text-[#A5B5C0]">
                 {contained
                   ? "All kill-chain nodes isolated. Forensic state preserved. Network telemetry verified clean."
                   : "Applying cryptographic isolation rules and session revocations across virtual nodes."}
@@ -203,22 +203,22 @@ export function ResponseCenterView() {
 
           {/* SECURED METRIC HUD */}
           {contained && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 border-y border-[#20E3A2]/30 py-4 text-center">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 border-y border-[#20DFA0]/30 py-4 text-center">
               <div>
-                <span className="text-[8.5px] text-[#6F9AAA] uppercase block">SYSTEM INTEGRITY</span>
-                <span className="text-xl font-bold text-[#20E3A2]">100%</span>
+                <span className="text-[8.5px] text-[#7893A1] uppercase block">SYSTEM INTEGRITY</span>
+                <span className="text-xl font-bold text-[#20DFA0]">100%</span>
               </div>
               <div>
-                <span className="text-[8.5px] text-[#6F9AAA] uppercase block">ACTIVE THREATS</span>
-                <span className="text-xl font-bold text-[#20E3A2]">00</span>
+                <span className="text-[8.5px] text-[#7893A1] uppercase block">ACTIVE THREATS</span>
+                <span className="text-xl font-bold text-[#20DFA0]">00</span>
               </div>
               <div>
-                <span className="text-[8.5px] text-[#6F9AAA] uppercase block">COMPROMISED HOSTS</span>
-                <span className="text-xl font-bold text-[#20E3A2]">00 ISOLATED</span>
+                <span className="text-[8.5px] text-[#7893A1] uppercase block">COMPROMISED HOSTS</span>
+                <span className="text-xl font-bold text-[#20DFA0]">00 ISOLATED</span>
               </div>
               <div>
-                <span className="text-[8.5px] text-[#6F9AAA] uppercase block">EVIDENCE</span>
-                <span className="text-xl font-bold text-[#19E6FF]">PRESERVED</span>
+                <span className="text-[8.5px] text-[#7893A1] uppercase block">EVIDENCE</span>
+                <span className="text-xl font-bold text-[#16D9F2]">PRESERVED</span>
               </div>
             </div>
           )}
@@ -234,19 +234,19 @@ export function ResponseCenterView() {
                   className={cn(
                     "flex items-center gap-3 border p-3 text-xs transition-all rounded-[3px]",
                     done
-                      ? "border-[#20E3A2]/40 bg-[#20E3A2]/10 text-[#20E3A2]"
+                      ? "border-[#20DFA0]/40 bg-[#20DFA0]/10 text-[#20DFA0]"
                       : running
-                        ? "border-[#19E6FF] bg-[#19E6FF]/10 text-[#19E6FF]"
-                        : "border-[#1A2730] bg-[#080D12] text-[#667783]",
+                        ? "border-[#16D9F2] bg-[#16D9F2]/10 text-[#16D9F2]"
+                        : "border-[#1B2933] bg-[#070C11] text-[#647682]",
                   )}
                 >
                   <span className="font-bold font-mono">
                     {done ? (
-                      <Check className="size-4 text-[#20E3A2]" />
+                      <Check className="size-4 text-[#20DFA0]" />
                     ) : running ? (
-                      <LoaderCircle className="size-4 animate-spin text-[#19E6FF]" />
+                      <LoaderCircle className="size-4 animate-spin text-[#16D9F2]" />
                     ) : (
-                      <Circle className="size-3 text-[#667783]" />
+                      <Circle className="size-3 text-[#647682]" />
                     )}
                   </span>
                   <span className="font-medium flex-1">
@@ -265,7 +265,7 @@ export function ResponseCenterView() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
               <Button
                 asChild
-                className="rounded-[3px] bg-[#20E3A2]/15 text-[#20E3A2] border border-[#20E3A2]/50 hover:bg-[#20E3A2] hover:text-[#05080C] font-bold text-xs h-9 px-6 cursor-pointer shadow-[0_0_15px_rgba(32,227,162,0.2)]"
+                className="rounded-[3px] bg-[#20DFA0]/15 text-[#20DFA0] border border-[#20DFA0]/50 hover:bg-[#20DFA0] hover:text-[#05080C] font-bold text-xs h-9 px-6 cursor-pointer shadow-[0_0_10px_rgba(32,223,160,0.10)]"
               >
                 <Link to="/reports">
                   VIEW INCIDENT FORENSIC REPORT &gt;
@@ -274,7 +274,7 @@ export function ResponseCenterView() {
               <Button
                 variant="outline"
                 onClick={resetDemo}
-                className="rounded-[3px] border-[#1A2730] bg-[#0B1117] text-[#A6B6C2] hover:text-[#F2F7FA] text-xs h-9 cursor-pointer"
+                className="rounded-[3px] border-[#1B2933] bg-[#0B1117] text-[#A5B5C0] hover:text-[#F3F7FA] text-xs h-9 cursor-pointer"
               >
                 RESET SIMULATION
               </Button>

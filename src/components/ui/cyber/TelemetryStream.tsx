@@ -160,16 +160,16 @@ export function TelemetryStream() {
   });
 
   return (
-    <div className="flex flex-col h-full rounded-[2px] border border-[#1A2730] bg-[#05080C] p-3 font-mono text-xs">
+    <div className="flex flex-col h-full rounded-[4px] border border-[#1B2933] bg-[#05080C] p-3 font-mono text-xs">
       {/* Top Controls Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1A2730] pb-2 text-[9.5px]">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#1B2933] pb-2 text-[9.5px]">
         <div className="flex items-center gap-2">
-          <Terminal className="size-3 text-[#19E6FF]" />
-          <span className="font-semibold uppercase tracking-[0.12em] text-[#F2F7FA]">
+          <Terminal className="size-3 text-[#16D9F2]" />
+          <span className="font-semibold uppercase tracking-[0.10em] text-[#F3F7FA]">
             // RAW TELEMETRY STREAM
           </span>
-          <span className="flex items-center gap-1 rounded-[2px] bg-[#080D12] px-1.5 py-0.2 text-[#20E3A2] border border-[#20E3A2]/40">
-            <span className={cn("size-1.5 rounded-full bg-[#20E3A2]", isStreaming && "animate-pulse")} />
+          <span className="flex items-center gap-1 rounded-[2px] bg-[#070C11] px-1.5 py-0.2 text-[#20DFA0] border border-[#20DFA0]/40">
+            <span className={cn("size-1.5 rounded-full bg-[#20DFA0]", isStreaming && "animate-pulse")} />
             {isStreaming ? "LIVE INGESTION" : "STREAM PAUSED"}
           </span>
         </div>
@@ -178,7 +178,7 @@ export function TelemetryStream() {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="rounded-[2px] border border-[#1A2730] bg-[#0B1117] px-2 py-0.5 text-[9.5px] text-[#F2F7FA] focus:outline-none cursor-pointer"
+            className="rounded-[2px] border border-[#1B2933] bg-[#0B1117] px-2 py-0.5 text-[9.5px] text-[#F3F7FA] focus:outline-none cursor-pointer"
           >
             <option value="ALL">ALL EVENTS</option>
             <option value="DETECTION">DETECTIONS</option>
@@ -189,7 +189,7 @@ export function TelemetryStream() {
 
           <button
             onClick={() => setIsStreaming(!isStreaming)}
-            className="flex items-center gap-1 rounded-[2px] border border-[#19E6FF]/30 bg-[#08758A]/20 px-2 py-0.5 text-[#19E6FF] hover:bg-[#19E6FF]/20 transition-colors cursor-pointer text-[9.5px]"
+            className="flex items-center gap-1 rounded-[2px] border border-[#16D9F2]/30 bg-[#08798A]/20 px-2 py-0.5 text-[#16D9F2] hover:bg-[#16D9F2]/20 transition-colors cursor-pointer text-[9.5px]"
           >
             {isStreaming ? (
               <>
@@ -204,7 +204,7 @@ export function TelemetryStream() {
 
           <button
             onClick={() => setEvents([])}
-            className="rounded-[2px] border border-[#1A2730] bg-[#0B1117] p-1 text-[#667783] hover:text-[#F2F7FA] hover:border-[#19E6FF]/40 transition-colors cursor-pointer"
+            className="rounded-[2px] border border-[#1B2933] bg-[#0B1117] p-1 text-[#647682] hover:text-[#F3F7FA] hover:border-[#16D9F2]/40 transition-colors cursor-pointer"
             title="Clear Stream"
           >
             <Trash2 className="size-3" />
@@ -215,7 +215,7 @@ export function TelemetryStream() {
       {/* Stream Logs Viewport */}
       <div className="flex-1 overflow-y-auto max-h-72 space-y-1 py-2 font-mono text-[10.5px] custom-scrollbar">
         {filteredEvents.length === 0 ? (
-          <div className="py-8 text-center text-[#667783]">
+          <div className="py-8 text-center text-[#647682]">
             NO TELEMETRY PACKETS MATCHING FILTER
           </div>
         ) : (
@@ -225,30 +225,30 @@ export function TelemetryStream() {
               className={cn(
                 "flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 rounded-[2px] border px-2.5 py-1 transition-colors",
                 evt.severity === "threat"
-                  ? "border-[#FF3045]/30 bg-[#B91C2E]/10 text-[#FF5264]"
+                  ? "border-[#FF3347]/30 bg-[#B91C2E]/10 text-[#FF5264]"
                   : evt.severity === "warn"
                     ? "border-[#FFB020]/30 bg-[#B77900]/10 text-[#FFD166]"
-                    : "border-[#142029] bg-[#080D12] text-[#A6B6C2]",
+                    : "border-[#142029] bg-[#070C11] text-[#A5B5C0]",
               )}
             >
               <div className="flex flex-wrap items-center gap-2">
-                <span className="text-[#667783] font-mono text-[9.5px]">{evt.time}</span>
+                <span className="text-[#647682] font-mono text-[9.5px]">{evt.time}</span>
                 <span
                   className={cn(
                     "rounded-[2px] px-1 py-0.2 text-[8.5px] font-mono font-semibold uppercase border",
                     evt.severity === "threat"
-                      ? "border-[#FF3045]/40 bg-[#B91C2E]/30 text-[#FF5264]"
-                      : "border-[#19E6FF]/40 bg-[#08758A]/30 text-[#19E6FF]",
+                      ? "border-[#FF3347]/40 bg-[#B91C2E]/30 text-[#FF5264]"
+                      : "border-[#16D9F2]/40 bg-[#08798A]/30 text-[#16D9F2]",
                   )}
                 >
                   {evt.type}
                 </span>
-                <span className="text-[#19E6FF] font-medium">{evt.host}</span>
-                <span className="text-[#F2F7FA]">{evt.detail}</span>
+                <span className="text-[#16D9F2] font-medium">{evt.host}</span>
+                <span className="text-[#F3F7FA]">{evt.detail}</span>
               </div>
 
               <div className="flex items-center gap-1.5 shrink-0 text-[9.5px]">
-                {evt.pid && <span className="text-[#6F9AAA]">PID:{evt.pid}</span>}
+                {evt.pid && <span className="text-[#7893A1]">PID:{evt.pid}</span>}
                 {evt.mitre && (
                   <span className="rounded-[2px] bg-[#05080C] px-1.5 py-0.2 font-mono font-medium text-[#FFB020] border border-[#FFB020]/30">
                     {evt.mitre}

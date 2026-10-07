@@ -157,10 +157,10 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
 
         <div className="rounded-xl border border-border/80 bg-card/60 p-4 backdrop-blur-sm">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
-            <Zap className="size-3.5 text-indigo-400" />
+            <Zap className="size-3.5 text-[#3B82F6]" />
             <span>Response Score</span>
           </div>
-          <div className="text-2xl font-bold font-mono text-indigo-400">
+          <div className="text-2xl font-bold font-mono text-[#F3F7FA]">
             {learningMetrics.responseEffectivenessScore}%
           </div>
           <div className="text-[10px] text-emerald-400 font-medium mt-1">Effective containment</div>
@@ -323,9 +323,9 @@ export function LearningDashboard({ report }: LearningDashboardProps) {
       {/* SECTION 3 — RESPONSE EFFECTIVENESS & "WHAT IF WE ACTED EARLIER?" */}
       <section className="space-y-6">
         {/* Spotlight Card: "WHAT IF WE HAD ACTED EARLIER?" */}
-        <div className="relative overflow-hidden rounded-2xl border-2 border-cyan-500/40 bg-gradient-to-br from-cyan-950/30 via-card/80 to-indigo-950/20 p-6 md:p-8 backdrop-blur-md shadow-xl">
-          <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-            <GitBranch className="size-48 text-cyan-400" />
+        <div className="relative overflow-hidden rounded-xl border border-[#1B2933] bg-[#0B1117] p-6 md:p-8 backdrop-blur-md shadow-xl">
+          <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
+            <GitBranch className="size-48 text-[#16D9F2]" />
           </div>
 
           <div className="relative z-10">
