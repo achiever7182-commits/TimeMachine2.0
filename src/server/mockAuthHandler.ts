@@ -57,6 +57,69 @@ export function createMockUser(userId: string, email: string, displayName: strin
   };
 }
 
+export const MOCK_PROFILES = [
+  {
+    id: "usr-admin-01",
+    organization_id: "00000000-0000-0000-0000-000000000001",
+    display_name: "Master Security Admin",
+    email: "admin@timemachine.soc",
+    role_id: "10000000-0000-0000-0000-000000000001",
+    status: "ACTIVE",
+    last_login_at: new Date().toISOString(),
+    created_at: "2026-01-01T08:00:00.000Z",
+  },
+  {
+    id: "usr-demo-01",
+    organization_id: "00000000-0000-0000-0000-000000000001",
+    display_name: "SOC Lead Operator",
+    email: "operator@time-machine.soc",
+    role_id: "10000000-0000-0000-0000-000000000002",
+    status: "ACTIVE",
+    last_login_at: new Date().toISOString(),
+    created_at: "2026-01-15T09:30:00.000Z",
+  },
+  {
+    id: "usr-analyst-02",
+    organization_id: "00000000-0000-0000-0000-000000000001",
+    display_name: "Forensics Specialist Smith",
+    email: "analyst.smith@time-machine.soc",
+    role_id: "10000000-0000-0000-0000-000000000002",
+    status: "ACTIVE",
+    last_login_at: "2026-10-06T14:45:00.000Z",
+    created_at: "2026-02-10T11:20:00.000Z",
+  },
+  {
+    id: "usr-ciso-03",
+    organization_id: "00000000-0000-0000-0000-000000000001",
+    display_name: "CISO Director Vance",
+    email: "ciso.director@time-machine.soc",
+    role_id: "10000000-0000-0000-0000-000000000001",
+    status: "ACTIVE",
+    last_login_at: "2026-10-05T18:10:00.000Z",
+    created_at: "2026-01-05T07:15:00.000Z",
+  },
+  {
+    id: "usr-responder-04",
+    organization_id: "00000000-0000-0000-0000-000000000001",
+    display_name: "Incident Responder Chen",
+    email: "responder.chen@time-machine.soc",
+    role_id: "10000000-0000-0000-0000-000000000002",
+    status: "ACTIVE",
+    last_login_at: "2026-10-04T09:12:00.000Z",
+    created_at: "2026-02-28T16:00:00.000Z",
+  },
+  {
+    id: "usr-audit-05",
+    organization_id: "00000000-0000-0000-0000-000000000001",
+    display_name: "External Compliance Auditor",
+    email: "guest.auditor@external.audit",
+    role_id: "10000000-0000-0000-0000-000000000003",
+    status: "SUSPENDED",
+    last_login_at: "2026-09-28T10:00:00.000Z",
+    created_at: "2026-03-01T12:00:00.000Z",
+  },
+];
+
 export function createSessionPayload(email: string, displayName?: string) {
   const userId = "00000000-0000-0000-0000-000000000001";
   const name = displayName || email.split("@")[0] || "Operator";
@@ -159,15 +222,8 @@ export async function handleMockSupabaseRequest(request: Request): Promise<Respo
   // REST endpoints
   if (pathname === "/rest/v1/profiles") {
     if (request.method === "GET") {
-      const profile = {
-        id: "00000000-0000-0000-0000-000000000001",
-        organization_id: "00000000-0000-0000-0000-000000000001",
-        display_name: "Operator",
-        email: "operator@time-machine.soc",
-        role_id: "10000000-0000-0000-0000-000000000002",
-      };
       const isSingle = (request.headers.get("accept") || "").includes("vnd.pgrst.object+json");
-      return new Response(JSON.stringify(isSingle ? profile : [profile]), {
+      return new Response(JSON.stringify(isSingle ? MOCK_PROFILES[0] : MOCK_PROFILES), {
         status: 200,
         headers: { ...cors, "Content-Type": "application/json" },
       });
@@ -261,17 +317,10 @@ export function handleMockSupabaseNode(
 
     if (pathname === "/rest/v1/profiles") {
       if (req.method === "GET") {
-        const profile = {
-          id: "00000000-0000-0000-0000-000000000001",
-          organization_id: "00000000-0000-0000-0000-000000000001",
-          display_name: "Operator",
-          email: "operator@time-machine.soc",
-          role_id: "10000000-0000-0000-0000-000000000002",
-        };
         const acceptHeader = String(req.headers["accept"] || "");
         const isSingle = acceptHeader.includes("vnd.pgrst.object+json");
         res.statusCode = 200;
-        return res.end(JSON.stringify(isSingle ? profile : [profile]));
+        return res.end(JSON.stringify(isSingle ? MOCK_PROFILES[0] : MOCK_PROFILES));
       }
       res.statusCode = 200;
       return res.end(JSON.stringify([]));

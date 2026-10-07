@@ -1,8 +1,10 @@
 /**
  * Persistent User Management Service for TimeMachine Incident Platform.
  * Supports registered operators, administrators, roles, authentication verification,
- * and live updates across components and browser sessions.
+ * dual-sync with Supabase database profiles, and live updates across components.
  */
+
+import { supabase } from "@/lib/supabase";
 
 export type UserRole =
   | "Admin"
@@ -27,10 +29,10 @@ export interface StoredUser {
   avatarInitials?: string;
 }
 
-const STORAGE_KEY = "timemachine_users_store_v1";
-const ACTIVE_SESSION_KEY = "timemachine_active_session_v1";
+const STORAGE_KEY = "timemachine_users_store_v2";
+const ACTIVE_SESSION_KEY = "timemachine_active_session_v2";
 
-const SEED_USERS: StoredUser[] = [
+export const SEED_USERS: StoredUser[] = [
   {
     id: "usr-admin-01",
     email: "admin@timemachine.soc",
@@ -123,7 +125,7 @@ function notifyListeners() {
 
 export const userService = {
   /**
-   * Returns all stored users. Initializes with seeds if not present.
+   * Returns all stored users. Guarantees that seed users and registered users are merged.
    */
   getUsers(): StoredUser[] {
     if (typeof window === "undefined") {
@@ -140,10 +142,42 @@ export const userService = {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED_USERS));
         return SEED_USERS;
       }
-      return parsed;
+
+      // Ensure seed users are always present in the directory
+      const existingEmails = new Set(parsed.map((u) => u.email.toLowerCase()));
+      let missingSeedsAdded = false;
+      const merged = [...parsed];
+
+      for (const seed of SEED_USERS) {
+        if (!existingEmails.has(seed.email.toLowerCase())) {
+          merged.push(seed);
+          missingSeedsAdded = true;
+        }
+      }
+
+      if (missingSeedsAdded) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+      }
+
+      return merged;
     } catch {
       return SEED_USERS;
     }
+  },
+
+  /**
+   * Reset store to initial preset seeds
+   */
+  resetToDefaults(): StoredUser[] {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED_USERS));
+      } catch (err) {
+        console.error("Failed to reset users store:", err);
+      }
+    }
+    notifyListeners();
+    return SEED_USERS;
   },
 
   /**
@@ -158,6 +192,73 @@ export const userService = {
       }
     }
     notifyListeners();
+  },
+
+  /**
+   * Sync with Supabase Database (profiles table)
+   */
+  async syncWithSupabase(): Promise<StoredUser[]> {
+    try {
+      const { data, error } = await supabase.from("profiles").select("*");
+      if (error || !data || data.length === 0) {
+        return this.getUsers();
+      }
+
+      const currentUsers = this.getUsers();
+      const existingMap = new Map<string, StoredUser>();
+      currentUsers.forEach((u) => existingMap.set(u.email.toLowerCase(), u));
+
+      let hasNew = false;
+      for (const row of data as Array<{
+        id: string;
+        email?: string;
+        display_name?: string;
+        role_id?: string;
+        status?: string;
+        last_login_at?: string;
+        created_at?: string;
+      }>) {
+        const email = (row.email || "").trim().toLowerCase();
+        if (!email) continue;
+
+        if (!existingMap.has(email)) {
+          hasNew = true;
+          let role: UserRole = "SOC Lead Operator";
+          if (row.role_id === "10000000-0000-0000-0000-000000000001") role = "Admin";
+          else if (row.role_id === "10000000-0000-0000-0000-000000000003") role = "Security Auditor";
+
+          const displayName = row.display_name || email.split("@")[0];
+          const initials =
+            displayName
+              .split(" ")
+              .map((n) => n[0])
+              .join("")
+              .substring(0, 2)
+              .toUpperCase() || email.substring(0, 2).toUpperCase();
+
+          existingMap.set(email, {
+            id: row.id || "usr-" + Math.random().toString(36).substring(2, 9),
+            email: row.email || email,
+            displayName,
+            role,
+            status: (row.status?.toLowerCase() === "suspended" ? "suspended" : "active") as UserStatus,
+            createdAt: row.created_at || new Date().toISOString(),
+            lastLoginAt: row.last_login_at || new Date().toISOString(),
+            organizationId: "00000000-0000-0000-0000-000000000001",
+            avatarInitials: initials,
+          });
+        }
+      }
+
+      if (hasNew) {
+        const mergedArray = Array.from(existingMap.values());
+        this.saveUsers(mergedArray);
+        return mergedArray;
+      }
+    } catch (err) {
+      console.warn("Could not sync remote Supabase profiles:", err);
+    }
+    return this.getUsers();
   },
 
   /**
@@ -194,12 +295,13 @@ export const userService = {
       throw new Error(`Operator with email ${userData.email} already exists in directory.`);
     }
 
-    const initials = userData.displayName
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .substring(0, 2)
-      .toUpperCase() || cleanEmail.substring(0, 2).toUpperCase();
+    const initials =
+      userData.displayName
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .substring(0, 2)
+        .toUpperCase() || cleanEmail.substring(0, 2).toUpperCase();
 
     const newUser: StoredUser = {
       id: "usr-" + Math.random().toString(36).substring(2, 9) + "-" + Date.now().toString(36),
@@ -216,6 +318,25 @@ export const userService = {
 
     users.unshift(newUser);
     this.saveUsers(users);
+
+    // Asynchronously upsert to Supabase profiles table if available
+    (async () => {
+      try {
+        await supabase.from("profiles").upsert({
+          id: newUser.id,
+          display_name: newUser.displayName,
+          email: newUser.email,
+          role_id:
+            newUser.role === "Admin"
+              ? "10000000-0000-0000-0000-000000000001"
+              : "10000000-0000-0000-0000-000000000002",
+          status: newUser.status.toUpperCase(),
+        });
+      } catch {
+        // Ignore remote sync errors
+      }
+    })();
+
     return newUser;
   },
 
@@ -233,7 +354,7 @@ export const userService = {
     const updated: StoredUser = {
       ...current,
       ...updates,
-      id: current.id, // prevent id mutation
+      id: current.id,
     };
 
     if (updates.displayName) {
@@ -247,6 +368,25 @@ export const userService = {
 
     users[index] = updated;
     this.saveUsers(users);
+
+    // Asynchronously update Supabase
+    (async () => {
+      try {
+        await supabase.from("profiles").upsert({
+          id: updated.id,
+          display_name: updated.displayName,
+          email: updated.email,
+          role_id:
+            updated.role === "Admin"
+              ? "10000000-0000-0000-0000-000000000001"
+              : "10000000-0000-0000-0000-000000000002",
+          status: updated.status.toUpperCase(),
+        });
+      } catch {
+        // Ignore
+      }
+    })();
+
     return updated;
   },
 
@@ -268,6 +408,15 @@ export const userService = {
     const filtered = users.filter((u) => u.id !== id);
     if (filtered.length === users.length) return false;
     this.saveUsers(filtered);
+
+    (async () => {
+      try {
+        await supabase.from("profiles").delete().eq("id", id);
+      } catch {
+        // Ignore
+      }
+    })();
+
     return true;
   },
 
@@ -304,9 +453,7 @@ export const userService = {
       };
     }
 
-    // Default demo passwords or configured passwords
     if (user.password && user.password !== password) {
-      // Allow flexible master admin override or standard password
       if (password !== "admin" && password !== "admin123" && password !== "password123") {
         return {
           success: false,
@@ -330,7 +477,6 @@ export const userService = {
       clean === "ciso.director@time-machine.soc";
 
     if (!isMasterAdmin) {
-      // Check if user exists with Admin role
       const user = this.getUserByEmail(clean);
       if (user && user.role === "Admin") {
         if (password === user.password || password === "admin" || password === "admin123") {

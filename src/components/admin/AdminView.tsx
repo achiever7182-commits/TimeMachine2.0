@@ -150,13 +150,30 @@ export function AdminView() {
     },
   ]);
 
-  // Sync users when store changes
+  // Sync users when store changes and on mount with Supabase database
   useEffect(() => {
+    userService.syncWithSupabase().then((data) => {
+      if (data && data.length > 0) setUsers(data);
+    });
+
     const unsub = userService.subscribe(() => {
       setUsers(userService.getUsers());
     });
     return unsub;
   }, []);
+
+  const handleResetDefaults = () => {
+    const reset = userService.resetToDefaults();
+    setUsers(reset);
+    toast.success(`Restored all ${reset.length} preset security operators into directory.`);
+  };
+
+  const handleSyncDatabase = async () => {
+    toast.info("Syncing with Supabase database profiles...");
+    const syncd = await userService.syncWithSupabase();
+    setUsers(syncd);
+    toast.success(`Synchronized ${syncd.length} operators.`);
+  };
 
   // Filtered users
   const filteredUsers = useMemo(() => {
@@ -519,24 +536,30 @@ export function AdminView() {
           </Button>
 
           <Button
+            onClick={handleSyncDatabase}
+            variant="outline"
+            className="h-9 border-cyan-500/30 bg-cyan-950/20 text-cyan-300 hover:bg-cyan-500/20 hover:text-white rounded-sm text-xs cursor-pointer"
+          >
+            <RefreshCw className="mr-1.5 size-3.5" />
+            SYNC DB
+          </Button>
+
+          <Button
+            onClick={handleResetDefaults}
+            variant="outline"
+            className="h-9 border-amber-500/30 bg-amber-950/20 text-amber-300 hover:bg-amber-500/20 hover:text-white rounded-sm text-xs cursor-pointer"
+          >
+            <ShieldAlert className="mr-1.5 size-3.5" />
+            RELOAD PRESETS
+          </Button>
+
+          <Button
             onClick={handleExportUsers}
             variant="outline"
             className="h-9 border-border bg-black/40 text-xs rounded-sm hover:bg-secondary cursor-pointer"
           >
             <Download className="mr-1.5 size-3.5" />
             EXPORT JSON
-          </Button>
-
-          <Button
-            onClick={() => {
-              setUsers(userService.getUsers());
-              toast.info("User directory refreshed.");
-            }}
-            variant="outline"
-            size="icon"
-            className="h-9 w-9 rounded-sm cursor-pointer"
-          >
-            <RefreshCw className="size-3.5" />
           </Button>
         </div>
       </div>
