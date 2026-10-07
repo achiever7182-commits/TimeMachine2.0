@@ -45,11 +45,31 @@ export function LandingPage() {
               </span>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <span className="hidden sm:inline-flex items-center gap-2 rounded-full border border-green-signal/30 bg-green-signal/10 px-3 py-1 text-xs font-semibold text-green-signal">
               <span className="size-2 rounded-full bg-green-signal animate-pulse" />
-              DEMO SYSTEM ONLINE
+              DEMO ONLINE
             </span>
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="text-xs font-mono border-red-500/30 bg-red-950/20 text-red-300 hover:bg-red-500/20"
+            >
+              <Link to="/admin">
+                <ShieldCheck className="mr-1.5 size-3.5 text-red-400" />
+                Admin Portal
+              </Link>
+            </Button>
+            <Button
+              asChild
+              size="sm"
+              className="text-xs font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 hover:bg-cyan-400 hover:text-black font-bold"
+            >
+              <Link to="/login">
+                Operator Login
+              </Link>
+            </Button>
             <Button
               variant="outline"
               size="sm"
@@ -57,7 +77,7 @@ export function LandingPage() {
               className="text-xs font-mono border-cyan-glow/40 bg-card/60"
             >
               <SlidersHorizontal className="mr-1.5 size-3.5 text-cyan-signal" />
-              {interactiveMode ? "Hero Mode" : "Full Workshop Mode"}
+              {interactiveMode ? "Hero Mode" : "Workshop Mode"}
             </Button>
           </div>
         </header>

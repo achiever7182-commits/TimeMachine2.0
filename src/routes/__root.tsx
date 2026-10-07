@@ -130,9 +130,11 @@ function RootComponent() {
             {pathname === "/" || pathname === "/login" ? (
               <Outlet />
             ) : (
-              <AppShell>
-                <Outlet />
-              </AppShell>
+              <AuthGuard>
+                <AppShell>
+                  <Outlet />
+                </AppShell>
+              </AuthGuard>
             )}
             <IrisVoiceLauncher />
             <Toaster position="top-right" richColors theme="dark" />

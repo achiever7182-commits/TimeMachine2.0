@@ -17,7 +17,8 @@ import {
   ShieldCheck,
   Siren,
   Terminal,
-  Activity
+  Activity,
+  Users,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
@@ -29,11 +30,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Link, useRouterState, useLocation } from "@tanstack/react-router";
+import { Link, useRouterState, useLocation, useNavigate } from "@tanstack/react-router";
 import { useDemo } from "@/context/DemoContext";
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import { IrisCopilot } from "@/components/ai-copilot/IrisCopilot";
+import { toast } from "sonner";
+import { LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -49,7 +52,8 @@ const navSections = [
     items: [
       { label: "Dashboard", to: "/dashboard", icon: Home, shortcut: "⌘1" },
       { label: "Incidents", to: "/incidents", icon: Siren, shortcut: "⌘2" },
-    ]
+      { label: "Admin Console", to: "/admin", icon: ShieldCheck, shortcut: "⌘A" },
+    ],
   },
   {
     title: "INVESTIGATION",
@@ -59,32 +63,32 @@ const navSections = [
       { label: "Digital Twin", to: "/digital-twin", icon: Network },
       { label: "IRIS Investigator", to: "/iris", icon: Bot },
       { label: "Evidence", to: "/evidence", icon: Radar },
-    ]
+    ],
   },
   {
     title: "SIMULATION",
     items: [
       { label: "Simulation Lab", to: "/simulation-lab", icon: FlaskConical },
-    ]
+    ],
   },
   {
     title: "RESPONSE",
     items: [
       { label: "Response Center", to: "/response-center", icon: ListChecks },
-    ]
+    ],
   },
   {
     title: "INTELLIGENCE",
     items: [
       { label: "Reports", to: "/reports", icon: FileText },
-    ]
+    ],
   },
   {
     title: "SYSTEM",
     items: [
       { label: "Settings", to: "/settings", icon: Settings },
-    ]
-  }
+    ],
+  },
 ];
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
@@ -115,7 +119,9 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
                   <Icon
                     className={cn(
                       "size-[14px]",
-                      active ? "text-cyan-signal drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]" : "text-muted-foreground/70 group-hover:text-cyan-signal",
+                      active
+                        ? "text-cyan-signal drop-shadow-[0_0_8px_rgba(0,229,255,0.8)]"
+                        : "text-muted-foreground/70 group-hover:text-cyan-signal",
                     )}
                   />
                   <span className="font-sans text-[13px]">{item.label}</span>
@@ -138,7 +144,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, storedUser, signOut } = useAuth();
   const {
     demoStage,
     isAttackRunning,
@@ -149,9 +155,23 @@ export function AppShell({ children }: { children: ReactNode }) {
     resumeSimulation,
     resetDemo,
   } = useDemo();
-  
+
+  const navigate = useNavigate();
   const location = useLocation();
-  const breadcrumbName = navSections.flatMap(s => s.items).find(i => i.to === location.pathname)?.label || location.pathname.substring(1).toUpperCase() || "DASHBOARD";
+  const breadcrumbName =
+    navSections.flatMap((s) => s.items).find((i) => i.to === location.pathname)?.label ||
+    location.pathname.substring(1).toUpperCase() ||
+    "DASHBOARD";
+
+  const handleSignOut = async () => {
+    toast.info("Terminating operator session...");
+    await signOut();
+    navigate({ to: "/login" });
+  };
+
+  const displayName = profile?.display_name || storedUser?.displayName || "Operator";
+  const displayRole = profile?.role || storedUser?.role || "SOC Lead Operator";
+  const userEmail = user?.email || storedUser?.email || "operator@time-machine.soc";
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans">
@@ -167,16 +187,18 @@ export function AppShell({ children }: { children: ReactNode }) {
             </span>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2 border-b border-border bg-black/40 px-5 py-2 font-mono text-[10px]">
           <CircleDot className="size-2 text-cyan-signal animate-pulse" />
-          <span className="text-muted-foreground">NODE: <span className="text-cyan-signal">TM-CORE-01</span></span>
+          <span className="text-muted-foreground">
+            NODE: <span className="text-cyan-signal">TM-CORE-01</span>
+          </span>
         </div>
 
         <div className="flex-1 overflow-y-auto px-2 py-6 custom-scrollbar">
           <NavLinks />
         </div>
-        
+
         <div className="mt-auto border-t border-border bg-black/60 p-4">
           <div className="mb-3 rounded border border-warning/30 bg-warning/5 p-3">
             <div className="flex items-center gap-2 font-mono text-[10px] uppercase text-warning">
@@ -187,27 +209,49 @@ export function AppShell({ children }: { children: ReactNode }) {
               Synthetic telemetry active. No verified live endpoint telemetry connected.
             </p>
           </div>
-          
+
           <div className="flex flex-col gap-2">
             {!isAttackRunning && !isPaused ? (
-              <Button size="sm" onClick={startAttackSimulation} className="w-full bg-primary/10 text-cyan-signal border border-primary/30 hover:bg-primary/20 hover:text-white transition-colors font-mono text-xs rounded-sm h-8">
+              <Button
+                size="sm"
+                onClick={startAttackSimulation}
+                className="w-full bg-primary/10 text-cyan-signal border border-primary/30 hover:bg-primary/20 hover:text-white transition-colors font-mono text-xs rounded-sm h-8 cursor-pointer"
+              >
                 [ RUN SIMULATION ]
               </Button>
             ) : isAttackRunning ? (
               <div className="flex gap-2">
-                <Button size="sm" onClick={pauseSimulation} className="flex-1 bg-warning/10 text-warning border border-warning/30 hover:bg-warning/20 rounded-sm font-mono text-xs h-8">
+                <Button
+                  size="sm"
+                  onClick={pauseSimulation}
+                  className="flex-1 bg-warning/10 text-warning border border-warning/30 hover:bg-warning/20 rounded-sm font-mono text-xs h-8 cursor-pointer"
+                >
                   PAUSE
                 </Button>
-                <Button size="sm" variant="outline" onClick={resetDemo} className="rounded-sm font-mono text-xs h-8">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={resetDemo}
+                  className="rounded-sm font-mono text-xs h-8 cursor-pointer"
+                >
                   RESET
                 </Button>
               </div>
             ) : (
               <div className="flex gap-2">
-                <Button size="sm" onClick={resumeSimulation} className="flex-1 bg-primary/10 text-cyan-signal border border-primary/30 hover:bg-primary/20 rounded-sm font-mono text-xs h-8">
+                <Button
+                  size="sm"
+                  onClick={resumeSimulation}
+                  className="flex-1 bg-primary/10 text-cyan-signal border border-primary/30 hover:bg-primary/20 rounded-sm font-mono text-xs h-8 cursor-pointer"
+                >
                   RESUME
                 </Button>
-                <Button size="sm" variant="outline" onClick={resetDemo} className="rounded-sm font-mono text-xs h-8">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={resetDemo}
+                  className="rounded-sm font-mono text-xs h-8 cursor-pointer"
+                >
                   RESET
                 </Button>
               </div>
@@ -225,11 +269,13 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-64 border-border bg-sidebar p-0">
-              {/* Mobile nav similar to desktop */}
+              {/* Mobile nav */}
               <div className="flex items-center gap-3 border-b border-border p-5">
                 <Terminal className="size-5 text-cyan-signal" />
                 <div>
-                  <span className="block font-sans text-sm font-bold tracking-[0.1em] text-foreground">TIMEMACHINE</span>
+                  <span className="block font-sans text-sm font-bold tracking-[0.1em] text-foreground">
+                    TIMEMACHINE
+                  </span>
                 </div>
               </div>
               <div className="px-2 py-6">
@@ -237,7 +283,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               </div>
             </SheetContent>
           </Sheet>
-          
+
           <div className="hidden items-center gap-2 font-mono text-[10px] text-muted-foreground/60 sm:flex">
             <span>TIMEMACHINE</span>
             <span>/</span>
@@ -248,9 +294,9 @@ export function AppShell({ children }: { children: ReactNode }) {
 
           <div className="mx-auto hidden max-w-md flex-1 items-center rounded-sm border border-border bg-black/50 px-3 py-1.5 sm:flex">
             <Search className="mr-2 size-3 text-muted-foreground" />
-            <input 
+            <input
               type="text"
-              placeholder="Search incidents, hosts, hashes, IPs, evidence..." 
+              placeholder="Search incidents, hosts, hashes, IPs, evidence..."
               className="flex-1 bg-transparent font-mono text-xs text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
             />
           </div>
@@ -274,27 +320,56 @@ export function AppShell({ children }: { children: ReactNode }) {
             <span className="hidden items-center gap-2 rounded-sm border border-warning/30 bg-warning/10 px-2 py-1 font-mono text-[10px] font-bold text-warning sm:inline-flex">
               <CircleDot className="size-2 animate-pulse" /> SYNTHETIC DATA
             </span>
-            
+
             <Button variant="ghost" size="icon" className="rounded-sm hover:bg-secondary/50">
               <Bell className="size-4 text-muted-foreground" />
             </Button>
-            
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="size-8 rounded-sm bg-black/50 font-mono text-xs font-bold text-cyan-signal border-primary/20 hover:bg-primary/10 hover:text-cyan-signal">
-                  {profile?.display_name?.substring(0, 2).toUpperCase() || user?.email?.substring(0, 2).toUpperCase() || "OP"}
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="size-8 rounded-sm bg-black/50 font-mono text-xs font-bold text-cyan-signal border-primary/20 hover:bg-primary/10 hover:text-cyan-signal cursor-pointer"
+                >
+                  {displayName.substring(0, 2).toUpperCase()}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 rounded-sm border-border bg-sidebar font-mono text-xs">
-                <DropdownMenuLabel className="font-normal text-muted-foreground">
-                  OPERATOR: {user?.email}
+              <DropdownMenuContent
+                align="end"
+                className="w-60 rounded-sm border-border bg-sidebar font-mono text-xs"
+              >
+                <DropdownMenuLabel className="font-normal text-muted-foreground space-y-1">
+                  <div className="font-bold text-foreground truncate">{displayName}</div>
+                  <div className="text-[10px] text-cyan-signal font-semibold">{displayRole}</div>
+                  <div className="text-[10px] text-muted-foreground/80 truncate">{userEmail}</div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-border" />
-                <DropdownMenuItem asChild className="hover:bg-primary/10 hover:text-cyan-signal focus:bg-primary/10 focus:text-cyan-signal">
-                  <Link to="/settings">SYSTEM SETTINGS</Link>
+                <DropdownMenuItem
+                  asChild
+                  className="hover:bg-primary/10 hover:text-cyan-signal focus:bg-primary/10 focus:text-cyan-signal cursor-pointer"
+                >
+                  <Link to="/admin" className="flex items-center gap-2">
+                    <ShieldCheck className="size-3.5 text-red-400" />
+                    <span>ADMIN CONSOLE</span>
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => signOut()} className="text-destructive hover:bg-destructive/10 focus:bg-destructive/10 focus:text-destructive">
-                  TERMINATE SESSION
+                <DropdownMenuItem
+                  asChild
+                  className="hover:bg-primary/10 hover:text-cyan-signal focus:bg-primary/10 focus:text-cyan-signal cursor-pointer"
+                >
+                  <Link to="/settings" className="flex items-center gap-2">
+                    <Settings className="size-3.5" />
+                    <span>SYSTEM SETTINGS</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-border" />
+                <DropdownMenuItem
+                  onClick={handleSignOut}
+                  className="text-destructive hover:bg-destructive/10 focus:bg-destructive/10 focus:text-destructive font-bold flex items-center justify-between cursor-pointer"
+                >
+                  <span>TERMINATE SESSION</span>
+                  <LogOut className="size-3.5" />
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

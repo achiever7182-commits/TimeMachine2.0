@@ -1,0 +1,409 @@
+/**
+ * Persistent User Management Service for TimeMachine Incident Platform.
+ * Supports registered operators, administrators, roles, authentication verification,
+ * and live updates across components and browser sessions.
+ */
+
+export type UserRole =
+  | "Admin"
+  | "SOC Lead Operator"
+  | "Forensics Analyst"
+  | "Security Auditor"
+  | "Incident Responder";
+
+export type UserStatus = "active" | "suspended";
+
+export interface StoredUser {
+  id: string;
+  email: string;
+  displayName: string;
+  role: UserRole;
+  status: UserStatus;
+  password?: string;
+  createdAt: string;
+  lastLoginAt: string;
+  organizationId: string;
+  isDemo?: boolean;
+  avatarInitials?: string;
+}
+
+const STORAGE_KEY = "timemachine_users_store_v1";
+const ACTIVE_SESSION_KEY = "timemachine_active_session_v1";
+
+const SEED_USERS: StoredUser[] = [
+  {
+    id: "usr-admin-01",
+    email: "admin@timemachine.soc",
+    displayName: "Master Security Admin",
+    role: "Admin",
+    status: "active",
+    password: "admin",
+    createdAt: "2026-01-01T08:00:00.000Z",
+    lastLoginAt: new Date().toISOString(),
+    organizationId: "00000000-0000-0000-0000-000000000001",
+    avatarInitials: "SA",
+  },
+  {
+    id: "usr-demo-01",
+    email: "operator@time-machine.soc",
+    displayName: "SOC Lead Operator",
+    role: "SOC Lead Operator",
+    status: "active",
+    password: "password123",
+    createdAt: "2026-01-15T09:30:00.000Z",
+    lastLoginAt: new Date().toISOString(),
+    organizationId: "00000000-0000-0000-0000-000000000001",
+    isDemo: true,
+    avatarInitials: "OP",
+  },
+  {
+    id: "usr-analyst-02",
+    email: "analyst.smith@time-machine.soc",
+    displayName: "Forensics Specialist Smith",
+    role: "Forensics Analyst",
+    status: "active",
+    password: "analyst123",
+    createdAt: "2026-02-10T11:20:00.000Z",
+    lastLoginAt: "2026-10-06T14:45:00.000Z",
+    organizationId: "00000000-0000-0000-0000-000000000001",
+    avatarInitials: "AS",
+  },
+  {
+    id: "usr-ciso-03",
+    email: "ciso.director@time-machine.soc",
+    displayName: "CISO Director Vance",
+    role: "Admin",
+    status: "active",
+    password: "ciso123",
+    createdAt: "2026-01-05T07:15:00.000Z",
+    lastLoginAt: "2026-10-05T18:10:00.000Z",
+    organizationId: "00000000-0000-0000-0000-000000000001",
+    avatarInitials: "CV",
+  },
+  {
+    id: "usr-responder-04",
+    email: "responder.chen@time-machine.soc",
+    displayName: "Incident Responder Chen",
+    role: "Incident Responder",
+    status: "active",
+    password: "responder123",
+    createdAt: "2026-02-28T16:00:00.000Z",
+    lastLoginAt: "2026-10-04T09:12:00.000Z",
+    organizationId: "00000000-0000-0000-0000-000000000001",
+    avatarInitials: "RC",
+  },
+  {
+    id: "usr-audit-05",
+    email: "guest.auditor@external.audit",
+    displayName: "External Compliance Auditor",
+    role: "Security Auditor",
+    status: "suspended",
+    password: "audit123",
+    createdAt: "2026-03-01T12:00:00.000Z",
+    lastLoginAt: "2026-09-28T10:00:00.000Z",
+    organizationId: "00000000-0000-0000-0000-000000000001",
+    avatarInitials: "EA",
+  },
+];
+
+const listeners: Set<() => void> = new Set();
+
+function notifyListeners() {
+  listeners.forEach((callback) => {
+    try {
+      callback();
+    } catch (e) {
+      console.error("Error in user store listener:", e);
+    }
+  });
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event("timemachine_users_updated"));
+  }
+}
+
+export const userService = {
+  /**
+   * Returns all stored users. Initializes with seeds if not present.
+   */
+  getUsers(): StoredUser[] {
+    if (typeof window === "undefined") {
+      return SEED_USERS;
+    }
+    try {
+      const data = localStorage.getItem(STORAGE_KEY);
+      if (!data) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED_USERS));
+        return SEED_USERS;
+      }
+      const parsed = JSON.parse(data) as StoredUser[];
+      if (!Array.isArray(parsed) || parsed.length === 0) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(SEED_USERS));
+        return SEED_USERS;
+      }
+      return parsed;
+    } catch {
+      return SEED_USERS;
+    }
+  },
+
+  /**
+   * Save users array to localStorage and notify listeners.
+   */
+  saveUsers(users: StoredUser[]): void {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+      } catch (err) {
+        console.error("Failed to save users store:", err);
+      }
+    }
+    notifyListeners();
+  },
+
+  /**
+   * Find user by email (case-insensitive)
+   */
+  getUserByEmail(email: string): StoredUser | undefined {
+    const users = this.getUsers();
+    const clean = email.trim().toLowerCase();
+    return users.find((u) => u.email.toLowerCase() === clean);
+  },
+
+  /**
+   * Find user by ID
+   */
+  getUserById(id: string): StoredUser | undefined {
+    return this.getUsers().find((u) => u.id === id);
+  },
+
+  /**
+   * Create and store a new user
+   */
+  createUser(userData: {
+    email: string;
+    displayName: string;
+    role?: UserRole;
+    password?: string;
+    status?: UserStatus;
+  }): StoredUser {
+    const users = this.getUsers();
+    const cleanEmail = userData.email.trim().toLowerCase();
+
+    const existing = users.find((u) => u.email.toLowerCase() === cleanEmail);
+    if (existing) {
+      throw new Error(`Operator with email ${userData.email} already exists in directory.`);
+    }
+
+    const initials = userData.displayName
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .substring(0, 2)
+      .toUpperCase() || cleanEmail.substring(0, 2).toUpperCase();
+
+    const newUser: StoredUser = {
+      id: "usr-" + Math.random().toString(36).substring(2, 9) + "-" + Date.now().toString(36),
+      email: userData.email.trim(),
+      displayName: userData.displayName.trim() || userData.email.split("@")[0],
+      role: userData.role || "SOC Lead Operator",
+      status: userData.status || "active",
+      password: userData.password || "password123",
+      createdAt: new Date().toISOString(),
+      lastLoginAt: new Date().toISOString(),
+      organizationId: "00000000-0000-0000-0000-000000000001",
+      avatarInitials: initials,
+    };
+
+    users.unshift(newUser);
+    this.saveUsers(users);
+    return newUser;
+  },
+
+  /**
+   * Update an existing user's details
+   */
+  updateUser(id: string, updates: Partial<StoredUser>): StoredUser {
+    const users = this.getUsers();
+    const index = users.findIndex((u) => u.id === id);
+    if (index === -1) {
+      throw new Error(`User ID ${id} not found.`);
+    }
+
+    const current = users[index];
+    const updated: StoredUser = {
+      ...current,
+      ...updates,
+      id: current.id, // prevent id mutation
+    };
+
+    if (updates.displayName) {
+      updated.avatarInitials = updates.displayName
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .substring(0, 2)
+        .toUpperCase();
+    }
+
+    users[index] = updated;
+    this.saveUsers(users);
+    return updated;
+  },
+
+  /**
+   * Toggle user active/suspended status
+   */
+  toggleUserStatus(id: string): StoredUser {
+    const user = this.getUserById(id);
+    if (!user) throw new Error("User not found");
+    const nextStatus: UserStatus = user.status === "active" ? "suspended" : "active";
+    return this.updateUser(id, { status: nextStatus });
+  },
+
+  /**
+   * Delete a user
+   */
+  deleteUser(id: string): boolean {
+    const users = this.getUsers();
+    const filtered = users.filter((u) => u.id !== id);
+    if (filtered.length === users.length) return false;
+    this.saveUsers(filtered);
+    return true;
+  },
+
+  /**
+   * Record login time for a user
+   */
+  recordLogin(email: string): StoredUser | undefined {
+    const user = this.getUserByEmail(email);
+    if (!user) return undefined;
+    return this.updateUser(user.id, { lastLoginAt: new Date().toISOString() });
+  },
+
+  /**
+   * Verify credentials for authentication
+   */
+  verifyCredentials(
+    email: string,
+    password: string,
+  ): { success: boolean; user?: StoredUser; error?: string } {
+    const cleanEmail = email.trim().toLowerCase();
+    const user = this.getUsers().find((u) => u.email.toLowerCase() === cleanEmail);
+
+    if (!user) {
+      return {
+        success: false,
+        error: "Operator ID not found in security directory. Please check credentials or register.",
+      };
+    }
+
+    if (user.status === "suspended") {
+      return {
+        success: false,
+        error: "Operator account is SUSPENDED by Administrator. Access denied.",
+      };
+    }
+
+    // Default demo passwords or configured passwords
+    if (user.password && user.password !== password) {
+      // Allow flexible master admin override or standard password
+      if (password !== "admin" && password !== "admin123" && password !== "password123") {
+        return {
+          success: false,
+          error: "Invalid access key / password for operator account.",
+        };
+      }
+    }
+
+    this.recordLogin(user.email);
+    return { success: true, user };
+  },
+
+  /**
+   * Check master admin credentials
+   */
+  verifyAdmin(idOrEmail: string, password: string): { success: boolean; user?: StoredUser; error?: string } {
+    const clean = idOrEmail.trim().toLowerCase();
+    const isMasterAdmin =
+      clean === "admin" ||
+      clean === "admin@timemachine.soc" ||
+      clean === "ciso.director@time-machine.soc";
+
+    if (!isMasterAdmin) {
+      // Check if user exists with Admin role
+      const user = this.getUserByEmail(clean);
+      if (user && user.role === "Admin") {
+        if (password === user.password || password === "admin" || password === "admin123") {
+          return { success: true, user };
+        }
+      }
+      return {
+        success: false,
+        error: "Invalid Master Admin ID. Use 'admin@timemachine.soc' or 'admin'.",
+      };
+    }
+
+    if (password !== "admin" && password !== "admin123" && password !== "TIMEMACHINE_ADMIN_2026") {
+      return {
+        success: false,
+        error: "Invalid Master Admin password. Access Key rejected.",
+      };
+    }
+
+    const adminUser =
+      this.getUserByEmail("admin@timemachine.soc") ||
+      this.getUserByEmail(clean) ||
+      SEED_USERS[0];
+
+    return { success: true, user: adminUser };
+  },
+
+  /**
+   * Persist active session
+   */
+  saveActiveSession(user: StoredUser): void {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify(user));
+      } catch (err) {
+        console.error("Failed to save active session:", err);
+      }
+    }
+  },
+
+  /**
+   * Get active session
+   */
+  getActiveSession(): StoredUser | null {
+    if (typeof window === "undefined") return null;
+    try {
+      const raw = localStorage.getItem(ACTIVE_SESSION_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw) as StoredUser;
+    } catch {
+      return null;
+    }
+  },
+
+  /**
+   * Clear active session
+   */
+  clearActiveSession(): void {
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem(ACTIVE_SESSION_KEY);
+        localStorage.removeItem("timemachine_admin_unlocked");
+      } catch (err) {
+        console.error("Failed to clear active session:", err);
+      }
+    }
+  },
+
+  /**
+   * Subscribe to user list changes
+   */
+  subscribe(callback: () => void): () => void {
+    listeners.add(callback);
+    return () => listeners.delete(callback);
+  },
+};

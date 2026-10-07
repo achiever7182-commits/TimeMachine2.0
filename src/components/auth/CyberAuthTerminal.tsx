@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { supabase } from "@/lib/supabase";
 import {
   ShieldAlert,
   Terminal,
@@ -15,11 +14,16 @@ import {
   Fingerprint,
   Radio,
   FileKey,
+  Sparkles,
+  ShieldCheck,
+  Zap,
 } from "lucide-react";
 import { CyberBackground } from "./CyberBackground";
 import { TemporalCore } from "./TemporalCore";
 import { AuthHud } from "./AuthHud";
 import { PrivacyRobot } from "@/components/ui/privacy-robot";
+import { useAuth } from "@/context/AuthContext";
+import { userService } from "@/services/userService";
 
 type AuthMode = "login" | "signup" | "recovery";
 
@@ -28,6 +32,7 @@ interface CyberAuthTerminalProps {
 }
 
 export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
+  const { signInDemo, signInWithCredentials } = useAuth();
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -41,6 +46,26 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
   const [enteringApp, setEnteringApp] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
+  const handleLaunchDemo = () => {
+    setError(null);
+    setAuthStage("LAUNCHING DEMO ENVIRONMENT...");
+    signInDemo();
+    setEnteringApp(true);
+    if (onSuccess) {
+      setTimeout(() => {
+        onSuccess();
+      }, 350);
+    }
+  };
+
+  const handleQuickFill = (targetEmail: string, targetPass: string) => {
+    setEmail(targetEmail);
+    setPassword(targetPass);
+    setError(null);
+    setSuccessMessage(null);
+    setMode("login");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -50,20 +75,19 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
     try {
       if (mode === "login") {
         setAuthStage("AUTHENTICATING OPERATOR...");
-        const { error: authError } = await supabase.auth.signInWithPassword({
-          email: email.trim(),
-          password,
-        });
+        const result = await signInWithCredentials(email.trim(), password);
 
-        if (authError) throw authError;
+        if (!result.success) {
+          throw new Error(result.error || "Authentication rejected. Invalid ID or access key.");
+        }
 
         // Cinematic 3-phase verification sequence
-        setAuthStage("VERIFYING CREDENTIALS...");
-        await new Promise((r) => setTimeout(r, 260));
+        setAuthStage("VERIFYING SECURITY TOKENS...");
+        await new Promise((r) => setTimeout(r, 200));
         setAuthStage("OPERATOR SESSION INITIALIZED...");
-        await new Promise((r) => setTimeout(r, 260));
+        await new Promise((r) => setTimeout(r, 200));
         setAuthStage("TIMELINE ENGINE READY...");
-        await new Promise((r) => setTimeout(r, 260));
+        await new Promise((r) => setTimeout(r, 200));
 
         setEnteringApp(true);
         if (onSuccess) {
@@ -75,53 +99,46 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
         if (password !== confirmPassword) {
           throw new Error("Access keys do not match. Please re-enter.");
         }
-        if (password.length < 6) {
-          throw new Error("Access key must contain at least 6 characters.");
+        if (password.length < 4) {
+          throw new Error("Access key must contain at least 4 characters.");
         }
 
         setAuthStage("CREATING OPERATOR PROFILE...");
-        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-          email: email.trim(),
-          password,
-          options: {
-            data: {
-              display_name: username.trim() || email.split("@")[0],
-            },
-          },
-        });
+        try {
+          const newUser = userService.createUser({
+            email: email.trim(),
+            displayName: username.trim() || email.split("@")[0],
+            password,
+            role: "SOC Lead Operator",
+          });
 
-        if (signUpError) throw signUpError;
+          // Auto-sign in the newly registered user
+          setAuthStage("LOGGING IN WITH NEW CREDENTIALS...");
+          await signInWithCredentials(newUser.email, password);
 
-        if (signUpData.session) {
-          setAuthStage("INITIALIZING SECURITY SESSION...");
-          await new Promise((r) => setTimeout(r, 260));
-          setAuthStage("TIMELINE ENGINE READY...");
-          await new Promise((r) => setTimeout(r, 260));
           setEnteringApp(true);
           if (onSuccess) {
             setTimeout(() => {
               onSuccess();
             }, 300);
           }
-        } else {
-          setAuthStage("ACCESS READY");
-          setSuccessMessage(
-            "OPERATOR PROFILE CREATED. Registration confirmed. You may now authenticate.",
-          );
-          setLoading(false);
-          setAuthStage(null);
+        } catch (regErr: unknown) {
+          const msg = regErr instanceof Error ? regErr.message : "Registration failed.";
+          throw new Error(msg);
         }
       } else if (mode === "recovery") {
-        setAuthStage("DISPATCHING RECOVERY TOKEN...");
-        const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-          redirectTo: `${window.location.origin}/dashboard`,
-        });
-
-        if (resetError) throw resetError;
-
-        setSuccessMessage(
-          "RECOVERY TOKEN DISPATCHED. Check the designated operator email address.",
-        );
+        setAuthStage("VERIFYING OPERATOR ID...");
+        await new Promise((r) => setTimeout(r, 400));
+        const user = userService.getUserByEmail(email.trim());
+        if (user) {
+          setSuccessMessage(
+            `RECOVERY TOKEN GRANTED. Operator Call sign: ${user.displayName}. Default demo key is 'password123' or 'admin'.`,
+          );
+        } else {
+          setSuccessMessage(
+            "RECOVERY TOKEN DISPATCHED. Check the designated operator email address.",
+          );
+        }
         setLoading(false);
         setAuthStage(null);
       }
@@ -159,7 +176,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                 ACCESS GRANTED // SESSION ACTIVE
               </h2>
               <p className="text-xs text-slate-400 tracking-widest animate-pulse">
-                ENTERING TIMEMACHINE INCIDENT PLATFORM...
+                INITIALIZING TIMEMACHINE PLATFORM...
               </p>
             </div>
           </div>
@@ -169,10 +186,10 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
       {/* Main Full-Screen Layout */}
       <div className="relative z-20 flex min-h-screen w-full flex-col lg:flex-row">
         {/* Left Side: Cinematic Branding & Temporal Core */}
-        <div className="flex flex-1 flex-col justify-center px-6 py-16 sm:px-12 lg:px-20 xl:px-24">
+        <div className="flex flex-1 flex-col justify-center px-6 py-12 sm:px-12 lg:px-16 xl:px-24">
           <div className="relative max-w-2xl">
             {/* Top Brand Badges */}
-            <div className="mb-6 flex flex-wrap items-center gap-3 font-mono text-[11px] tracking-[0.2em] text-cyan-400">
+            <div className="mb-4 flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-cyan-400">
               <span className="flex items-center gap-1.5 rounded-sm border border-cyan-500/30 bg-[#050B12]/80 px-2.5 py-1 shadow-[0_0_10px_rgba(0,229,255,0.1)]">
                 <Radio className="size-3 animate-pulse text-cyan-400" />
                 SOC INCIDENT TERMINAL
@@ -196,33 +213,55 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
               </div>
             </div>
 
-            <div className="mt-8 space-y-4">
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold uppercase tracking-tight text-slate-200">
+            <div className="mt-6 space-y-3">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold uppercase tracking-tight text-slate-200">
                 RECONSTRUCT <br className="hidden sm:inline" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-blue-500 drop-shadow-[0_0_25px_rgba(0,229,255,0.3)]">
-                  THE ATTACK.
+                  THE ATTACK TIMELINE.
                 </span>
               </h2>
-              <p className="max-w-lg text-sm sm:text-base text-slate-400 leading-relaxed">
-                Observe. Investigate. Rewind. Respond. <br />
-                Every attack leaves a timeline. Access the platform to isolate root cause and
-                execute decisive counterfactual mitigation.
+              <p className="max-w-lg text-xs sm:text-sm text-slate-400 leading-relaxed">
+                Observe synthetic cyber telemetry, isolate patient zero, and run counterfactual
+                what-if branch simulations in real time.
               </p>
             </div>
 
+            {/* Instant One-Click Demo Mode Banner */}
+            <div className="mt-6 rounded border border-cyan-400/40 bg-gradient-to-r from-cyan-950/60 via-sky-950/40 to-transparent p-4 backdrop-blur-md shadow-[0_0_25px_rgba(0,229,255,0.15)]">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2 font-mono text-xs font-bold text-cyan-300">
+                    <Sparkles className="size-4 text-cyan-400 animate-pulse" />
+                    <span>INSTANT DEMO MODE (NO LOGIN REQUIRED)</span>
+                  </div>
+                  <p className="mt-1 font-mono text-[11px] text-slate-400">
+                    Explore the full Incident Time Machine platform instantly with preloaded cyber attack scenarios.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleLaunchDemo}
+                  className="shrink-0 flex items-center gap-2 rounded bg-cyan-400 px-4 py-2 font-mono text-xs font-bold text-black shadow-[0_0_20px_rgba(0,229,255,0.4)] transition-all hover:bg-cyan-300 hover:scale-105 active:scale-95 cursor-pointer"
+                >
+                  <Zap className="size-3.5 fill-black" />
+                  <span>EXPLORE DEMO NOW</span>
+                </button>
+              </div>
+            </div>
+
             {/* Central Temporal Core & Forensic Timeline Motifs */}
-            <div className="mt-10 flex flex-col md:flex-row items-center gap-8">
+            <div className="mt-8 flex flex-col md:flex-row items-center gap-6">
               <TemporalCore />
 
               {/* Forensic Artifacts Stream */}
-              <div className="w-full max-w-sm rounded border border-cyan-500/20 bg-[#050B12]/70 p-4 font-mono text-xs backdrop-blur-md">
-                <div className="mb-2.5 flex items-center justify-between border-b border-cyan-500/20 pb-2 text-[10px] text-cyan-400">
+              <div className="w-full max-w-sm rounded border border-cyan-500/20 bg-[#050B12]/70 p-3.5 font-mono text-xs backdrop-blur-md">
+                <div className="mb-2 flex items-center justify-between border-b border-cyan-500/20 pb-1.5 text-[10px] text-cyan-400">
                   <span className="flex items-center gap-1.5 font-bold uppercase tracking-wider">
                     <Fingerprint className="size-3.5" /> RECONSTRUCTED TRACES
                   </span>
                   <span className="text-slate-500">LIVE FEED</span>
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-1.5">
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="text-cyan-400 font-semibold">EVT-2048</span>
                     <span className="text-slate-400">14:32:08</span>
@@ -251,10 +290,10 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
         </div>
 
         {/* Right Side: Secure Authentication Terminal */}
-        <div className="flex w-full items-center justify-center p-4 sm:p-8 lg:w-[34rem] xl:w-[38rem] lg:bg-[#020609]/70 lg:backdrop-blur-xl lg:border-l lg:border-cyan-500/10">
+        <div className="flex w-full items-center justify-center p-4 sm:p-6 lg:w-[34rem] xl:w-[38rem] lg:bg-[#020609]/70 lg:backdrop-blur-xl lg:border-l lg:border-cyan-500/10">
           <div className="w-full max-w-md">
             {/* Terminal Container with Sharp Corner Brackets & Inner Glow */}
-            <div className="relative overflow-hidden rounded border border-cyan-500/30 bg-[#050B12]/90 p-6 sm:p-8 shadow-[0_0_50px_rgba(0,229,255,0.06)] backdrop-blur-2xl">
+            <div className="relative overflow-hidden rounded border border-cyan-500/30 bg-[#050B12]/90 p-5 sm:p-7 shadow-[0_0_50px_rgba(0,229,255,0.06)] backdrop-blur-2xl">
               {/* Technical Corner Brackets */}
               <div className="absolute left-0 top-0 size-4 border-l-2 border-t-2 border-cyan-400" />
               <div className="absolute right-0 top-0 size-4 border-r-2 border-t-2 border-cyan-400" />
@@ -262,7 +301,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
               <div className="absolute bottom-0 right-0 size-4 border-b-2 border-r-2 border-cyan-400" />
 
               {/* Technical Header & Diagnostic Info */}
-              <div className="mb-6 space-y-2 border-b border-cyan-500/20 pb-4 font-mono">
+              <div className="mb-5 space-y-2 border-b border-cyan-500/20 pb-3 font-mono">
                 <div className="flex items-center justify-between text-xs text-cyan-400">
                   <span className="flex items-center gap-2 font-bold tracking-widest uppercase">
                     <ShieldAlert className="size-4 text-cyan-400" />
@@ -271,16 +310,13 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                     {mode === "recovery" && "◈ ACCOUNT RECOVERY"}
                   </span>
                   <span className="text-[10px] text-slate-400 border border-slate-700/50 px-1.5 py-0.5 rounded bg-black/40">
-                    AES-256 / TLS
+                    AES-256
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between text-[10px] text-slate-400 uppercase pt-1">
                   <span>
                     SYSTEM: <strong className="text-cyan-400">TIMEMACHINE CORE</strong>
-                  </span>
-                  <span>
-                    NODE: <strong className="text-cyan-400">TM-OPS-01</strong>
                   </span>
                   <span className="flex items-center gap-1">
                     <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -289,11 +325,36 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                 </div>
               </div>
 
+              {/* Quick Fill Preset Buttons */}
+              <div className="mb-4">
+                <div className="mb-1.5 font-mono text-[10px] uppercase tracking-wider text-slate-400">
+                  ⚡ QUICK TEST CREDENTIALS:
+                </div>
+                <div className="grid grid-cols-2 gap-1.5 font-mono text-[10px]">
+                  <button
+                    type="button"
+                    onClick={() => handleQuickFill("operator@time-machine.soc", "password123")}
+                    className="flex items-center justify-center gap-1 rounded border border-cyan-500/30 bg-cyan-950/20 py-1.5 text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-400 transition-colors"
+                  >
+                    <User className="size-3 text-cyan-400" />
+                    <span>Demo Operator</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleQuickFill("admin@timemachine.soc", "admin")}
+                    className="flex items-center justify-center gap-1 rounded border border-red-500/30 bg-red-950/20 py-1.5 text-red-300 hover:bg-red-500/20 hover:border-red-400 transition-colors"
+                  >
+                    <ShieldCheck className="size-3 text-red-400" />
+                    <span>Master Admin</span>
+                  </button>
+                </div>
+              </div>
+
               {/* Auth Form */}
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="space-y-4 font-mono">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-3 font-mono">
                   {/* Email / Operator ID Field */}
-                  <div className="space-y-1.5">
+                  <div className="space-y-1">
                     <label
                       htmlFor="operator-email"
                       className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300"
@@ -304,25 +365,25 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                       <User className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-cyan-400/60" />
                       <input
                         id="operator-email"
-                        type="email"
+                        type="text"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full rounded border border-cyan-500/30 bg-black/60 py-2.5 pl-10 pr-4 text-sm text-cyan-50 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all"
+                        className="w-full rounded border border-cyan-500/30 bg-black/60 py-2 pl-10 pr-4 text-xs sm:text-sm text-cyan-50 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all"
                         placeholder="operator@time-machine.soc"
-                        autoComplete="email"
+                        autoComplete="username"
                       />
                     </div>
                   </div>
 
                   {/* Username Field for Registration */}
                   {mode === "signup" && (
-                    <div className="space-y-1.5">
+                    <div className="space-y-1">
                       <label
                         htmlFor="operator-username"
                         className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300"
                       >
-                        OPERATOR ALIAS (CALLSIGN)
+                        OPERATOR ALIAS (DISPLAY NAME)
                       </label>
                       <div className="relative">
                         <Terminal className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-cyan-400/60" />
@@ -332,9 +393,8 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                           required
                           value={username}
                           onChange={(e) => setUsername(e.target.value)}
-                          className="w-full rounded border border-cyan-500/30 bg-black/60 py-2.5 pl-10 pr-4 text-sm text-cyan-50 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all"
-                          placeholder="analyst_alpha"
-                          autoComplete="username"
+                          className="w-full rounded border border-cyan-500/30 bg-black/60 py-2 pl-10 pr-4 text-xs sm:text-sm text-cyan-50 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all"
+                          placeholder="SOC Specialist Alpha"
                         />
                       </div>
                     </div>
@@ -342,7 +402,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
 
                   {/* Password / Access Key Field (Login & Signup) */}
                   {mode !== "recovery" && (
-                    <div className="space-y-1.5">
+                    <div className="space-y-1">
                       <div className="flex items-center justify-between">
                         <label
                           htmlFor="operator-password"
@@ -360,7 +420,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                             }}
                             className="text-[10px] text-cyan-400 hover:text-cyan-300 hover:underline transition-colors"
                           >
-                            FORGOT ACCESS KEY?
+                            FORGOT KEY?
                           </button>
                         )}
                       </div>
@@ -374,7 +434,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                           onChange={(e) => setPassword(e.target.value)}
                           onFocus={() => setIsPasswordFocused(true)}
                           onBlur={() => setIsPasswordFocused(false)}
-                          className="w-full rounded border border-cyan-500/30 bg-black/60 py-2.5 pl-10 pr-11 text-sm text-cyan-50 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all relative z-10"
+                          className="w-full rounded border border-cyan-500/30 bg-black/60 py-2 pl-10 pr-11 text-xs sm:text-sm text-cyan-50 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all relative z-10"
                           placeholder="••••••••••••"
                           autoComplete={mode === "login" ? "current-password" : "new-password"}
                         />
@@ -396,7 +456,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
 
                   {/* Confirm Password Field for Registration */}
                   {mode === "signup" && (
-                    <div className="space-y-1.5">
+                    <div className="space-y-1">
                       <label
                         htmlFor="operator-confirm-password"
                         className="block text-[11px] font-semibold uppercase tracking-wider text-slate-300"
@@ -413,7 +473,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                           onChange={(e) => setConfirmPassword(e.target.value)}
                           onFocus={() => setIsPasswordFocused(true)}
                           onBlur={() => setIsPasswordFocused(false)}
-                          className="w-full rounded border border-cyan-500/30 bg-black/60 py-2.5 pl-10 pr-4 text-sm text-cyan-50 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all relative z-10"
+                          className="w-full rounded border border-cyan-500/30 bg-black/60 py-2 pl-10 pr-4 text-xs sm:text-sm text-cyan-50 placeholder:text-slate-600 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 shadow-inner transition-all relative z-10"
                           placeholder="••••••••••••"
                           autoComplete="new-password"
                         />
@@ -426,7 +486,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                 {error && (
                   <div
                     role="alert"
-                    className="relative rounded border border-threat/40 bg-threat/10 p-3.5 font-mono text-xs text-threat-foreground"
+                    className="relative rounded border border-threat/40 bg-threat/10 p-3 font-mono text-xs text-threat-foreground"
                   >
                     <div className="absolute left-0 top-0 h-full w-1 bg-threat" />
                     <div className="flex items-start gap-2">
@@ -435,7 +495,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                         <span className="block font-bold text-threat uppercase">
                           ⚠ AUTHENTICATION FAILED
                         </span>
-                        <span className="text-slate-300">{error}</span>
+                        <span className="text-slate-300 text-[11px]">{error}</span>
                       </div>
                     </div>
                   </div>
@@ -445,28 +505,25 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                 {successMessage && (
                   <div
                     role="status"
-                    className="relative rounded border border-emerald-500/40 bg-emerald-500/10 p-3.5 font-mono text-xs text-emerald-300"
+                    className="relative rounded border border-emerald-500/40 bg-emerald-500/10 p-3 font-mono text-xs text-emerald-300"
                   >
                     <div className="absolute left-0 top-0 h-full w-1 bg-emerald-400" />
                     <div className="flex items-start gap-2">
                       <CheckCircle2 className="size-4 shrink-0 text-emerald-400 mt-0.5" />
                       <div>
                         <span className="block font-bold uppercase">◈ TRANSMISSION CONFIRMED</span>
-                        <span>{successMessage}</span>
+                        <span className="text-[11px]">{successMessage}</span>
                       </div>
                     </div>
                   </div>
                 )}
 
-                {/* Futuristic Authenticate Button */}
+                {/* Authenticate Button */}
                 <button
                   type="submit"
                   disabled={loading}
-                  className="group relative w-full overflow-hidden rounded border border-cyan-400 bg-cyan-500/10 py-3.5 font-mono text-xs sm:text-sm font-bold tracking-[0.2em] text-cyan-300 transition-all hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_30px_rgba(0,229,255,0.5)] focus:outline-none focus:ring-2 focus:ring-cyan-400 disabled:opacity-60 disabled:pointer-events-none active:scale-[0.99]"
+                  className="group relative w-full overflow-hidden rounded border border-cyan-400 bg-cyan-500/10 py-3 font-mono text-xs sm:text-sm font-bold tracking-[0.2em] text-cyan-300 transition-all hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_30px_rgba(0,229,255,0.5)] focus:outline-none focus:ring-2 focus:ring-cyan-400 disabled:opacity-60 disabled:pointer-events-none active:scale-[0.99] cursor-pointer"
                 >
-                  {/* Hover Scanline effect */}
-                  <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-cyan-300/30 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-
                   <span className="relative flex items-center justify-center gap-2">
                     {loading ? (
                       <>
@@ -484,7 +541,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                         {mode === "signup" && (
                           <>
                             <FileKey className="size-4" />
-                            <span>[ ◈ INITIALIZE REGISTRATION ]</span>
+                            <span>[ ◈ REGISTER OPERATOR ]</span>
                           </>
                         )}
                         {mode === "recovery" && (
@@ -501,23 +558,16 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                 {/* Instant Demo Operator Access Button */}
                 <button
                   type="button"
-                  onClick={() => {
-                    setEnteringApp(true);
-                    if (onSuccess) {
-                      setTimeout(() => {
-                        onSuccess();
-                      }, 300);
-                    }
-                  }}
-                  className="w-full rounded border border-cyan-500/30 bg-cyan-950/20 py-2.5 font-mono text-xs font-semibold tracking-wider text-cyan-400 hover:bg-cyan-500/20 hover:border-cyan-400 transition-all flex items-center justify-center gap-2"
+                  onClick={handleLaunchDemo}
+                  className="w-full rounded border border-cyan-500/40 bg-gradient-to-r from-cyan-950/40 via-cyan-900/30 to-cyan-950/40 py-2.5 font-mono text-xs font-bold tracking-wider text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(0,229,255,0.3)] transition-all flex items-center justify-center gap-2 cursor-pointer"
                 >
-                  <Activity className="size-3.5 text-cyan-400 animate-pulse" />
-                  <span>[ LAUNCH INSTANT DEMO SESSION ]</span>
+                  <Zap className="size-3.5 text-cyan-400 animate-pulse fill-cyan-400" />
+                  <span>[ NO LOGIN REQUIRED — INSTANT DEMO ]</span>
                 </button>
               </form>
 
               {/* Mode Toggle Secondary Actions */}
-              <div className="mt-6 flex flex-col items-center justify-center gap-3 border-t border-cyan-500/20 pt-4 text-center font-mono text-[11px] tracking-wider text-slate-400">
+              <div className="mt-5 flex flex-col items-center justify-center gap-2 border-t border-cyan-500/20 pt-3.5 text-center font-mono text-[11px] tracking-wider text-slate-400">
                 {mode === "login" ? (
                   <button
                     type="button"
@@ -529,7 +579,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
                     className="hover:text-cyan-400 transition-colors uppercase"
                   >
                     NEW OPERATOR?{" "}
-                    <span className="text-cyan-400 font-bold underline">REQUEST ACCESS</span>
+                    <span className="text-cyan-400 font-bold underline">REGISTER HERE</span>
                   </button>
                 ) : (
                   <button
