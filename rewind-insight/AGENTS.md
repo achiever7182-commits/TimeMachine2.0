@@ -1,0 +1,1 @@
+- Keep all Incident Time Machine data and response behavior synthetic and frontend-only until an authenticated, explicitly approved integration is requested; this preserves the demo's safety boundary.
