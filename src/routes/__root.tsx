@@ -16,6 +16,7 @@ import { DemoProvider } from "@/context/DemoContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { AuthGuard } from "@/components/auth/AuthGuard";
 import { TelemetryProvider } from "@/telemetry/context/TelemetryContext";
+import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
 import { reportError } from "../lib/error-reporting";
 function NotFoundComponent() {
@@ -134,6 +135,7 @@ function RootComponent() {
               </AppShell>
             )}
             <IrisVoiceLauncher />
+            <Toaster position="top-right" richColors theme="dark" />
           </DemoProvider>
         </TelemetryProvider>
       </AuthProvider>
