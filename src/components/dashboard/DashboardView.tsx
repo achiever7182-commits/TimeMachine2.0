@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   Activity,
@@ -7,6 +7,7 @@ import {
   Database,
   FileCode,
   FileText,
+  Film,
   FlaskConical,
   GitBranch,
   Laptop,
@@ -19,6 +20,7 @@ import {
   Server,
   ShieldAlert,
   ShieldCheck,
+  Sparkles,
   Terminal,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,16 +32,11 @@ import { getDashboardSnapshot } from "@/services/incidentService";
 import { SIMULATION_SPEEDS } from "@/services/simulationService";
 import { cn } from "@/lib/utils";
 
-const CINEMATIC_FLAG =
-  (import.meta.env["VITE_ENABLE_CINEMATIC_DASHBOARD"] as string | undefined) ?? "true";
-
 const LazyCinematicDashboard = lazy(() =>
   import("./cinematic").then((m) => ({
     default: m.CinematicDashboard,
   })),
 );
-
-const isCinematicEnabled = typeof window !== "undefined" && CINEMATIC_FLAG === "true";
 
 const kpiIcons = [Activity, ShieldAlert, MonitorCheck, Clock3];
 
@@ -60,14 +57,38 @@ export function DashboardView() {
     resetDemo,
   } = useDemo();
 
-  const [cinematicActive, setCinematicActive] = useState<boolean>(isCinematicEnabled);
+  const [cinematicActive, setCinematicActive] = useState<boolean>(false);
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("view") === "cinematic") {
+        setCinematicActive(true);
+      }
+    }
+  }, []);
+
   const handleCinematicExit = useCallback(() => {
     setCinematicActive(false);
-    window.requestAnimationFrame(() => {
-      document
-        .getElementById("operational-dashboard")
-        ?.scrollIntoView({ behavior: "auto", block: "start" });
-    });
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("view");
+      window.history.replaceState({}, "", url.toString());
+      window.requestAnimationFrame(() => {
+        document
+          .getElementById("operational-dashboard")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }, []);
+
+  const handleCinematicEnter = useCallback(() => {
+    setCinematicActive(true);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }, []);
 
   const snapshot = getDashboardSnapshot(incidentState);
@@ -105,7 +126,7 @@ export function DashboardView() {
 
   return (
     <AppPage>
-      {cinematicActive && isCinematicEnabled ? (
+      {cinematicActive && isMounted ? (
         <Suspense fallback={null}>
           <LazyCinematicDashboard onExit={handleCinematicExit} />
         </Suspense>
@@ -136,7 +157,18 @@ export function DashboardView() {
         </div>
 
         {/* Actions & Simulation Controls */}
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* Cinematic Story Launcher */}
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleCinematicEnter}
+            className="border-cyan-signal/40 bg-cyan-signal/10 hover:bg-cyan-signal/20 text-cyan-signal rounded-sm font-mono text-xs uppercase h-8 px-2.5"
+            title="Launch 12-chapter cinematic incident story"
+          >
+            <Film className="size-3.5 mr-1.5" /> Story Mode
+          </Button>
+
           {/* Speed Selector */}
           <div className="flex items-center border border-border bg-black/50 px-2 py-1 text-xs rounded-sm">
             <span className="px-1.5 font-mono text-muted-foreground/70 uppercase text-[11px]">

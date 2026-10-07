@@ -114,10 +114,11 @@ export function IrisCopilot() {
       <Button
         size="icon"
         onClick={() => setOpen(true)}
-        className="fixed bottom-20 right-4 z-40 size-12 rounded-full shadow-glow bg-cyan-signal text-background hover:bg-cyan-400"
-        aria-label="Open IRIS Assistant"
+        className="fixed bottom-18 right-4 z-40 size-12 rounded-full border border-cyan-signal/50 bg-black/80 text-cyan-signal shadow-[0_0_20px_rgba(0,229,255,0.25)] hover:bg-cyan-signal/20 hover:text-white transition-all hover:scale-105"
+        aria-label="Open IRIS Text Copilot"
+        title="Open IRIS Copilot Chat"
       >
-        <Bot className="size-6" />
+        <MessageCircle className="size-5" />
       </Button>
 
       {open && (

@@ -1,4 +1,4 @@
-import { Bot } from "lucide-react";
+import { Mic } from "lucide-react";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -33,14 +33,15 @@ export function IrisVoiceLauncher() {
         <button
           type="button"
           onClick={() => setIsActivated(true)}
-          className="pointer-events-auto fixed bottom-4 right-4 grid size-14 place-items-center rounded-full border border-cyan-signal/60 bg-cyan-signal text-background shadow-[0_0_30px_color-mix(in_oklab,var(--cyan-signal)_35%,transparent)] transition-transform hover:scale-105 hover:bg-cyan-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-signal focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          aria-label="Talk to IRIS by voice"
-          title="Talk to IRIS by voice"
+          className="pointer-events-auto fixed bottom-4 right-4 grid size-12 place-items-center rounded-full border border-cyan-signal/60 bg-gradient-to-tr from-cyan-600 to-cyan-400 text-background shadow-[0_0_25px_rgba(0,229,255,0.4)] transition-all hover:scale-105 hover:shadow-[0_0_35px_rgba(0,229,255,0.7)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-signal"
+          aria-label="Talk to IRIS Voice Agent"
+          title="Talk to IRIS Voice Agent"
         >
-          <Bot className="size-6" aria-hidden="true" />
+          <Mic className="size-5 text-black" aria-hidden="true" />
         </button>
       )}
     </div>,
     document.body,
   );
 }
+
