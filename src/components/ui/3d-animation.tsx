@@ -140,7 +140,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
   return (
     <div
       className={cn(
-        "relative w-full overflow-hidden rounded-xl border border-cyan-500/20 bg-[#020609] p-4 font-sans select-none",
+        "relative w-full overflow-hidden rounded-xl border border-cyan-500/20 bg-background p-4 font-sans select-none",
         className,
       )}
     >
@@ -153,7 +153,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
       {/* Top HUD Controls */}
       <div className="relative z-20 mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-cyan-500/20 pb-3 font-mono text-xs">
         <div className="flex items-center gap-2.5">
-          <div className="flex size-6 items-center justify-center rounded border border-cyan-400/40 bg-[#050B12] text-cyan-400 shadow-glow">
+          <div className="flex size-6 items-center justify-center rounded border border-cyan-400/40 bg-card text-cyan-400 shadow-glow">
             <RotateCcw className="size-3.5 animate-spin" style={{ animationDuration: "12s" }} />
           </div>
           <div>
@@ -179,7 +179,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
               "rounded px-2.5 py-1 font-bold tracking-wider transition-all border",
               isAutoOrbit
                 ? "bg-cyan-500/20 text-cyan-300 border-cyan-400 shadow-[0_0_10px_rgba(0,229,255,0.3)]"
-                : "bg-[#050B12] text-slate-400 border-slate-700 hover:text-cyan-400",
+                : "bg-card text-slate-400 border-slate-700 hover:text-cyan-400",
             )}
           >
             [◈ ORBIT {isAutoOrbit ? "ON" : "OFF"}]
@@ -190,7 +190,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
               "rounded px-2 py-1 transition-all border",
               activeFace === "front" && !isAutoOrbit
                 ? "border-cyan-400 bg-cyan-950 text-cyan-300"
-                : "border-slate-800 bg-[#050B12] text-slate-400 hover:text-cyan-400",
+                : "border-slate-800 bg-card text-slate-400 hover:text-cyan-400",
             )}
           >
             OVERVIEW
@@ -201,7 +201,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
               "rounded px-2 py-1 transition-all border",
               activeFace === "left" && !isAutoOrbit
                 ? "border-cyan-400 bg-cyan-950 text-cyan-300"
-                : "border-slate-800 bg-[#050B12] text-slate-400 hover:text-cyan-400",
+                : "border-slate-800 bg-card text-slate-400 hover:text-cyan-400",
             )}
           >
             EVENTS
@@ -212,7 +212,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
               "rounded px-2 py-1 transition-all border",
               activeFace === "right" && !isAutoOrbit
                 ? "border-cyan-400 bg-cyan-950 text-cyan-300"
-                : "border-slate-800 bg-[#050B12] text-slate-400 hover:text-cyan-400",
+                : "border-slate-800 bg-card text-slate-400 hover:text-cyan-400",
             )}
           >
             IRIS GAP
@@ -223,7 +223,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
               "rounded px-2 py-1 transition-all border",
               activeFace === "back" && !isAutoOrbit
                 ? "border-cyan-400 bg-cyan-950 text-cyan-300"
-                : "border-slate-800 bg-[#050B12] text-slate-400 hover:text-cyan-400",
+                : "border-slate-800 bg-card text-slate-400 hover:text-cyan-400",
             )}
           >
             BLAST RADIUS
@@ -262,7 +262,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
             >
               {/* FACE 1: FRONT (Overview & Temporal Cursor) */}
               <div
-                className="absolute inset-0 flex flex-col justify-between rounded border border-cyan-400/50 bg-[#050B12]/92 p-5 text-slate-200 shadow-[0_0_30px_rgba(0,229,255,0.15)] backdrop-blur-xl"
+                className="absolute inset-0 flex flex-col justify-between rounded border border-cyan-400/50 bg-card p-5 text-slate-200 shadow-[0_0_30px_rgba(0,229,255,0.15)] backdrop-blur-xl"
                 style={{
                   transform: "translateZ(150px)",
                   backfaceVisibility: "visible",
@@ -317,7 +317,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
 
               {/* FACE 2: BACK (Blast Radius & Impact) */}
               <div
-                className="absolute inset-0 flex flex-col justify-between rounded border border-threat/50 bg-[#050B12]/92 p-5 text-slate-200 shadow-[0_0_30px_rgba(255,42,42,0.15)] backdrop-blur-xl"
+                className="absolute inset-0 flex flex-col justify-between rounded border border-threat/50 bg-card p-5 text-slate-200 shadow-[0_0_30px_rgba(255,42,42,0.15)] backdrop-blur-xl"
                 style={{
                   transform: "rotateY(180deg) translateZ(150px)",
                   backfaceVisibility: "visible",
@@ -368,7 +368,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
 
               {/* FACE 3: LEFT (Telemetry & Event Logs) */}
               <div
-                className="absolute inset-0 flex flex-col justify-between rounded border border-cyan-400/40 bg-[#050B12]/92 p-5 text-slate-200 shadow-[0_0_30px_rgba(0,229,255,0.15)] backdrop-blur-xl"
+                className="absolute inset-0 flex flex-col justify-between rounded border border-cyan-400/40 bg-card p-5 text-slate-200 shadow-[0_0_30px_rgba(0,229,255,0.15)] backdrop-blur-xl"
                 style={{
                   transform: "rotateY(-90deg) translateZ(150px)",
                   backfaceVisibility: "visible",
@@ -431,7 +431,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
 
               {/* FACE 4: RIGHT (IRIS Earliest Detection Gap) */}
               <div
-                className="absolute inset-0 flex flex-col justify-between rounded border border-sky-400/50 bg-[#050B12]/92 p-5 text-slate-200 shadow-[0_0_30px_rgba(56,189,248,0.15)] backdrop-blur-xl"
+                className="absolute inset-0 flex flex-col justify-between rounded border border-sky-400/50 bg-card p-5 text-slate-200 shadow-[0_0_30px_rgba(56,189,248,0.15)] backdrop-blur-xl"
                 style={{
                   transform: "rotateY(90deg) translateZ(150px)",
                   backfaceVisibility: "visible",
@@ -475,7 +475,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
 
               {/* FACE 5: TOP (Temporal Radar Sweep HUD) */}
               <div
-                className="absolute inset-0 flex flex-col items-center justify-center rounded border border-cyan-400/40 bg-[#050B12]/92 p-4 text-center shadow-[0_0_30px_rgba(0,229,255,0.2)] backdrop-blur-xl"
+                className="absolute inset-0 flex flex-col items-center justify-center rounded border border-cyan-400/40 bg-card p-4 text-center shadow-[0_0_30px_rgba(0,229,255,0.2)] backdrop-blur-xl"
                 style={{
                   transform: "rotateX(90deg) translateZ(150px)",
                   backfaceVisibility: "visible",
@@ -497,7 +497,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
 
               {/* FACE 6: BOTTOM (Cryptographic Hash & Seal) */}
               <div
-                className="absolute inset-0 flex flex-col items-center justify-center rounded border border-cyan-400/40 bg-[#050B12]/92 p-4 text-center shadow-[0_0_30px_rgba(0,229,255,0.2)] backdrop-blur-xl"
+                className="absolute inset-0 flex flex-col items-center justify-center rounded border border-cyan-400/40 bg-card p-4 text-center shadow-[0_0_30px_rgba(0,229,255,0.2)] backdrop-blur-xl"
                 style={{
                   transform: "rotateX(-90deg) translateZ(150px)",
                   backfaceVisibility: "visible",
@@ -533,7 +533,7 @@ export const TemporalCoreCube: React.FC<TemporalCoreCubeProps> = ({
                 style={{ transformStyle: "preserve-3d" }}
               >
                 <div
-                  className="absolute inset-0 rounded border border-cyan-400/30 bg-[#050B12] p-4 text-cyan-400"
+                  className="absolute inset-0 rounded border border-cyan-400/30 bg-card p-4 text-cyan-400"
                   style={{ transform: "translateZ(150px)" }}
                 >
                   <div className="font-mono text-xs font-bold">{incidentId} [MIRROR]</div>

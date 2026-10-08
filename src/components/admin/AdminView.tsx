@@ -404,7 +404,7 @@ export function AdminView() {
   if (!unlocked) {
     return (
       <div className="flex min-h-[85vh] w-full items-center justify-center p-4">
-        <div className="relative w-full max-w-md overflow-hidden rounded border border-red-500/40 bg-[#050B12]/95 p-6 sm:p-8 shadow-[0_0_60px_rgba(255,50,50,0.15)] backdrop-blur-2xl">
+        <div className="relative w-full max-w-md overflow-hidden rounded border border-red-500/40 bg-card p-6 sm:p-8 shadow-[0_0_60px_rgba(255,50,50,0.15)] backdrop-blur-2xl">
           {/* Tech corner brackets */}
           <div className="absolute left-0 top-0 size-4 border-l-2 border-t-2 border-red-500" />
           <div className="absolute right-0 top-0 size-4 border-r-2 border-t-2 border-red-500" />

@@ -24,7 +24,7 @@ export function AuthHud() {
       <div className="flex items-center justify-between">
         {/* Top Left */}
         <div className="flex items-center gap-2.5">
-          <div className="flex size-6 items-center justify-center rounded border border-cyan-500/30 bg-[#050B12]/80 text-cyan-400 shadow-[0_0_10px_rgba(0,229,255,0.2)]">
+          <div className="flex size-6 items-center justify-center rounded border border-cyan-500/30 bg-card text-cyan-400 shadow-[0_0_10px_rgba(0,229,255,0.2)]">
             <Terminal className="size-3.5" />
           </div>
           <div>
@@ -37,11 +37,11 @@ export function AuthHud() {
 
         {/* Top Right */}
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded border border-cyan-500/20 bg-[#050B12]/60 text-slate-400">
+          <div className="hidden sm:flex items-center gap-1.5 px-2 py-1 rounded border border-cyan-500/20 bg-card text-slate-400">
             <Shield className="size-3 text-cyan-400" />
             <span>CHANNEL: TLS 1.3</span>
           </div>
-          <div className="flex items-center gap-2 px-2.5 py-1 rounded border border-cyan-500/20 bg-[#050B12]/80 font-bold text-cyan-400 shadow-[0_0_12px_rgba(0,229,255,0.1)]">
+          <div className="flex items-center gap-2 px-2.5 py-1 rounded border border-cyan-500/20 bg-card font-bold text-cyan-400 shadow-[0_0_12px_rgba(0,229,255,0.1)]">
             <span className="size-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34d399]" />
             <span className="tracking-widest">SYSTEM ONLINE</span>
             <span className="text-slate-500">|</span>

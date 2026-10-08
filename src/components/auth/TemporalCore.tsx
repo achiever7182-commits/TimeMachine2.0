@@ -133,7 +133,7 @@ export function TemporalCore() {
 
       {/* Central Temporal Engine Core Icon */}
       <div className="relative z-10 flex flex-col items-center justify-center text-center">
-        <div className="relative flex items-center justify-center size-20 rounded-full border border-cyan-500/40 bg-[#050B12]/80 backdrop-blur-md shadow-[0_0_25px_rgba(0,229,255,0.3)]">
+        <div className="relative flex items-center justify-center size-20 rounded-full border border-cyan-500/40 bg-card backdrop-blur-md shadow-[0_0_25px_rgba(0,229,255,0.3)]">
           <RotateCcw className="size-8 text-cyan-400 animate-[spin_20s_linear_infinite]" />
           <div className="absolute inset-2 rounded-full border border-cyan-400/20" />
         </div>

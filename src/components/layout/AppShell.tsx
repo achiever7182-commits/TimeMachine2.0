@@ -107,7 +107,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
     <nav className="space-y-4 px-2.5" aria-label="Security Command Console">
       {navSections.map((section) => (
         <div key={section.title} className="space-y-1">
-          <div className="flex items-center justify-between px-2.5 py-1 text-[9.5px] font-mono font-bold tracking-[0.2em] text-[#7893A1] border-b border-[#142029]">
+          <div className="flex items-center justify-between px-2.5 py-1 text-[9.5px] font-display font-bold tracking-[0.2em] text-[#7893A1] border-b border-[#142029]">
             <span>// {section.title}</span>
             <span className="text-[8px] text-[#16D9F2]/40">SYS</span>
           </div>
@@ -121,14 +121,14 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
                   to={item.to}
                   onClick={onNavigate}
                   className={cn(
-                    "group relative flex min-h-[34px] items-center gap-2.5 px-2.5 text-xs font-mono transition-all duration-150 rounded-[3px] border",
+                    "group relative flex min-h-[34px] items-center gap-2.5 px-2.5 text-xs font-display transition-all duration-150 rounded-[3px] border",
                     active
                       ? "border-[#16D9F2]/40 bg-[#16D9F2]/10 text-[#F3F7FA] shadow-[inset_0_0_12px_rgba(22,217,242,0.08)] border-l-2 border-l-[#16D9F2]"
                       : "border-transparent text-[#A5B5C0] hover:border-[#1B2933] hover:bg-[#0B1117] hover:text-[#F3F7FA]",
                   )}
                 >
                   <span className={cn(
-                    "text-[10px] transition-colors font-mono",
+                    "text-[10px] transition-colors font-display",
                     active ? "text-[#16D9F2] font-bold" : "text-[#647682] group-hover:text-[#16D9F2]/70"
                   )}>
                     &gt;
@@ -220,11 +220,11 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Terminal className="size-4.5" />
             </div>
             <div>
-              <div className="font-mono text-xs font-black tracking-[0.18em] text-[#F3F7FA] flex items-center gap-1.5">
+              <div className="font-display text-xs font-black tracking-[0.18em] text-[#F3F7FA] flex items-center gap-1.5">
                 TIMEMACHINE
                 <span className="text-[9px] px-1 py-0.2 bg-[#16D9F2]/20 text-[#16D9F2] border border-[#16D9F2]/40 rounded-[2px] font-bold">2.0</span>
               </div>
-              <div className="font-mono text-[8.5px] uppercase tracking-[0.2em] text-[#16D9F2]/80">
+              <div className="font-display text-[8.5px] uppercase tracking-[0.2em] text-[#16D9F2]/80">
                 INCIDENT RESPONSE ENGINE
               </div>
             </div>
@@ -327,7 +327,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <SheetContent side="left" className="w-64 border-[#142029] bg-[#05080C] p-0 text-[#F3F7FA]">
                 <div className="flex items-center gap-2 border-b border-[#142029] p-4 bg-[#070C11]">
                   <Terminal className="size-4 text-[#16D9F2]" />
-                  <span className="font-mono text-xs font-bold tracking-widest text-[#F3F7FA]">
+                  <span className="font-display text-xs font-bold tracking-widest text-[#F3F7FA]">
                     TIMEMACHINE CONSOLE
                   </span>
                 </div>

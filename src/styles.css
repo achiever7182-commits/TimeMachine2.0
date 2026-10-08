@@ -39,6 +39,7 @@
   --color-tm-elevated: var(--tm-elevated);
   --color-tm-border: var(--tm-border);
   --color-tm-border-subtle: var(--tm-border-subtle);
+  --color-tm-border-strong: var(--tm-border-strong);
 
   --color-tm-text: var(--tm-text);
   --color-tm-text-secondary: var(--tm-text-secondary);
@@ -75,61 +76,98 @@
   --color-threat-glow: var(--threat-glow);
   --color-warning-glow: var(--warning-glow);
 
+  /* Tailwind Core Color Overrides (Forces exact colors everywhere) */
+  --color-cyan-50: var(--tm-cyan);
+  --color-cyan-100: var(--tm-cyan);
+  --color-cyan-200: var(--tm-cyan);
+  --color-cyan-300: var(--tm-cyan);
+  --color-cyan-400: var(--tm-cyan);
+  --color-cyan-500: var(--tm-cyan-bright);
+  --color-cyan-600: var(--tm-cyan-dark);
+  --color-cyan-700: var(--tm-cyan-dark);
+  --color-cyan-800: var(--tm-cyan-dark);
+  --color-cyan-900: var(--tm-cyan-dark);
+  --color-cyan-950: var(--tm-bg);
+
+  --color-slate-100: var(--tm-text);
+  --color-slate-200: var(--tm-text);
+  --color-slate-300: var(--tm-text-secondary);
+  --color-slate-400: var(--tm-text-secondary);
+  --color-slate-500: var(--tm-text-muted);
+  --color-slate-600: var(--tm-text-muted);
+  --color-slate-700: var(--tm-border);
+  --color-slate-800: var(--tm-border-strong);
+  --color-slate-900: var(--tm-panel);
+  --color-slate-950: var(--tm-bg);
+
+  --color-emerald-400: var(--tm-success);
+  --color-emerald-500: var(--tm-success-bright);
+  
+  --color-red-400: var(--tm-critical);
+  --color-red-500: var(--tm-critical-bright);
+  
+  --color-amber-400: var(--tm-warning);
+  --color-amber-500: var(--tm-warning-bright);
+
+  --color-blue-400: var(--tm-blue);
+  --color-blue-500: var(--tm-blue-bright);
+
   --color-base-black: var(--tm-bg);
   --color-base-navy: var(--tm-surface);
   --color-base-panel: var(--tm-panel);
   --color-base-elevated: var(--tm-elevated);
 
-  --font-sans: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", "IBM Plex Mono", Consolas, monospace;
-  --font-display: "Space Grotesk", sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, monospace;
+  --font-display: "Orbitron", sans-serif;
 }
 
 :root,
 .dark {
-  --radius: 0.25rem;
+  --radius: 2px;
 
   /* 1. DARK GRAPHITE / OBSIDIAN FOUNDATION */
-  --tm-bg: #05080C;
-  --tm-surface: #070C11;
-  --tm-panel: #0B1117;
-  --tm-elevated: #0F171E;
+  --tm-bg: #030607;
+  --tm-surface: #060B0C;
+  --tm-panel: #0A1112;
+  --tm-elevated: #0D1718;
 
-  --tm-border: #1B2933;
-  --tm-border-subtle: #142029;
+  --tm-border: #172426;
+  --tm-border-subtle: #203234;
+  --tm-border-strong: #2A3B3D;
 
   /* 2. TEXT PALETTE */
-  --tm-text: #F3F7FA;
-  --tm-text-secondary: #A5B5C0;
-  --tm-text-muted: #647682;
-  --tm-text-label: #7893A1;
-  --tm-text-disabled: #3F4D56;
+  --tm-text: #E8F0F1;
+  --tm-text-secondary: #A0B1B3;
+  --tm-text-muted: #607274;
+  --tm-text-label: #7F9698;
+  --tm-text-disabled: #607274;
 
-  /* 3. ICE CYAN (PRIMARY BRAND) */
-  --tm-cyan: #16D9F2;
-  --tm-cyan-bright: #55EAF8;
-  --tm-cyan-muted: #0FA8C2;
-  --tm-cyan-dark: #08798A;
+  /* 3. PRIMARY CYBER GREEN (replacing ICE CYAN as primary brand) */
+  --tm-cyan: #39FF88;
+  --tm-cyan-bright: #19D66B;
+  --tm-cyan-muted: #0B6B3A;
+  --tm-cyan-dark: #0B6B3A;
 
-  /* 4. ELECTRIC BLUE (SECONDARY) */
-  --tm-blue: #3B82F6;
-  --tm-blue-bright: #60A5FA;
-  --tm-blue-dark: #1D4ED8;
+  /* 4. NETWORK BLUE */
+  --tm-blue: #4AA3FF;
+  --tm-blue-bright: #4AA3FF;
+  --tm-blue-dark: #145A91;
 
-  /* 5. CRIMSON RED (THREAT) */
-  --tm-critical: #FF3347;
-  --tm-critical-bright: #FF5264;
-  --tm-critical-dark: #B91C2E;
+  /* 5. THREAT RED */
+  --tm-critical: #FF3045;
+  --tm-critical-bright: #FF3045;
+  --tm-critical-dark: #8F1827;
 
-  /* 6. AMBER (WARNING) */
-  --tm-warning: #FFB020;
-  --tm-warning-bright: #FFD166;
-  --tm-warning-dark: #B77900;
+  /* 6. INVESTIGATION AMBER */
+  --tm-warning: #FFB000;
+  --tm-warning-bright: #FFB000;
+  --tm-warning-dark: #D98E00;
 
   /* 7. GREEN (SUCCESS / SECURE) */
-  --tm-success: #20DFA0;
-  --tm-success-bright: #5AF2C0;
-  --tm-success-dark: #087F60;
+  --tm-success: #39FF88;
+  --tm-success-bright: #19D66B;
+  --tm-success-dark: #0B6B3A;
 
   /* Component mappings */
   --background: var(--tm-bg);
@@ -142,7 +180,7 @@
   --popover-foreground: var(--tm-text);
 
   --primary: var(--tm-cyan);
-  --primary-foreground: #05080C;
+  --primary-foreground: #030607;
 
   --secondary: var(--tm-surface);
   --secondary-foreground: var(--tm-text-secondary);
@@ -164,10 +202,11 @@
   --sidebar-foreground: var(--tm-text);
 
   /* Subtle signal glows */
-  --cyan-glow: rgba(22, 217, 242, 0.12);
-  --threat-glow: rgba(255, 51, 71, 0.12);
-  --warning-glow: rgba(255, 176, 32, 0.12);
-  --success-glow: rgba(32, 223, 160, 0.10);
+  --cyan-glow: rgba(57, 255, 136, 0.15);
+  --threat-glow: rgba(255, 48, 69, 0.15);
+  --warning-glow: rgba(255, 176, 0, 0.12);
+  --success-glow: rgba(57, 255, 136, 0.15);
+  --blue-glow: rgba(74, 163, 255, 0.10);
 }
 
 @layer base {
@@ -184,10 +223,10 @@
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
-    letter-spacing: -0.01em;
+    letter-spacing: 0.02em;
     /* Subtle military grid background */
     background-image:
-      radial-gradient(circle at 50% 0%, rgba(22, 217, 242, 0.025) 0%, transparent 60%),
+      radial-gradient(circle at 50% 0%, rgba(57, 255, 136, 0.025) 0%, transparent 60%),
       linear-gradient(var(--tm-border-subtle) 1px, transparent 1px),
       linear-gradient(90deg, var(--tm-border-subtle) 1px, transparent 1px);
     background-size:
@@ -218,29 +257,23 @@
   button,
   a,
   input {
-    letter-spacing: 0.01em;
+    letter-spacing: 0.02em;
   }
 
   ::selection {
-    background: rgba(22, 217, 242, 0.20);
-    color: #16D9F2;
+    background: rgba(57, 255, 136, 0.20);
+    color: #39FF88;
   }
 
-  h1 {
-    font-family: var(--font-sans);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-  }
-
-  h2, h3, h4, h5, h6 {
-    font-family: var(--font-sans);
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: 0.02em;
   }
 }
 
 @utility shadow-panel {
-  box-shadow: 0 4px 20px rgba(5, 8, 12, 0.8), 0 0 1px 1px var(--tm-border);
+  box-shadow: 0 4px 20px rgba(3, 6, 7, 0.8), 0 0 1px 1px var(--tm-border);
 }
 @utility shadow-glow {
   box-shadow: 0 0 10px var(--cyan-glow);
@@ -283,15 +316,15 @@
 @keyframes pulse-ring {
   0% {
     transform: scale(0.8);
-    box-shadow: 0 0 0 0 rgba(25, 230, 255, 0.6);
+    box-shadow: 0 0 0 0 rgba(57, 255, 136, 0.6);
   }
   70% {
     transform: scale(1);
-    box-shadow: 0 0 0 6px rgba(25, 230, 255, 0);
+    box-shadow: 0 0 0 6px rgba(57, 255, 136, 0);
   }
   100% {
     transform: scale(0.8);
-    box-shadow: 0 0 0 0 rgba(25, 230, 255, 0);
+    box-shadow: 0 0 0 0 rgba(57, 255, 136, 0);
   }
 }
 

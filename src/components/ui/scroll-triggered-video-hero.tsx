@@ -164,7 +164,7 @@ export default function ScrollTriggeredVideoHero({ className }: { className?: st
                     </p>
                   </div>
 
-                  <div className="max-w-xl rounded-2xl border border-white/10 bg-slate-950/35 p-4 shadow-2xl shadow-cyan-950/20 backdrop-blur-xl">
+                  <div className="max-w-xl rounded-2xl border border-white/10 bg-background/35 p-4 shadow-2xl shadow-cyan-950/20 backdrop-blur-xl">
                     <div className="mb-3 text-[10px] font-bold uppercase tracking-[0.34em] text-cyan-200/90">
                       {activeChapter.label}
                     </div>
@@ -187,7 +187,7 @@ export default function ScrollTriggeredVideoHero({ className }: { className?: st
               </AnimatePresence>
             </div>
 
-            <div className="relative z-10 ml-auto w-full max-w-md rounded-2xl border border-white/10 bg-slate-950/55 p-4 shadow-2xl shadow-cyan-950/15 backdrop-blur-xl">
+            <div className="relative z-10 ml-auto w-full max-w-md rounded-2xl border border-white/10 bg-background/55 p-4 shadow-2xl shadow-cyan-950/15 backdrop-blur-xl">
               <div className="mb-4 flex items-center justify-between border-b border-white/10 pb-3">
                 <div>
                   <p className="text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-300/80">
@@ -231,7 +231,7 @@ export default function ScrollTriggeredVideoHero({ className }: { className?: st
         </div>
 
         <motion.div
-          className="absolute bottom-8 left-1/2 z-30 flex w-[min(88vw,600px)] -translate-x-1/2 items-center gap-4 rounded-full border border-white/10 bg-slate-950/70 px-4 py-2.5 shadow-2xl shadow-cyan-950/25 backdrop-blur-xl"
+          className="absolute bottom-8 left-1/2 z-30 flex w-[min(88vw,600px)] -translate-x-1/2 items-center gap-4 rounded-full border border-white/10 bg-background/70 px-4 py-2.5 shadow-2xl shadow-cyan-950/25 backdrop-blur-xl"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}

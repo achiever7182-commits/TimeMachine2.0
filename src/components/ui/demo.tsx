@@ -7,7 +7,7 @@ import { PoemAnimation, TemporalCoreCube } from "@/components/ui/3d-animation";
  */
 export default function Demo() {
   return (
-    <div className="p-6 bg-[#020609] min-h-screen flex items-center justify-center">
+    <div className="p-6 bg-background min-h-screen flex items-center justify-center">
       <div className="w-full max-w-5xl">
         <TemporalCoreCube
           incidentId="INC-2048"

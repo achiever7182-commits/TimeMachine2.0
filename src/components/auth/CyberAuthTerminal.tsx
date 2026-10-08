@@ -154,7 +154,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
   };
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#020609] text-foreground font-sans selection:bg-cyan-500/30">
+    <div className="relative min-h-screen w-full overflow-hidden bg-background text-foreground font-sans selection:bg-cyan-500/30">
       {/* Background Animated Systems */}
       <CyberBackground />
 
@@ -166,7 +166,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
 
       {/* Cinematic Transition Overlay when Entering Dashboard */}
       {enteringApp && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#020609]/95 backdrop-blur-2xl transition-all duration-500 animate-in fade-in">
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background backdrop-blur-2xl transition-all duration-500 animate-in fade-in">
           <div className="relative flex flex-col items-center gap-6 text-center font-mono">
             <div className="relative flex size-20 items-center justify-center rounded-full border border-cyan-400 bg-cyan-950/40 shadow-[0_0_40px_rgba(0,229,255,0.6)]">
               <Activity className="size-10 animate-pulse text-cyan-400" />
@@ -190,7 +190,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
           <div className="relative max-w-2xl">
             {/* Top Brand Badges */}
             <div className="mb-4 flex flex-wrap items-center gap-2 font-mono text-[11px] tracking-[0.2em] text-cyan-400">
-              <span className="flex items-center gap-1.5 rounded-sm border border-cyan-500/30 bg-[#050B12]/80 px-2.5 py-1 shadow-[0_0_10px_rgba(0,229,255,0.1)]">
+              <span className="flex items-center gap-1.5 rounded-sm border border-cyan-500/30 bg-card px-2.5 py-1 shadow-[0_0_10px_rgba(0,229,255,0.1)]">
                 <Radio className="size-3 animate-pulse text-cyan-400" />
                 SOC INCIDENT TERMINAL
               </span>
@@ -254,7 +254,7 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
               <TemporalCore />
 
               {/* Forensic Artifacts Stream */}
-              <div className="w-full max-w-sm rounded border border-cyan-500/20 bg-[#050B12]/70 p-3.5 font-mono text-xs backdrop-blur-md">
+              <div className="w-full max-w-sm rounded border border-cyan-500/20 bg-card p-3.5 font-mono text-xs backdrop-blur-md">
                 <div className="mb-2 flex items-center justify-between border-b border-cyan-500/20 pb-1.5 text-[10px] text-cyan-400">
                   <span className="flex items-center gap-1.5 font-bold uppercase tracking-wider">
                     <Fingerprint className="size-3.5" /> RECONSTRUCTED TRACES
@@ -290,10 +290,10 @@ export function CyberAuthTerminal({ onSuccess }: CyberAuthTerminalProps) {
         </div>
 
         {/* Right Side: Secure Authentication Terminal */}
-        <div className="flex w-full items-center justify-center p-4 sm:p-6 lg:w-[34rem] xl:w-[38rem] lg:bg-[#020609]/70 lg:backdrop-blur-xl lg:border-l lg:border-cyan-500/10">
+        <div className="flex w-full items-center justify-center p-4 sm:p-6 lg:w-[34rem] xl:w-[38rem] lg:bg-background lg:backdrop-blur-xl lg:border-l lg:border-cyan-500/10">
           <div className="w-full max-w-md">
             {/* Terminal Container with Sharp Corner Brackets & Inner Glow */}
-            <div className="relative overflow-hidden rounded border border-cyan-500/30 bg-[#050B12]/90 p-5 sm:p-7 shadow-[0_0_50px_rgba(0,229,255,0.06)] backdrop-blur-2xl">
+            <div className="relative overflow-hidden rounded border border-cyan-500/30 bg-card p-5 sm:p-7 shadow-[0_0_50px_rgba(0,229,255,0.06)] backdrop-blur-2xl">
               {/* Technical Corner Brackets */}
               <div className="absolute left-0 top-0 size-4 border-l-2 border-t-2 border-cyan-400" />
               <div className="absolute right-0 top-0 size-4 border-r-2 border-t-2 border-cyan-400" />

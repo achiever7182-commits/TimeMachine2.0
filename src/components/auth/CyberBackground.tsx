@@ -308,7 +308,7 @@ export function CyberBackground() {
 
       {/* Background Timeline Element (Communicates TimeMachine Core Concept) */}
       <div className="absolute bottom-12 left-0 right-0 hidden md:flex items-center justify-center opacity-25 select-none pointer-events-none">
-        <div className="flex items-center gap-6 font-mono text-[10px] text-cyan-400/80 bg-[#050B12]/40 px-6 py-2 border-y border-cyan-500/10">
+        <div className="flex items-center gap-6 font-mono text-[10px] text-cyan-400/80 bg-card px-6 py-2 border-y border-cyan-500/10">
           <span className="text-cyan-300 font-bold">2026-09-28 TIMELINE:</span>
           <span className="flex items-center gap-1.5">
             <span className="size-1.5 rounded-full bg-cyan-400"></span> AUTH

@@ -10,12 +10,12 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   if (authState === "AUTHENTICATING" || authState === "LOADING_PROFILE") {
     return (
-      <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-[#020609] font-mono text-cyan-400">
+      <div className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-background font-mono text-cyan-400">
         <CyberBackground />
         <AuthHud />
 
         <div className="relative z-20 flex flex-col items-center gap-6 text-center">
-          <div className="relative flex size-20 items-center justify-center rounded-full border border-cyan-500/40 bg-[#050B12]/80 backdrop-blur-md shadow-[0_0_30px_rgba(0,229,255,0.4)]">
+          <div className="relative flex size-20 items-center justify-center rounded-full border border-cyan-500/40 bg-card backdrop-blur-md shadow-[0_0_30px_rgba(0,229,255,0.4)]">
             <RotateCcw className="size-8 text-cyan-400 animate-spin" />
             <div className="absolute inset-1 rounded-full border border-cyan-400/20 animate-ping" />
           </div>

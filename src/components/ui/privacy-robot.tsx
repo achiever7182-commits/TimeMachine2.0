@@ -456,7 +456,7 @@ function RobotPrototype({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -5, scale: 0.95 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="pointer-events-none relative flex w-64 flex-col gap-2 rounded-sm border border-cyan-500/50 bg-[#020609]/90 p-4 shadow-[0_0_20px_rgba(0,217,255,0.15)] backdrop-blur-md"
+              className="pointer-events-none relative flex w-64 flex-col gap-2 rounded-sm border border-cyan-500/50 bg-background p-4 shadow-[0_0_20px_rgba(0,217,255,0.15)] backdrop-blur-md"
             >
               {/* HUD Brackets */}
               <div className="absolute left-0 top-0 h-2 w-2 border-l border-t border-cyan-500" />
